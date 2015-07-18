@@ -38,7 +38,8 @@ public:
 
 private:
     Ui::uiUpdate ui;
-    QString strVersion;
+    QString strShortVersion;
+    QString strFullVersion;
     QNetworkAccessManager *accessManager;
     QNetworkCookieJar *cookieJar;
 

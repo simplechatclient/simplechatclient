@@ -28,8 +28,8 @@
 #include "models/settings.h"
 #include "update_gui.h"
 
-#define DOWNLOAD_LINK "http://simplechatclien.sourceforge.net/download/"
-#define DOWNLOAD_SITE_LINK "http://sourceforge.net/projects/simplechatclien/files/scc-%1.exe/download"
+#define DOWNLOAD_LINK "http://simplechatclient.github.io/download"
+#define DOWNLOAD_SITE_LINK "https://github.com/simplechatclient/simplechatclient/releases/download/%1/scc-%2.exe"
 
 UpdateGui::UpdateGui(QWidget *parent) : QDialog(parent)
 {
@@ -66,14 +66,14 @@ void UpdateGui::createGui()
 
 void UpdateGui::setDefaultValues()
 {
-    strVersion = Settings::instance()->get("available_version");
+    strFullVersion = Settings::instance()->get("available_version");
 
-    QStringList lAvailableVersion = strVersion.split(".");
+    QStringList lAvailableVersion = strFullVersion.split(".");
     QString strCurrentMajor = lAvailableVersion.at(0);
     QString strCurrentMinor = lAvailableVersion.at(1);
     QString strCurrentPatch = lAvailableVersion.at(2);
 
-    QString strShortVersion = QString("%1.%2.%3").arg(strCurrentMajor).arg(strCurrentMinor).arg(strCurrentPatch);
+    strShortVersion = QString("%1.%2.%3").arg(strCurrentMajor).arg(strCurrentMinor).arg(strCurrentPatch);
 
     ui.label_title->setText(QString("Simple Chat Client %1").arg(strShortVersion));
     ui.label_content->setText(Settings::instance()->get("whats_new"));
@@ -90,8 +90,8 @@ void UpdateGui::buttonDownload()
 
 #ifdef Q_OS_WIN
     QNetworkRequest request;
-    request.setUrl(QUrl(QString(DOWNLOAD_SITE_LINK).arg(strVersion)));
-    request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+http://simplechatclien.sourceforge.net)");
+    request.setUrl(QUrl(QString(DOWNLOAD_SITE_LINK).arg(strShortVersion, strFullVersion)));
+    request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+http://simplechatclient.github.io)");
 
     accessManager->get(request);
 #else
@@ -104,7 +104,7 @@ void UpdateGui::downloadedFile(const QByteArray &bData)
     QString path = QFileInfo(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).absoluteFilePath();
 
     // save
-    QString fileName = path+"/scc-"+strVersion+".exe";
+    QString fileName = path+"/scc-"+strFullVersion+".exe";
 
     QFile file(fileName);
     if (file.exists()) file.remove();
@@ -145,7 +145,7 @@ void UpdateGui::networkFinished(QNetworkReply *reply)
     {
         QNetworkRequest request;
         request.setUrl(possibleRedirectUrl.toUrl());
-        request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+http://simplechatclien.sourceforge.net)");
+        request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+http://simplechatclient.github.io)");
 
         QNetworkReply *pReply = accessManager->get(request);
         connect(pReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
@@ -183,5 +183,5 @@ void UpdateGui::showError(const QString &strError)
     ui.pushButton_download->hide();
 
     ui.label_title->setText("");
-    ui.label_content->setText(QString("<center><b>%1<br/>%2<br/><br/>%3<br/><a href=\"%4\">%4</a></b></center>").arg(tr("Error"), strError, tr("Visit homepage"), "http://simplechatclien.sourceforge.net"));
+    ui.label_content->setText(QString("<center><b>%1<br/>%2<br/><br/>%3<br/><a href=\"%4\">%4</a></b></center>").arg(tr("Error"), strError, tr("Visit homepage"), "http://simplechatclient.github.io"));
 }

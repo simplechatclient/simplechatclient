@@ -70,7 +70,7 @@ void Update::checkUpdate()
 void Update::updateRequest(const QString &strMethod, const QString &strUrl, const QString &strUrlMarker)
 {
     QString strAgentPlatform = this->getPlatform();
-    QString strAgentUrl = "http://simplechatclien.sourceforge.net";
+    QString strAgentUrl = "http://simplechatclient.github.io";
     QString strAgentProgram = "SimpleChatClient";
     QString strAgentVersion = Settings::instance()->get("version");
     QString strUserAgent = QString("Mozilla/5.0 (%1; +%2) %3/%4").arg(strAgentPlatform, strAgentUrl, strAgentProgram, strAgentVersion);
@@ -202,7 +202,7 @@ void Update::updateFinished(QNetworkReply *reply)
         int updateSourceforge = fastParseVersion(hUpdateResults.value(UPDATE_URL_SOURCEFORGE));
         int updateGithub = fastParseVersion(hUpdateResults.value(UPDATE_URL_GITHUB));
 
-        if ((updateSourceforge != 0) && (updateGithub != 0))
+        if ((updateSourceforge != 0) || (updateGithub != 0))
         {
             if (updateSourceforge >= updateGithub)
                 saveUpdate(hUpdateResults.value(UPDATE_URL_SOURCEFORGE));
