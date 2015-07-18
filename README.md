@@ -1,4 +1,6 @@
 ##[Simple Chat Client](http://simplechatclient.github.io "Simple Chat Client Offical Site") [![Build Status](https://travis-ci.org/simplechatclient/simplechatclient.svg?branch=master)](https://travis-ci.org/simplechatclient/simplechatclient)
+
+[![Join the chat at https://gitter.im/simplechatclient/simplechatclient](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/simplechatclient/simplechatclient?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Simple Chat Client is a lightweight and simple program which allows talking in the czat.onet.pl
 without using a browser or java.
 
