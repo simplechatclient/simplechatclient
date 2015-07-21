@@ -182,7 +182,7 @@ QHash<QString,QString> Config::getDefaultValues()
 
         lDefaultValues.insert("nick", QString::null);
         lDefaultValues.insert("pass", QString::null);
-        lDefaultValues.insert("themes", "Standard");
+        lDefaultValues.insert("themes", "Origin");
         lDefaultValues.insert("language", "pl");
 
         lDefaultValues.insert("highlight", QString::null);
