@@ -57,7 +57,7 @@ void Offline::addMessage(qint64 iTime, const QString &strType, const QString &st
     Convert::simpleConvert(strOfflineMessage);
 
     // save offlinelog
-    if (Settings::instance()->get("logs") == "true")
+    if (Settings::instance()->getBool("logs"))
     {
         QString strOfflineMessageLog = QString("%1 <%2> %3").arg(QDateTime::fromMSecsSinceEpoch(iTime).toString("[yyyy-MM-dd] [hh:mm:ss]"), strNick, strOfflineMessage);
         Log::save("offlinelog", strOfflineMessageLog, Log::Txt);

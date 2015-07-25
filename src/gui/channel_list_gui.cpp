@@ -431,7 +431,7 @@ void ChannelListGui::allCellDoubleClicked(int row, int column)
 
     if (Utils::instance()->isErotic(strChannel))
     {
-        if (Settings::instance()->get("age_check") == "true")
+        if (Settings::instance()->getBool("age_check"))
         {
             QMessageBox msgBox;
             msgBox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.557, stop:0 rgba(198, 0, 0, 255), stop:1 rgba(255, 0, 0, 255));");
@@ -446,7 +446,7 @@ void ChannelListGui::allCellDoubleClicked(int row, int column)
             msgBox.exec();
 
             if (msgBox.clickedButton() == enterButton)
-                Settings::instance()->set("age_check", "false");
+                Settings::instance()->setBool("age_check", false);
             else
                 return;
         }
@@ -484,7 +484,7 @@ void ChannelListGui::eroticCellDoubleClicked(int row, int column)
 
     if (Utils::instance()->isErotic(strChannel))
     {
-        if (Settings::instance()->get("age_check") == "true")
+        if (Settings::instance()->getBool("age_check"))
         {
             QMessageBox msgBox;
             msgBox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.557, stop:0 rgba(198, 0, 0, 255), stop:1 rgba(255, 0, 0, 255));");
@@ -500,7 +500,7 @@ void ChannelListGui::eroticCellDoubleClicked(int row, int column)
 
             if (msgBox.clickedButton() == enterButton)
             {
-                Settings::instance()->set("age_check", "false");
+                Settings::instance()->setBool("age_check", false);
                 Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
             }
         }

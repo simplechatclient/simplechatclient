@@ -53,7 +53,17 @@ QString Settings::get(const QString &key)
     return settings.value(key, QString::null);
 }
 
+bool Settings::getBool(const QString &key)
+{
+    return settings.value(key, QString::null) == "true";
+}
+
 void Settings::set(const QString &key, const QString &value)
 {
     settings[key] = value;
+}
+
+void Settings::setBool(const QString &key, bool value)
+{
+    settings[key] = value ? "true" : "false";
 }

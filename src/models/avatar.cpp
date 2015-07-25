@@ -146,7 +146,7 @@ void Avatar::saveAvatar(const QString &strAvatarPath, const QByteArray &bAvatar)
     }
     else
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << tr("Error: Cannot save avatar file %1").arg(strAvatarPath);
     }
 }

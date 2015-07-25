@@ -302,7 +302,7 @@ void ToolWidget::setDefaultValues()
     separator2->hide();
 
     // set default bold
-    if (Settings::instance()->get("my_bold") == "true")
+    if (Settings::instance()->getBool("my_bold"))
     {
         bold->setChecked(true);
         bMyBold = true;
@@ -316,7 +316,7 @@ void ToolWidget::setDefaultValues()
     }
 
     // set default italic
-    if (Settings::instance()->get("my_italic") == "true")
+    if (Settings::instance()->getBool("my_italic"))
     {
         italic->setChecked(true);
         bMyItalic = true;
@@ -461,25 +461,19 @@ void ToolWidget::boldClicked()
         bold->setChecked(false);
         bMyBold = false;
         strMyFontWeight = QString::null;
-        QString strValue = "false";
-        Settings::instance()->set("my_bold", strValue);
-
-        Config *pConfig = new Config();
-        pConfig->set("my_bold", strValue);
-        delete pConfig;
     }
     else
     {
         bold->setChecked(true);
         bMyBold = true;
         strMyFontWeight = "bold";
-        QString strValue = "true";
-        Settings::instance()->set("my_bold", strValue);
-
-        Config *pConfig = new Config();
-        pConfig->set("my_bold", strValue);
-        delete pConfig;
     }
+
+    Settings::instance()->setBool("my_bold", bMyBold);
+
+    Config *pConfig = new Config();
+    pConfig->set("my_bold", bMyBold ? "true" : "false");
+    delete pConfig;
 
     // refresh font
     QFont fInputLine = pInputLine->font();
@@ -494,25 +488,19 @@ void ToolWidget::italicClicked()
         italic->setChecked(false);
         bMyItalic = false;
         strMyFontStyle = QString::null;
-        QString strValue = "false";
-        Settings::instance()->set("my_italic", strValue);
-
-        Config *pConfig = new Config();
-        pConfig->set("my_italic", strValue);
-        delete pConfig;
     }
     else
     {
         italic->setChecked(true);
         bMyItalic = true;
         strMyFontStyle = "italic";
-        QString strValue = "true";
-        Settings::instance()->set("my_italic", "true");
-
-        Config *pConfig = new Config();
-        pConfig->set("my_italic", strValue);
-        delete pConfig;
     }
+
+    Settings::instance()->setBool("my_italic", bMyItalic);
+
+    Config *pConfig = new Config();
+    pConfig->set("my_italic", bMyItalic ? "true" : "false");
+    delete pConfig;
 
     // refresh font
     QFont fInputLine = pInputLine->font();
@@ -809,7 +797,7 @@ void ToolWidget::inputlineReturnPressed()
     Settings::instance()->set("last_active", QString::number(iCurrentTime));
 
     // disable away
-    bool bAway = Settings::instance()->get("away") == "true" ? true : false;
+    bool bAway = Settings::instance()->getBool("away");
     if (bAway)
         Core::instance()->network->send("AWAY :");
 
@@ -827,7 +815,7 @@ void ToolWidget::moderButtonClicked()
     Settings::instance()->set("last_active", QString::number(iCurrentTime));
 
     // disable away
-    bool bAway = Settings::instance()->get("away") == "true" ? true : false;
+    bool bAway = Settings::instance()->getBool("away");
     if (bAway)
         Core::instance()->network->send("AWAY :");
 

@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("scc");
 
     // debug off
-    Settings::instance()->set("debug", "false");
+    Settings::instance()->setBool("debug", false);
 
     // args
     foreach (QString param, app.arguments())
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
         if (param == "--debug")
         {
             displayDebug();
-            Settings::instance()->set("debug", "true");
+            Settings::instance()->setBool("debug", true);
         }
         else if (param == "--version")
         {

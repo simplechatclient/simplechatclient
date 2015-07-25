@@ -90,7 +90,7 @@ void Notes::read()
         }
         else
         {
-            if (Settings::instance()->get("debug") == "true")
+            if (Settings::instance()->getBool("debug"))
                 qWarning() << tr("Error: Cannot read notes file!");
         }
     }
@@ -110,7 +110,7 @@ void Notes::save()
     }
     else
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << tr("Error: Cannot save notes file!");
     }
 }

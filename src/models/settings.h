@@ -34,7 +34,9 @@ public:
 
     Settings();
     QString get(const QString &key);
+    bool getBool(const QString &key);
     void set(const QString &key, const QString &value);
+    void setBool(const QString &key, bool value);
 
 private:
     QHash<QString,QString> settings;

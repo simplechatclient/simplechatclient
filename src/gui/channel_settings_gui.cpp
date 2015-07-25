@@ -1123,7 +1123,7 @@ void ChannelSettingsGui::getAvatarReady(const QByteArray &content, const QString
     QPixmap pixmap;
     if (!pixmap.loadFromData(content))
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << "Unable to load image from " << avatarUrl;
         return;
     }

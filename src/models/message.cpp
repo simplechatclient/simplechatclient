@@ -92,11 +92,11 @@ bool Message::isHideJoinPart(const QString &strChannel, MessageCategory eMessage
 {
     if ((eMessageCategory == MessageJoin) || (eMessageCategory == MessagePart) || (eMessageCategory == MessageQuit))
     {
-        if (Settings::instance()->get("show_join_part") == "false")
+        if (!Settings::instance()->getBool("show_join_part"))
             return true;
 
         int iNickCount = Nick::instance()->getFromChannel(strChannel).size();
-        if ((Settings::instance()->get("show_join_part_big_channel") == "false") && (iNickCount > 50))
+        if (!Settings::instance()->getBool("show_join_part_big_channel") && iNickCount > 50)
             return true;
     }
     return false;
@@ -127,15 +127,15 @@ void Message::showMessage(const QString &strChannel, const QString &strData, Mes
             strAwaylogData = QString("<%1> %2").arg(strNick, strData);
 
         // awaylog
-        if (Settings::instance()->get("away") == "true")
+        if (Settings::instance()->getBool("away"))
             Awaylog::instance()->add(iTime, strChannel, strAwaylogData);
 
         // tray
-        if (Settings::instance()->get("tray_message") == "true")
+        if (Settings::instance()->getBool("tray_message"))
             Tray::instance()->showMessage(strChannel, strAwaylogData);
 
         // sound
-        if (Settings::instance()->get("sound") == "true")
+        if (Settings::instance()->getBool("sound"))
             SoundNotify::instance()->play(Beep);
     }
 
@@ -144,7 +144,7 @@ void Message::showMessage(const QString &strChannel, const QString &strData, Mes
         Core::instance()->mainWindow()->setTabColor(strChannel, eMessageCategory);
 
     // save message
-    if (Settings::instance()->get("logs") == "true")
+    if (Settings::instance()->getBool("logs"))
         saveMessage(strChannel, strData, eMessageCategory, iTime, strNick);
 
     // display

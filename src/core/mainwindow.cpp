@@ -340,18 +340,18 @@ void MainWindow::init()
     showWelcome();
 
     // first run - show options if config not exist
-    if (Settings::instance()->get("first_run") == "true")
+    if (Settings::instance()->getBool("first_run"))
         firstRun();
 
     // auto connect
-    if (Settings::instance()->get("auto_connect") == "true")
+    if (Settings::instance()->getBool("auto_connect"))
         buttonConnect();
 }
 
 void MainWindow::addDefaultTabs()
 {
     // debug
-    if (Settings::instance()->get("debug") == "true")
+    if (Settings::instance()->getBool("debug"))
         pTabC->addTab(DEBUG_WINDOW);
 
     // status
@@ -366,7 +366,7 @@ void MainWindow::showWelcome()
 
 void MainWindow::firstRun()
 {
-    Settings::instance()->set("first_run", "false");
+    Settings::instance()->setBool("first_run", false);
 
     Config *pConfig = new Config(SettingsConfig);
     pConfig->set("first_run", "false");
@@ -424,16 +424,16 @@ void MainWindow::buttonConnect()
 {
     if (!Core::instance()->network->isConnected())
     {
-        Settings::instance()->set("reconnect", "true");
+        Settings::instance()->setBool("reconnect", true);
         Core::instance()->network->connect();
     }
     else
     {
-        Settings::instance()->set("reconnect", "false");
-        Settings::instance()->set("logged", "false");
+        Settings::instance()->setBool("reconnect", false);
+        Settings::instance()->setBool("logged", false);
         Core::instance()->network->disconnect();
 
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qDebug() << "Set timerReconnect: stop";
         Core::instance()->network->timerReconnect->stop();
     }
@@ -443,7 +443,7 @@ void MainWindow::updateButtons()
 {
     bool bUpdateMenu = false;
 
-    if ((Settings::instance()->get("socket_state") == "unknown") || (Settings::instance()->get("authorizing") == "true"))
+    if ((Settings::instance()->get("socket_state") == "unknown") || (Settings::instance()->getBool("authorizing")))
     {
         bUpdateMenu = false;
         connectAction->setEnabled(false);
@@ -504,37 +504,37 @@ void MainWindow::openOptions()
 
 void MainWindow::openChannelList()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         ChannelListGui(this).exec();
 }
 
 void MainWindow::openChannelHomes()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         ChannelHomesGui(this).exec();
 }
 
 void MainWindow::openChannelFavourites()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         ChannelFavouritesGui(this).exec();
 }
 
 void MainWindow::openFriends()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         FriendsGui(this).exec();
 }
 
 void MainWindow::openIgnore()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         IgnoreGui(this).exec();
 }
 
 void MainWindow::openFindNick()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         FindNickGui(this).exec();
 }
 
@@ -543,38 +543,38 @@ void MainWindow::openCams()
     if (Settings::instance()->get("webcam") == "system")
     {
 #ifdef Q_OS_WIN
-        if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+        if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         {
             QString strMe = Settings::instance()->get("nick");
             (new Kamerzysta(Core::instance()->kamerzystaSocket))->show(strMe);
         }
 #else
-        if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+        if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
             new WebcamGui();
 #endif
     }
     else // internal
     {
-        if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+        if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
             new WebcamGui();
     }
 }
 
 void MainWindow::openMyStats()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         MyStatsGui(this).exec();
 }
 
 void MainWindow::openMyProfile()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         MyProfileGui(this).exec();
 }
 
 void MainWindow::openMyAvatar()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         MyAvatarGui(this).exec();
 }
 
@@ -595,13 +595,13 @@ void MainWindow::openAwaylog()
 
 void MainWindow::openInviteList()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         InviteListGui(this).exec();
 }
 
 void MainWindow::openOfflineMessages()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
         OfflineListGui(this).exec();
 }
 
@@ -877,14 +877,14 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (isVisible() && Settings::instance()->get("minimize_to_tray") == "true")
+    if (isVisible() && Settings::instance()->getBool("minimize_to_tray"))
     {
         hide();
         event->ignore();
     }
     else
     {
-        if (Settings::instance()->get("always_quit") == "true")
+        if (Settings::instance()->getBool("always_quit"))
         {
             qApp->quit();
             return;
@@ -914,7 +914,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             {
                 Config *pConfig = new Config();
                 pConfig->set("always_quit", "true");
-                Settings::instance()->set("always_quit", "true");
+                Settings::instance()->setBool("always_quit", true);
                 delete pConfig;
             }
 

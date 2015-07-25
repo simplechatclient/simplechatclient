@@ -69,7 +69,7 @@ void OnetKernel::kernel(const QString &_strData)
     strData = _strData;
     strDataList = strData.split(" ");
 
-    if (Settings::instance()->get("debug") == "true")
+    if (Settings::instance()->getBool("debug"))
         Message::instance()->showMessage(DEBUG_WINDOW, "<- "+strData, MessageDefault);
 
     bool bUnknownRaw1 = false;
@@ -201,14 +201,14 @@ void OnetKernel::raw_join()
 
     if (strChannel.at(0) != '^')
     {
-        if (Settings::instance()->get("zuo_and_ip") == "true")
+        if (Settings::instance()->getBool("zuo_and_ip"))
             strDisplay = QString(tr("* %1 [%2@%3] has joined %4")).arg(strNick, strZUO, strIP, strChannel);
         else
             strDisplay = QString(tr("* %1 has joined %2")).arg(strNick, strChannel);
     }
     else
     {
-        if (Settings::instance()->get("zuo_and_ip") == "true")
+        if (Settings::instance()->getBool("zuo_and_ip"))
             strDisplay = QString(tr("* %1 [%2@%3] has joined priv")).arg(strNick, strZUO, strIP);
         else
             strDisplay = QString(tr("* %1 has joined priv")).arg(strNick);
@@ -287,14 +287,14 @@ void OnetKernel::raw_part()
     {
         if (!strReason.isEmpty())
         {
-            if (Settings::instance()->get("zuo_and_ip") == "true")
+            if (Settings::instance()->getBool("zuo_and_ip"))
                 strDisplay = QString(tr("* %1 [%2@%3] has left %4 [%5]")).arg(strNick, strZUO, strIP, strChannel, strReason);
             else
                 strDisplay = QString(tr("* %1 has left %2 [%3]")).arg(strNick, strChannel, strReason);
         }
         else
         {
-            if (Settings::instance()->get("zuo_and_ip") == "true")
+            if (Settings::instance()->getBool("zuo_and_ip"))
                 strDisplay = QString(tr("* %1 [%2@%3] has left %4")).arg(strNick, strZUO, strIP, strChannel);
             else
                 strDisplay = QString(tr("* %1 has left %2")).arg(strNick, strChannel);
@@ -302,7 +302,7 @@ void OnetKernel::raw_part()
     }
     else
     {
-        if (Settings::instance()->get("zuo_and_ip") == "true")
+        if (Settings::instance()->getBool("zuo_and_ip"))
             strDisplay = QString(tr("* %1 [%2@%3] has left priv")).arg(strNick, strZUO, strIP);
         else
             strDisplay = QString(tr("* %1 has left priv")).arg(strNick);
@@ -343,7 +343,7 @@ void OnetKernel::raw_quit()
     if ((!strReason.isEmpty()) && (strReason.at(0) == ':')) strReason.remove(0,1);
 
     QString strDisplay;
-    if (Settings::instance()->get("zuo_and_ip") == "true")
+    if (Settings::instance()->getBool("zuo_and_ip"))
         strDisplay = QString(tr("* %1 [%2@%3] has quit [%4]")).arg(strNick, strZUO, strIP, strReason);
     else
         strDisplay = QString(tr("* %1 has quit [%2]")).arg(strNick, strReason);
@@ -768,7 +768,7 @@ void OnetKernel::raw_invite()
     }
 
     // sound
-    if (Settings::instance()->get("sound") == "true")
+    if (Settings::instance()->getBool("sound"))
         SoundNotify::instance()->play(Query);
 }
 
@@ -987,7 +987,7 @@ void OnetKernel::raw_snonotice()
 void OnetKernel::raw_001()
 {
     // logged
-    Settings::instance()->set("logged", "true");
+    Settings::instance()->setBool("logged", true);
 
     // clear
     Friends::instance()->clear();
@@ -1006,26 +1006,26 @@ void OnetKernel::raw_001()
     Core::instance()->network->send("PROTOCTL ONETNAMESX");
 
     // busy
-    Settings::instance()->set("busy", "false");
+    Settings::instance()->setBool("busy", false);
 
     // away
-    Settings::instance()->set("away", "false");
+    Settings::instance()->setBool("away", false);
 
     // auto busy
-    if (Settings::instance()->get("auto_busy") == "true")
+    if (Settings::instance()->getBool("auto_busy"))
         Core::instance()->network->send("BUSY 1");
 
     // ignore favourites
-    if (Settings::instance()->get("autojoin_favourites") == "true")
-        Settings::instance()->set("ignore_favourites", "false");
+    if (Settings::instance()->getBool("autojoin_favourites"))
+        Settings::instance()->setBool("ignore_favourites", false);
     else
-        Settings::instance()->set("ignore_favourites", "true");
+        Settings::instance()->setBool("ignore_favourites", true);
 
     // override off
-    Settings::instance()->set("override", "false");
+    Settings::instance()->setBool("override", false);
 
     // age check on
-    Settings::instance()->set("age_check", "true");
+    Settings::instance()->setBool("age_check", true);
 
     // auto rejoin
     QList<CaseIgnoreString> lChannelsCaseIgnore = Channel::instance()->getListClearedSorted();
@@ -1049,7 +1049,7 @@ void OnetKernel::raw_001()
     Settings::instance()->set("last_active", QString::number(QDateTime::currentMSecsSinceEpoch()));
 
     // auto-away
-    if (Settings::instance()->get("auto_away") == "true")
+    if (Settings::instance()->getBool("auto_away"))
         Autoaway::instance()->start();
 }
 
@@ -1303,9 +1303,9 @@ void OnetKernel::raw_141n()
 void OnetKernel::raw_142n()
 {
     // join favourites
-    if (Settings::instance()->get("ignore_favourites") == "false")
+    if (!Settings::instance()->getBool("ignore_favourites"))
     {
-        Settings::instance()->set("ignore_favourites", "true");
+        Settings::instance()->setBool("ignore_favourites", true);
 
         QList<CaseIgnoreString> lChannelsCaseIgnore = ChannelFavourites::instance()->getAllCaseIgnoreSorted();
         if (lChannelsCaseIgnore.isEmpty())
@@ -3394,7 +3394,7 @@ void OnetKernel::raw_433()
     QString strNick = strDataList.at(3);
 
     // disconnect
-    Settings::instance()->set("reconnect", "false");
+    Settings::instance()->setBool("reconnect", false);
     Core::instance()->network->disconnect();
 
     if (strNick.at(0) != '~')
@@ -3416,8 +3416,8 @@ void OnetKernel::raw_433()
         if (iSelectedButton == QMessageBox::Yes)
         {
             // override
-            Settings::instance()->set("override", "true");
-            Settings::instance()->set("reconnect", "true");
+            Settings::instance()->setBool("override", true);
+            Settings::instance()->setBool("reconnect", true);
 
             Core::instance()->network->connect();
         }

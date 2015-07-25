@@ -52,7 +52,7 @@ Core::~Core()
     kamerzystaSocket->deleteLater();
 
     // close network
-    Settings::instance()->set("reconnect", "false");
+    Settings::instance()->setBool("reconnect", false);
     network->disconnect();
     network->quit();
     network->wait();
@@ -100,19 +100,19 @@ void Core::createSettings()
     Settings::instance()->set("motd", QString::null);
     Settings::instance()->set("version_status", UPDATE_STATUS_UNKNOWN);
 
-    Settings::instance()->set("logged", "false");
-    Settings::instance()->set("busy", "false");
-    Settings::instance()->set("away", "false");
-    Settings::instance()->set("override", "false");
-    Settings::instance()->set("ignore_raw_141", "false");
-    Settings::instance()->set("age_check", "true");
-    Settings::instance()->set("first_run", "true");
+    Settings::instance()->setBool("logged", false);
+    Settings::instance()->setBool("busy", false);
+    Settings::instance()->setBool("away", false);
+    Settings::instance()->setBool("override", false);
+    Settings::instance()->setBool("ignore_raw_141", false);
+    Settings::instance()->setBool("age_check", true);
+    Settings::instance()->setBool("first_run", true);
     Settings::instance()->set("uo_key", QString::null);
     Settings::instance()->set("uo_nick", QString::null);
     Settings::instance()->set("last_active", "0");
-    Settings::instance()->set("reconnect", "true");
+    Settings::instance()->setBool("reconnect", true);
     Settings::instance()->set("socket_state", "disconnected");
-    Settings::instance()->set("authorizing", "false");
+    Settings::instance()->setBool("authorizing", false);
 
     QStringList constCookies;
     constCookies << "onet_ubi" << "onet_cid" << "onet_sid" << "onet_uid" << "onetzuo_ticket" << "onet_uoi" << "onet_sgn";

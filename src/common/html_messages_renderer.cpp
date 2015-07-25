@@ -155,7 +155,7 @@ void HtmlMessagesRenderer::fixContextMenu(QString &strData, MessageCategory eMes
         }
     }
 
-    if (((!lUrlImages.isEmpty()) || (!lYoutubeImages.isEmpty())) && (Settings::instance()->get("img_thumbs") == "true"))
+    if (((!lUrlImages.isEmpty()) || (!lYoutubeImages.isEmpty())) && (Settings::instance()->getBool("img_thumbs")))
     {
         strDataList << "<br/><span class=\"thumbs\">";
 
@@ -451,10 +451,9 @@ QString HtmlMessagesRenderer::bodyCSS()
 {
     QString strFontSize = Settings::instance()->get("font_size");
     QString strBackgroundImage = Settings::instance()->get("background_image");
-    QString strShowBackgroundImage = Settings::instance()->get("show_background_image");
 
     QString strBackground;
-    if ((strShowBackgroundImage == "true") && (!strBackgroundImage.isEmpty()))
+    if (Settings::instance()->getBool("show_background_image") && !strBackgroundImage.isEmpty())
     {
 #ifdef Q_OS_WIN
     strBackgroundImage = "/"+strBackgroundImage;

@@ -88,7 +88,7 @@ void WebcamEngine::disconnected()
 
 void WebcamEngine::dataKernel(const QByteArray &bData)
 {
-    if (Settings::instance()->get("debug") == "true")
+    if (Settings::instance()->getBool("debug"))
         qDebug() << "CAM byte <- " << bData;
 
     switch (iCamCmd)
@@ -268,7 +268,7 @@ void WebcamEngine::raw_252b(const QByteArray &data)
     {
         QString strStatus = codec_cp1250->toUnicode(data.mid(10));
 
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qDebug() << "CAM <- SETSTATUS " << strStatus;
 
         emit updateStatus(strStatus);
@@ -314,7 +314,7 @@ void WebcamEngine::raw_403b(const QByteArray &data)
 {
     QString strError = data;
 
-    if (Settings::instance()->get("debug") == "true")
+    if (Settings::instance()->getBool("debug"))
         qDebug() << "CAM <- " << strError;
 
     emit error(strError);
@@ -324,7 +324,7 @@ void WebcamEngine::textKernel(const QString &strData)
 {
     if (strData.isEmpty()) return;
 
-    if (Settings::instance()->get("debug") == "true")
+    if (Settings::instance()->getBool("debug"))
         qDebug() << "CAM <- " << strData;
 
     QStringList strDataList = strData.split(" ");
@@ -432,7 +432,7 @@ void WebcamEngine::textKernel(const QString &strData)
             raw_520();
             break;
         default:
-            if (Settings::instance()->get("debug") == "true")
+            if (Settings::instance()->getBool("debug"))
                 qDebug() << "Unknown CAM RAW:" << strData;
             break;
     }

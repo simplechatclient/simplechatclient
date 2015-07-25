@@ -43,19 +43,19 @@ Xml::Xml(const QString &_strFile, const QString &_strRootName, const QHash<QStri
 
             if (!doc.setContent(strData))
             {
-                if (Settings::instance()->get("debug") == "true")
+                if (Settings::instance()->getBool("debug"))
                     qWarning() << QString(tr("Error: Cannot set content from xml file %1")).arg(strFile);
             }
         }
         else
         {
-            if (Settings::instance()->get("debug") == "true")
+            if (Settings::instance()->getBool("debug"))
                 qWarning() << QString(tr("Error: Cannot read xml file %1")).arg(strFile);
         }
     }
     else
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot open xml file %1")).arg(strFile);
     }
 }
@@ -64,7 +64,7 @@ QString Xml::get(const QString &strKey)
 {
     if (doc.isNull())
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot get xml value for key %1 from file %2")).arg(strKey, strFile);
         return QString::null;
     }
@@ -90,7 +90,7 @@ void Xml::set(const QString &strKey, const QString &strValue)
 {
     if (doc.isNull())
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot set xml value for key %1 from file %2")).arg(strKey, strFile);
         return;
     }
@@ -157,7 +157,7 @@ void Xml::remove(const QString &strKey)
 {
     if (doc.isNull())
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot remove xml value for key %1 from file %2")).arg(strKey, strFile);
         return;
     }
@@ -196,7 +196,7 @@ void Xml::save()
 {
     if (doc.isNull())
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot save xml file %1")).arg(strFile);
         return;
     }
@@ -204,7 +204,7 @@ void Xml::save()
     QString xml = doc.toString();
     if (xml.isEmpty())
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot save xml file %1")).arg(strFile);
         return;
     }
@@ -219,7 +219,7 @@ void Xml::save()
     }
     else
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << QString(tr("Error: Cannot save xml file %1")).arg(strFile);
     }
 }

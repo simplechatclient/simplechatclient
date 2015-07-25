@@ -51,27 +51,27 @@ void Busy::init()
 
 void Busy::start()
 {
-    if (Settings::instance()->get("busy") != "true")
+    if (!Settings::instance()->getBool("busy"))
     {
-        Settings::instance()->set("busy", "true");
+        Settings::instance()->setBool("busy", true);
         busyAction->setChecked(true);
     }
 }
 
 void Busy::stop()
 {
-    if (Settings::instance()->get("busy") != "false")
+    if (Settings::instance()->getBool("busy"))
     {
-        Settings::instance()->set("busy", "false");
+        Settings::instance()->setBool("busy", false);
         busyAction->setChecked(false);
     }
 }
 
 void Busy::busyTriggered()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
     {
-        bool bBusy = Settings::instance()->get("busy") == "true" ? true : false;
+        bool bBusy = Settings::instance()->getBool("busy");
 
         if (bBusy)
             Core::instance()->network->send("BUSY 0");

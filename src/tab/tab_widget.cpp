@@ -90,7 +90,7 @@ void TabWidget::createGui()
 void TabWidget::setDefaultValues()
 {
     // settings
-    if (Settings::instance()->get("nicklist") == "true")
+    if (Settings::instance()->getBool("nicklist"))
     {
         users->show();
         pNickListWidget->show();
@@ -118,7 +118,7 @@ void TabWidget::showEvent(QShowEvent *)
 {
     if ((strName.at(0) == '^') || (strName.at(0) == '#'))
     {
-        if ((Settings::instance()->get("nicklist") == "true") && (pNickListWidget->isHidden()))
+        if (Settings::instance()->getBool("nicklist") && pNickListWidget->isHidden())
         {
             users->show();
             pNickListWidget->show();

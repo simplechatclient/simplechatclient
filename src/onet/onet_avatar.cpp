@@ -271,7 +271,7 @@ void OnetAvatar::replyFinished(QNetworkReply *reply)
 
     if (reply->error() != 0)
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << "An error occured during the Avatar request (" << reply->error() << " :: Request: " << requestType << ")" ;
         emit errorOccured(reply->error());
     }

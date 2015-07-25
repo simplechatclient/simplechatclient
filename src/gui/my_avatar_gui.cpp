@@ -78,7 +78,7 @@ void MyAvatarGui::getAvatarReady(const QByteArray &content, const QString &avata
     QPixmap pixmap;
     if (!pixmap.loadFromData(content))
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             qWarning() << "Unable to load image from " << avatarUrl;
 
         ui.label_my_avatar->setPixmap(QPixmap(Avatar::instance()->getEmptyRegisteredUserAvatar()));

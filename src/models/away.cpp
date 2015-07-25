@@ -51,27 +51,27 @@ void Away::init()
 
 void Away::start()
 {
-    if (Settings::instance()->get("away") != "true")
+    if (!Settings::instance()->getBool("away"))
     {
-        Settings::instance()->set("away", "true");
+        Settings::instance()->setBool("away", true);
         awayAction->setChecked(true);
     }
 }
 
 void Away::stop()
 {
-    if (Settings::instance()->get("away") != "false")
+    if (Settings::instance()->getBool("away"))
     {
-        Settings::instance()->set("away", "false");
+        Settings::instance()->setBool("away", false);
         awayAction->setChecked(false);
     }
 }
 
 void Away::awayTriggered()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
     {
-        bool bAway = Settings::instance()->get("away") == "true" ? true : false;
+        bool bAway = Settings::instance()->getBool("away");
 
         QString strReason;
         if (bAway)

@@ -64,14 +64,14 @@ void Autoaway::stop()
 
 void Autoaway::timeoutAutoaway()
 {
-    if ((Core::instance()->network->isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
     {
         qint64 iCurrentTime = QDateTime::currentMSecsSinceEpoch();
 
         qint64 iLastActive = Settings::instance()->get("last_active").toLongLong();
 
-        bool bAway = Settings::instance()->get("away") == "true" ? true : false;
-        bool bAutoAway = Settings::instance()->get("auto_away") == "true" ? true : false;
+        bool bAway = Settings::instance()->getBool("away");
+        bool bAutoAway = Settings::instance()->getBool("auto_away");
 
         if ((!bAway) && (bAutoAway) && (iLastActive != 0) && (iCurrentTime-iLastActive > 300000)) // 300s
             Core::instance()->network->send(QString("AWAY :%1").arg(tr("Not here right now")));

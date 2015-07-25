@@ -242,7 +242,7 @@ QString Commands::cmdBanip()
 
 QString Commands::cmdBusy()
 {
-    bool bBusy = Settings::instance()->get("busy") == "true" ? true : false;
+    bool bBusy = Settings::instance()->getBool("busy");
 
     if (bBusy)
         return "BUSY 0";
@@ -377,7 +377,7 @@ QString Commands::cmdJoin()
 
     if (Utils::instance()->isErotic(strChannel))
     {
-        if (Settings::instance()->get("age_check") == "true")
+        if (Settings::instance()->getBool("age_check"))
         {
             QMessageBox msgBox;
             msgBox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.557, stop:0 rgba(198, 0, 0, 255), stop:1 rgba(255, 0, 0, 255));");
@@ -392,7 +392,7 @@ QString Commands::cmdJoin()
             msgBox.exec();
 
             if (msgBox.clickedButton() == enterButton)
-                Settings::instance()->set("age_check",  "false");
+                Settings::instance()->setBool("age_check", false);
             else
                 return QString::null;
         }
@@ -608,7 +608,7 @@ QString Commands::cmdQuit()
     QString strReason;
     for (int i = 1; i < strDataList.size(); ++i) { if (i != 1) strReason += " "; strReason += strDataList.at(i); }
 
-    Settings::instance()->set("reconnect", "false");
+    Settings::instance()->setBool("reconnect", false);
 
     if (!strReason.isEmpty())
     {

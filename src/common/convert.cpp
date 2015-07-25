@@ -60,7 +60,7 @@ void convertColor(QString &strData)
 {
     QList<QString> lColors = Utils::instance()->getColors();
 
-    if (Settings::instance()->get("font_formating") == "true")
+    if (Settings::instance()->getBool("font_formating"))
     {
         foreach (const QString &strColor, lColors)
         {
@@ -94,7 +94,7 @@ void convertFont(QString &strData)
         int first = pos;
         int second = first + rx.matchedLength();
 
-        if (Settings::instance()->get("font_formating") == "true")
+        if (Settings::instance()->getBool("font_formating"))
         {
             QString strAtributes;
             QString strFontStyle = rx.cap(1);
@@ -130,7 +130,7 @@ void convertEmoticons(QString &strData, bool bInsertWidthHeight, bool qWebViewCo
         QString strEmoticon = rx.cap(1);
         QString strEmoticonFull = "%I"+strEmoticon+"%";
 
-        if (Settings::instance()->get("emoticons") == "true")
+        if (Settings::instance()->getBool("emoticons"))
         {
             QString strEmoticonPath = findEmoticon(strEmoticon);
 
@@ -277,8 +277,8 @@ void Convert::createText(QString &strText)
 {
     QString strMyColor = Settings::instance()->get("my_color");
     QString strMyFont = Settings::instance()->get("my_font");
-    bool bMyBold = Settings::instance()->get("my_bold") == "true" ? true : false;
-    bool bMyItalic = Settings::instance()->get("my_italic") == "true" ? true : false;
+    bool bMyBold = Settings::instance()->getBool("my_bold");
+    bool bMyItalic = Settings::instance()->getBool("my_italic");
 
     QString font = strMyFont.toLower();
     QString weight;

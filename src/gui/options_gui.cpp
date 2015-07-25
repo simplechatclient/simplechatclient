@@ -343,21 +343,21 @@ void OptionsGui::setDefaultValues()
     // default values
     QString strLanguage = Settings::instance()->get("language");
 
-    QString strLogsByDate = Settings::instance()->get("logs_by_date");
+    bool bLogsByDate = Settings::instance()->getBool("logs_by_date");
     QString strLogsFormat = Settings::instance()->get("logs_format");
-    QString strLogs = Settings::instance()->get("logs");
+    bool bLogs = Settings::instance()->getBool("logs");
 
-    QString strSound = Settings::instance()->get("sound");
+    bool bSound = Settings::instance()->getBool("sound");
 
-    QString strShowBackgroundImage = Settings::instance()->get("show_background_image");
+    bool bShowBackgroundImage = Settings::instance()->getBool("show_background_image");
 
-    QString strFontFormating = Settings::instance()->get("font_formating");
-    QString strShowJoinPart = Settings::instance()->get("show_join_part");
-    QString strShowJoinPartBigChannel = Settings::instance()->get("show_join_part_big_channel");
-    QString strEmoticons = Settings::instance()->get("emoticons");
-    QString strReplaceEmoticons = Settings::instance()->get("replace_emoticons");
-    QString strNicklist = Settings::instance()->get("nicklist");
-    QString strImgThumbs = Settings::instance()->get("img_thumbs");
+    bool bFontFormating = Settings::instance()->getBool("font_formating");
+    bool bShowJoinPart = Settings::instance()->getBool("show_join_part");
+    bool bShowJoinPartBigChannel = Settings::instance()->getBool("show_join_part_big_channel");
+    bool bEmoticons = Settings::instance()->getBool("emoticons");
+    bool bReplaceEmoticons = Settings::instance()->getBool("replace_emoticons");
+    bool bNicklist = Settings::instance()->getBool("nicklist");
+    bool bImgThumbs = Settings::instance()->getBool("img_thumbs");
     QString strTimeFormat = Settings::instance()->get("time_format");
 
     QString strWinamp = Settings::instance()->get("winamp");
@@ -365,18 +365,18 @@ void OptionsGui::setDefaultValues()
     QString strMprisFormat = Settings::instance()->get("mpris_format");
     QString strMprisPlayer = Settings::instance()->get("mpris_player");
 
-    QString strTrayMessage = Settings::instance()->get("tray_message");
+    bool bTrayMessage = Settings::instance()->getBool("tray_message");
 
     QString strWebcam = Settings::instance()->get("webcam");
 
-    QString strUpdates = Settings::instance()->get("updates");
+    bool bUpdates = Settings::instance()->getBool("updates");
 
-    QString strAutoConnect = Settings::instance()->get("auto_connect");
-    QString strAutoBusy = Settings::instance()->get("auto_busy");
-    QString strAutoAway = Settings::instance()->get("auto_away");
-    QString strAutojoinFavourites = Settings::instance()->get("autojoin_favourites");
-    QString strMinimizeToTray = Settings::instance()->get("minimize_to_tray");
-    QString strZuoAndIp = Settings::instance()->get("zuo_and_ip");
+    bool bAutoConnect = Settings::instance()->getBool("auto_connect");
+    bool bAutoBusy = Settings::instance()->getBool("auto_busy");
+    bool bAutoAway = Settings::instance()->getBool("auto_away");
+    bool bAutojoinFavourites = Settings::instance()->getBool("autojoin_favourites");
+    bool bMinimizeToTray = Settings::instance()->getBool("minimize_to_tray");
+    bool bZuoAndIp = Settings::instance()->getBool("zuo_and_ip");
 
     // theme
     ui.lineEdit_theme->setText(Settings::instance()->get("themes"));
@@ -390,16 +390,10 @@ void OptionsGui::setDefaultValues()
         ui.comboBox_language->setCurrentIndex(1);
 
     // logs by date
-    if (strLogsByDate == "true")
-        ui.checkBox_logs_by_date->setChecked(true);
-    else
-        ui.checkBox_logs_by_date->setChecked(false);
+    ui.checkBox_logs_by_date->setChecked(bLogsByDate);
 
     // logs
-    if (strLogs == "true")
-        ui.checkBox_logs->setChecked(true);
-    else
-        ui.checkBox_logs->setChecked(false);
+    ui.checkBox_logs->setChecked(bLogs);
 
     // logs format
     if (strLogsFormat == "html")
@@ -408,58 +402,31 @@ void OptionsGui::setDefaultValues()
         ui.radioButton_logs_format_txt->setChecked(true);
 
     // sound
-    if (strSound == "true")
-        ui.checkBox_sound->setChecked(true);
-    else
-        ui.checkBox_sound->setChecked(false);
+    ui.checkBox_sound->setChecked(bSound);
 
     // show background image
-    if (strShowBackgroundImage == "true")
-        ui.checkBox_show_background_image->setChecked(true);
-    else
-        ui.checkBox_show_background_image->setChecked(false);
+    ui.checkBox_show_background_image->setChecked(bShowBackgroundImage);
 
     // font formating
-    if (strFontFormating == "true")
-        ui.checkBox_font_formating->setChecked(true);
-    else
-        ui.checkBox_font_formating->setChecked(false);
+    ui.checkBox_font_formating->setChecked(bFontFormating);
 
     // show join part
-    if (strShowJoinPart == "true")
-        ui.checkBox_show_join_part->setChecked(true);
-    else
-        ui.checkBox_show_join_part->setChecked(false);
+    ui.checkBox_show_join_part->setChecked(bShowJoinPart);
 
     // show join part big channel
-    if (strShowJoinPartBigChannel == "true")
-        ui.checkBox_show_join_part_big_channel->setChecked(true);
-    else
-        ui.checkBox_show_join_part_big_channel->setChecked(false);
+    ui.checkBox_show_join_part_big_channel->setChecked(bShowJoinPartBigChannel);
 
     // emoticons
-    if (strEmoticons == "true")
-        ui.checkBox_emoticons->setChecked(true);
-    else
-        ui.checkBox_emoticons->setChecked(false);
+    ui.checkBox_emoticons->setChecked(bEmoticons);
 
     // replace emoticons
-    if (strReplaceEmoticons == "true")
-        ui.checkBox_replace_emoticons->setChecked(true);
-    else
-        ui.checkBox_replace_emoticons->setChecked(false);
+    ui.checkBox_replace_emoticons->setChecked(bReplaceEmoticons);
 
     // nicklist
-    if (strNicklist == "true")
-        ui.checkBox_nicklist->setChecked(true);
-    else
-        ui.checkBox_nicklist->setChecked(false);
+    ui.checkBox_nicklist->setChecked(bNicklist);
 
     // img thumbs
-    if (strImgThumbs == "true")
-        ui.checkBox_img_thumbs->setChecked(true);
-    else
-        ui.checkBox_img_thumbs->setChecked(false);
+    ui.checkBox_img_thumbs->setChecked(bImgThumbs);
 
     // time format
     int index = ui.comboBox_time_format->findText(strTimeFormat);
@@ -477,16 +444,10 @@ void OptionsGui::setDefaultValues()
     ui.comboBox_mpris_player->setCurrentIndex(ui.comboBox_mpris_player->findText(strMprisPlayer));
 
     // tray message
-    if (strTrayMessage == "true")
-        ui.checkBox_tray_message->setChecked(true);
-    else
-        ui.checkBox_tray_message->setChecked(false);
+    ui.checkBox_tray_message->setChecked(bTrayMessage);
 
     // updates
-    if (strUpdates == "true")
-        ui.checkBox_updates->setChecked(true);
-    else
-        ui.checkBox_updates->setChecked(false);
+    ui.checkBox_updates->setChecked(bUpdates);
 
     // webcam
     if (strWebcam == "system")
@@ -495,40 +456,22 @@ void OptionsGui::setDefaultValues()
         ui.radioButton_webcam_internal->setChecked(true);
 
     // auto connect
-    if (strAutoConnect == "true")
-        ui.checkBox_auto_connect->setChecked(true);
-    else
-        ui.checkBox_auto_connect->setChecked(false);
+    ui.checkBox_auto_connect->setChecked(bAutoConnect);
 
     // auto busy
-    if (strAutoBusy == "true")
-        ui.checkBox_auto_busy->setChecked(true);
-    else
-        ui.checkBox_auto_busy->setChecked(false);
+    ui.checkBox_auto_busy->setChecked(bAutoBusy);
 
     // auto away
-    if (strAutoAway == "true")
-        ui.checkBox_auto_away->setChecked(true);
-    else
-        ui.checkBox_auto_away->setChecked(false);
+    ui.checkBox_auto_away->setChecked(bAutoAway);
 
     // auto join favourites
-    if (strAutojoinFavourites == "true")
-        ui.checkBox_autojoin_favourites->setChecked(true);
-    else
-        ui.checkBox_autojoin_favourites->setChecked(false);
+    ui.checkBox_autojoin_favourites->setChecked(bAutojoinFavourites);
 
     // minimize to tray
-    if (strMinimizeToTray == "true")
-        ui.checkBox_minimize_to_tray->setChecked(true);
-    else
-        ui.checkBox_minimize_to_tray->setChecked(false);
+    ui.checkBox_minimize_to_tray->setChecked(bMinimizeToTray);
 
     // zuo & ip
-    if (strZuoAndIp == "true")
-        ui.checkBox_zuo_and_ip->setChecked(true);
-    else
-        ui.checkBox_zuo_and_ip->setChecked(false);
+    ui.checkBox_zuo_and_ip->setChecked(bZuoAndIp);
 
     // set mainwindow colors
     setMainwindowColors();
@@ -537,7 +480,7 @@ void OptionsGui::setDefaultValues()
     setNicklistColors();
 
     // disable change nick if connected
-    if (Settings::instance()->get("logged") == "true")
+    if (Settings::instance()->getBool("logged"))
     {
         ui.label_logged_warning->setText(tr("Profile cannot be changed when logged"));
         ui.comboBox_profiles->setDisabled(true);
@@ -1072,12 +1015,10 @@ void OptionsGui::setSoundQuery()
 
 void OptionsGui::setSound(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("sound", strValue);
+    Settings::instance()->setBool("sound", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("sound", strValue);
+    pConfig->set("sound", bValue ? "true" : "false");
     delete pConfig;
 }
 
@@ -1090,23 +1031,19 @@ void OptionsGui::openLogsFolder()
 
 void OptionsGui::setLogsByDate(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("logs_by_date", strValue);
+    Settings::instance()->setBool("logs_by_date", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("logs_by_date", strValue);
+    pConfig->set("logs_by_date", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setLogs(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("logs", strValue);
+    Settings::instance()->setBool("logs", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("logs", strValue);
+    pConfig->set("logs", bValue ? "true" : "false");
     delete pConfig;
 }
 
@@ -1158,12 +1095,10 @@ void OptionsGui::setBackgroundImage()
 
 void OptionsGui::setShowBackgroundImage(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("show_background_image", strValue);
+    Settings::instance()->setBool("show_background_image", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("show_background_image", strValue);
+    pConfig->set("show_background_image", bValue ? "true" : "false");
     delete pConfig;
 
     // refresh background image
@@ -1172,78 +1107,64 @@ void OptionsGui::setShowBackgroundImage(bool bValue)
 
 void OptionsGui::setFontFormating(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("font_formating", strValue);
+    Settings::instance()->setBool("font_formating", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("font_formating", strValue);
+    pConfig->set("font_formating", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setShowJoinPart(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("show_join_part", strValue);
+    Settings::instance()->setBool("show_join_part", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("show_join_part", strValue);
+    pConfig->set("show_join_part", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setShowJoinPartBigChannel(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("show_join_part_big_channel", strValue);
+    Settings::instance()->setBool("show_join_part_big_channel", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("show_join_part_big_channel", strValue);
+    pConfig->set("show_join_part_big_channel", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setEmoticons(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("emoticons", strValue);
+    Settings::instance()->setBool("emoticons", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("emoticons", strValue);
+    pConfig->set("emoticons", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setReplaceEmoticons(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("replace_emoticons", strValue);
+    Settings::instance()->setBool("replace_emoticons", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("replace_emoticons", strValue);
+    pConfig->set("replace_emoticons", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setNicklist(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("nicklist", strValue);
+    Settings::instance()->setBool("nicklist", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("nicklist", strValue);
+    pConfig->set("nicklist", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setImgThumbs(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("img_thumbs", strValue);
+    Settings::instance()->setBool("img_thumbs", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("img_thumbs", strValue);
+    pConfig->set("img_thumbs", bValue ? "true" : "false");
     delete pConfig;
 }
 
@@ -1294,12 +1215,10 @@ void OptionsGui::setMprisPlayer(int index)
 
 void OptionsGui::setTrayMessage(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("tray_message", strValue);
+    Settings::instance()->setBool("tray_message", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("tray_message", strValue);
+    pConfig->set("tray_message", bValue ? "true" : "false");
     delete pConfig;
 }
 
@@ -1327,78 +1246,64 @@ void OptionsGui::setWebcamInternal()
 
 void OptionsGui::setUpdates(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("updates", strValue);
+    Settings::instance()->setBool("updates", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("updates", strValue);
+    pConfig->set("updates", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setAutoConnect(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("auto_connect", strValue);
+    Settings::instance()->setBool("auto_connect", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("auto_connect", strValue);
+    pConfig->set("auto_connect", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setAutoBusy(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("auto_busy", strValue);
+    Settings::instance()->setBool("auto_busy", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("auto_busy", strValue);
+    pConfig->set("auto_busy", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setAutoAway(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("auto_away", strValue);
+    Settings::instance()->setBool("auto_away", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("auto_away", strValue);
+    pConfig->set("auto_away", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setAutojoinFavourites(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("autojoin_favourites", strValue);
+    Settings::instance()->setBool("autojoin_favourites", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("autojoin_favourites", strValue);
+    pConfig->set("autojoin_favourites", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setMinimizeToTray(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("minimize_to_tray", strValue);
+    Settings::instance()->setBool("minimize_to_tray", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("minimize_to_tray", strValue);
+    pConfig->set("minimize_to_tray", bValue ? "true" : "false");
     delete pConfig;
 }
 
 void OptionsGui::setZuoAndIp(bool bValue)
 {
-    QString strValue = (bValue ? "true" : "false");
-
-    Settings::instance()->set("zuo_and_ip", strValue);
+    Settings::instance()->setBool("zuo_and_ip", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("zuo_and_ip", strValue);
+    pConfig->set("zuo_and_ip", bValue ? "true" : "false");
     delete pConfig;
 }
 

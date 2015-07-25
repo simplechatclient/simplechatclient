@@ -68,8 +68,8 @@ void Log::logClosed(const QString &strChannel)
 
 void Log::save(const QString &strChannel, const QString &strMessage, Log::LogsFormat currentLogFormat)
 {
-    if (Settings::instance()->get("logs") == "false") return;
-    if ((strChannel.isEmpty()) || (strMessage.isEmpty())) return;
+    if (!Settings::instance()->getBool("logs")) return;
+    if (strChannel.isEmpty() || strMessage.isEmpty()) return;
 
     QString strCurrentProfile = Settings::instance()->get("current_profile");
     QString path;
@@ -83,7 +83,7 @@ void Log::save(const QString &strChannel, const QString &strMessage, Log::LogsFo
     path += "profiles/"+strCurrentProfile+"/log/";
 
     // save logs by date
-    bool bLogsByDate = Settings::instance()->get("logs_by_date") == "true" ? true : false;
+    bool bLogsByDate = Settings::instance()->getBool("logs_by_date");
     if (bLogsByDate)
     {
         QString strDateY = QDate().currentDate().toString("yyyy");

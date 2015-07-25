@@ -35,7 +35,7 @@
 
 Network::Network(const QString &_strServer, int _iPort) : strServer(_strServer), iPort(_iPort), iActive(0), bAuthorized(false)
 {
-    Settings::instance()->set("reconnect", "true");
+    Settings::instance()->setBool("reconnect", true);
 
     timerReconnect = new QTimer();
     timerReconnect->setInterval(1000*60*2); // 2 min
@@ -108,7 +108,7 @@ void Network::clearAll()
     Nick::instance()->clear();
 
     // state
-    Settings::instance()->set("logged", "false");
+    Settings::instance()->setBool("logged", false);
 
     // timer
     timerPong->stop();
@@ -241,9 +241,9 @@ void Network::reconnect()
 {
     timerReconnect->stop();
 
-    if (Settings::instance()->get("reconnect") == "true")
+    if (Settings::instance()->getBool("reconnect"))
     {
-        if ((!this->isConnected()) && (Settings::instance()->get("logged") == "false"))
+        if (!this->isConnected() && !Settings::instance()->getBool("logged"))
         {
             QString strDisplay = tr("Reconnecting...");
             Message::instance()->showMessageAll(strDisplay, MessageInfo);
@@ -256,7 +256,7 @@ void Network::write(const QString &strData)
 {
     if ((socket->isValid()) && (socket->state() == QAbstractSocket::ConnectedState))
     {
-        if (Settings::instance()->get("debug") == "true")
+        if (Settings::instance()->getBool("debug"))
             Message::instance()->showMessage(DEBUG_WINDOW, "-> "+strData, MessageDefault);
 
         QTextCodec *codec = QTextCodec::codecForName("ISO-8859-2");
@@ -341,7 +341,7 @@ void Network::error(QAbstractSocket::SocketError error)
  */
 void Network::stateChanged(QAbstractSocket::SocketState socketState)
 {
-    if (Settings::instance()->get("debug") == "true")
+    if (Settings::instance()->getBool("debug"))
         qDebug() << "Network socket state changed to: " << socketState;
 
     if (socketState == QAbstractSocket::UnconnectedState)
@@ -381,7 +381,7 @@ void Network::timeoutPing()
 {
     QString strMSecs = QString::number(QDateTime::currentMSecsSinceEpoch());
 
-    if ((isConnected()) && (Settings::instance()->get("logged") == "true"))
+    if (isConnected() && Settings::instance()->getBool("logged"))
         send(QString("PING :%1").arg(strMSecs));
 }
 
