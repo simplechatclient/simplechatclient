@@ -148,7 +148,10 @@ void Core::configSettingsValues()
     while (it.hasNext())
     {
         it.next();
-        Settings::instance()->set(it.key(), it.value());
+        if (it.value() == "true" || it.value() == "false")
+            Settings::instance()->setBool(it.key(), it.value() == "true");
+        else
+            Settings::instance()->set(it.key(), it.value());
     }
 }
 
@@ -164,7 +167,10 @@ void Core::configProfileValues()
     while (it.hasNext())
     {
         it.next();
-        Settings::instance()->set(it.key(), it.value());
+        if (it.value() == "true" || it.value() == "false")
+            Settings::instance()->setBool(it.key(), it.value() == "true");
+        else
+            Settings::instance()->set(it.key(), it.value());
     }
 }
 
