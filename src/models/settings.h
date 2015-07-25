@@ -40,6 +40,7 @@ public:
 
 private:
     QHash<QString,QString> settings;
+    QHash<QString,bool> bSettings;
 
     void init();
     void clear();

@@ -46,6 +46,7 @@ void Settings::init()
 void Settings::clear()
 {
     settings.clear();
+    bSettings.clear();
 }
 
 QString Settings::get(const QString &key)
@@ -55,7 +56,7 @@ QString Settings::get(const QString &key)
 
 bool Settings::getBool(const QString &key)
 {
-    return settings.value(key, QString::null) == "true";
+    return bSettings.value(key, false);
 }
 
 void Settings::set(const QString &key, const QString &value)
@@ -65,5 +66,5 @@ void Settings::set(const QString &key, const QString &value)
 
 void Settings::setBool(const QString &key, bool value)
 {
-    settings[key] = value ? "true" : "false";
+    bSettings[key] = value;
 }
