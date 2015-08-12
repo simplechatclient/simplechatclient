@@ -310,7 +310,7 @@ void Network::recv()
         iActive = QDateTime::currentMSecsSinceEpoch();
 
         QTextCodec *codec = QTextCodec::codecForName("ISO-8859-2");
-        strData = codec->toUnicode(data);
+        QString strData = codec->toUnicode(data);
 
         // disabled due to bug in detection iso/utf
         /*
