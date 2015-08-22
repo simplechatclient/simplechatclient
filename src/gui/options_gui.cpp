@@ -329,6 +329,7 @@ void OptionsGui::setDefaultValues()
     ui.lineEdit_background_image->setText(QDir::toNativeSeparators(Settings::instance()->get("background_image")));
 
     // time format
+    ui.comboBox_time_format->clear();
     ui.comboBox_time_format->addItem("hh:mm:ss");
     ui.comboBox_time_format->addItem("hh:mm");
 
