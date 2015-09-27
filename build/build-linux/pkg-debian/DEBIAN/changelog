@@ -1,5 +1,4 @@
-Version 2.1.0 (2015-05-11)
+Version 2.2.0 (2015-09-28)
 ================================
-* New icons
-* Changed logs dir to yyyy/mm/dd
+* Compatibility with Windows 10
 * Many bugfixes 

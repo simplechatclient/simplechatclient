@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Simple Chat Client
-Version=2.1.0
+Version=2.2.0
 Exec=/usr/local/bin/scc
 Comment=Simple Chat Client
 Icon=/usr/local/share/scc/scc.png
