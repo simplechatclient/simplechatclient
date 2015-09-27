@@ -64,7 +64,7 @@ Update::~Update()
 
 void Update::checkUpdate()
 {
-    checkUpdateSourceforge();
+    checkUpdateGithub();
 }
 
 void Update::updateRequest(const QString &strMethod, const QString &strUrl, const QString &strUrlMarker)
@@ -96,14 +96,14 @@ void Update::updateRequest(const QString &strMethod, const QString &strUrl, cons
     }
 }
 
-void Update::checkUpdateSourceforge()
-{
-    updateRequest("POST", UPDATE_URL_SOURCEFORGE, UPDATE_URL_SOURCEFORGE);
-}
-
 void Update::checkUpdateGithub()
 {
     updateRequest("GET", UPDATE_URL_GITHUB, UPDATE_URL_GITHUB);
+}
+
+void Update::checkUpdateSourceforge()
+{
+    updateRequest("POST", UPDATE_URL_SOURCEFORGE, UPDATE_URL_SOURCEFORGE);
 }
 
 int Update::fastParseVersion(QString strVersionXml)
@@ -195,19 +195,19 @@ void Update::updateFinished(QNetworkReply *reply)
 
     if (hUpdateResults.size() == 1)
     {
-        checkUpdateGithub();
+        checkUpdateSourceforge();
     }
     else if (hUpdateResults.size() == 2)
     {
-        int updateSourceforge = fastParseVersion(hUpdateResults.value(UPDATE_URL_SOURCEFORGE));
         int updateGithub = fastParseVersion(hUpdateResults.value(UPDATE_URL_GITHUB));
+        int updateSourceforge = fastParseVersion(hUpdateResults.value(UPDATE_URL_SOURCEFORGE));
 
-        if ((updateSourceforge != 0) || (updateGithub != 0))
+        if ((updateGithub != 0) || (updateSourceforge != 0))
         {
-            if (updateSourceforge >= updateGithub)
-                saveUpdate(hUpdateResults.value(UPDATE_URL_SOURCEFORGE));
-            else
+            if (updateGithub >= updateSourceforge)
                 saveUpdate(hUpdateResults.value(UPDATE_URL_GITHUB));
+            else
+                saveUpdate(hUpdateResults.value(UPDATE_URL_SOURCEFORGE));
 
             if (!Settings::instance()->get("motd").isEmpty())
             {

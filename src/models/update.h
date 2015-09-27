@@ -47,8 +47,8 @@ private:
     QHash<QString, QString> hUpdateResults;
 
     void updateRequest(const QString &strMethod, const QString &strUrl, const QString &strUrlMarker);
-    void checkUpdateSourceforge();
     void checkUpdateGithub();
+    void checkUpdateSourceforge();
     int fastParseVersion(QString strXml);
     QString fullParseVersion();
     void saveUpdate(QString strXml);
