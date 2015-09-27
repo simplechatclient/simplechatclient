@@ -33,8 +33,8 @@
     #include <QSysInfo>
 #endif
 
-#define UPDATE_URL_SOURCEFORGE "http://simplechatclien.sourceforge.net/update.xml"
 #define UPDATE_URL_GITHUB "http://simplechatclient.github.io/update.xml"
+#define UPDATE_URL_SOURCEFORGE "http://simplechatclien.sourceforge.net/update.xml"
 
 Update * Update::Instance = 0;
 
