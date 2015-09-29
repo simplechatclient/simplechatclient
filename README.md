@@ -23,17 +23,17 @@ The program of the assumptions is small, lightweight and stable client.
 
 ### Windows Requirements
 
-[Microsoft Visual C++ 2008 SP1 Redistributable Package (x86)](http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=5582)
+[Microsoft Visual C++ 2013 Redistributable Package (x86)](http://www.microsoft.com/en-us/download/details.aspx?id=40784)
 
 Example Environment variables for development:
 
 PATH
 
-	c:\Qt\5.4\mingw491_32\bin;c:\Qt\Tools\mingw491_32\bin;C:\Program Files (x86)\CMake\bin;
+	c:\Qt\5.5\mingw492_32\bin;c:\Qt\Tools\mingw492_32\bin;C:\Program Files (x86)\CMake\bin;
 
 QT_DIR
 
-	c:\Qt\5.4\mingw491_32\bin\
+	c:\Qt\5.5\mingw492_32\bin\
 
 ### Linux Debian/Ubuntu packages
 
