@@ -218,7 +218,7 @@ bool InputLineWidget::event(QEvent *e)
 
         return true;
     }
-    else if ((k->key() == Qt::Key_Up) && (k->modifiers() == Qt::ControlModifier))
+    else if ((k->key() == Qt::Key_Up) && ((this->toPlainText().isEmpty()) || (k->modifiers() == Qt::ControlModifier)))
     {
         iLastMessage++;
         if (iLastMessage > iLastMessageLimit)
@@ -236,7 +236,7 @@ bool InputLineWidget::event(QEvent *e)
 
         return true;
     }
-    else if ((k->key() == Qt::Key_Down) && (k->modifiers() == Qt::ControlModifier))
+    else if ((k->key() == Qt::Key_Down) && ((this->toPlainText().isEmpty()) || (k->modifiers() == Qt::ControlModifier)))
     {
         iLastMessage--;
         if (iLastMessage < -1)
