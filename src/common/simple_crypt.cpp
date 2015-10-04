@@ -18,7 +18,7 @@
  */
 
 #include <QDebug>
-#include <QtCrypto/QtCrypto>
+#include <Qca-qt5/QtCrypto/QtCrypto>
 #include "simple_crypt.h"
 
 #ifdef Q_OS_WIN
