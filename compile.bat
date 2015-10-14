@@ -2,12 +2,15 @@
 
 set SCC_DIR=%CD%
 set DESTINATION="C:\scc\release"
-set QT_DIR="c:\Qt\5.5\mingw492_32"
-set QCA2_DIR="C:\qca-2.0.3"
+set QT_DIR="C:\Qt\5.5\mingw492_32"
+set QT_TOOLS_DIR="C:\Qt\Tools"
+set QCA2_DIR="C:\Qt\Tools\qca"
 set OPENSSL_DIR="C:\OpenSSL-Win32"
-set MINGW_DIR="c:\Qt\Tools\mingw492_32"
+set MINGW_DIR="C:\Qt\Tools\mingw492_32"
 set CMAKE_DIR="C:\Program Files\CMake"
-set CMAKE32_DIR="C:\Program Files (x86)\CMake"
+set CMAKE_32_DIR="C:\Program Files (x86)\CMake"
+set GIT_DIR="C:\Program Files\Git"
+set GIT_32_DIR="C:\Program Files (x86)\Git"
 
 rem ----------------------- END OF CONFIG ---------------------------
 
@@ -15,7 +18,7 @@ rem settings for QCA2 and QCA-OSSL
 set QTDIR=%QT_DIR%
 
 if not exist %CMAKE_DIR%\bin\cmake.exe (
-if not exist %CMAKE32_DIR%\bin\cmake.exe (
+if not exist %CMAKE_32_DIR%\bin\cmake.exe (
 echo Download CMake from http://www.cmake.org/files/v3.2/cmake-3.2.3-win32-x86.exe
 pause
 exit
@@ -34,19 +37,24 @@ pause
 exit
 )
 
-if not exist %QCA2_DIR%\include\QtCrypto\qca.h (
-echo Download QCA2 from https://projects.kde.org/projects/kdesupport/qca/repository
+if not exist %GIT_DIR%\bin\git.exe (
+if not exist %GIT_32_DIR%\bin\git.exe (
+echo Download Git 2.5.0 for Windows from https://github.com/git-for-windows/git/releases/download/v2.6.1.windows.1/Git-2.6.1-32-bit.exe
 pause
 exit
 )
+)
 
-if not exist %QT_DIR%\bin\libqca.dll (goto compile_qca)
+if not exist %QCA2_DIR%\include\QtCrypto\qca.h (goto compile_qca)
+if not exist %QT_DIR%\bin\libqca-qt5.dll (goto compile_qca)
 if not exist %QT_DIR%\mkspecs\features\crypto.prf (goto compile_qca)
 goto end_compile_qca
 :compile_qca
 echo Compiling qca
+cd /D %QT_TOOLS_DIR%
+git clone git://anongit.kde.org/qca qca
 cd /D %QCA2_DIR%
-cmake . -G "MinGW Makefiles"
+cmake . -G "MinGW Makefiles" -DBUILD_TESTS=OFF
 mingw32-make
 mingw32-make install
 cd /D %SCC_DIR%
@@ -143,7 +151,7 @@ xcopy %OPENSSL_DIR%\libeay32.dll %DESTINATION%\ /C /H /R /Y /Q
 xcopy %OPENSSL_DIR%\ssleay32.dll %DESTINATION%\ /C /H /R /Y /Q 
 
 echo Copying QCA libs
-xcopy %QT_DIR%\bin\libqca.dll %DESTINATION%\ /C /H /R /Y /Q
+xcopy %QT_DIR%\bin\libqca-qt5.dll %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\plugins\crypto\libqca-ossl.dll %DESTINATION%\plugins\crypto\ /C /H /R /Y /Q
 
 echo Copying translations
