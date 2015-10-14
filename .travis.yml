@@ -1,6 +1,6 @@
 before_install:
  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
- - sudo add-apt-repository --yes ppa:beineri/opt-qt541
+ - sudo add-apt-repository --yes ppa:beineri/opt-qt542
  - sudo apt-get update -qq
 install:
  - sudo apt-get install make pkg-config g++-4.9 libssl-dev
