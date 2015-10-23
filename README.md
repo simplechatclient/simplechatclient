@@ -1,5 +1,5 @@
 ## [Simple Chat Client](http://simplechatclient.github.io "Simple Chat Client Offical Site") [![Join the chat at https://gitter.im/simplechatclient/simplechatclient](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/simplechatclient/simplechatclient)
-[![GitHub release](https://img.shields.io/github/release/simplechatclient/simplechatclient.svg)](https://github.com/simplechatclient/simplechatclient/releases/latest) [![Github downloads](https://img.shields.io/github/downloads/simplechatclient/simplechatclient/latest/total.svg)](https://github.com/simplechatclient/simplechatclient/releases/latest)
+[![](https://img.shields.io/github/release/simplechatclient/simplechatclient.svg?label=Release)](https://github.com/simplechatclient/simplechatclient/releases/latest) [![](https://img.shields.io/github/downloads/simplechatclient/simplechatclient/latest/total.svg?label=Downloads)](https://github.com/simplechatclient/simplechatclient/releases/latest)
 [![Build Status](https://travis-ci.org/simplechatclient/simplechatclient.svg?branch=master)](https://travis-ci.org/simplechatclient/simplechatclient) 
 
 Simple Chat Client is a lightweight and simple program which allows talking in the czat.onet.pl
