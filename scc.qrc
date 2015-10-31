@@ -139,5 +139,7 @@
         <file>images/draw-brush.svg</file>
         <file>images/moderation.svg</file>
         <file>images/breeze/list-minus.svg</file>
+        <file>images/breeze/mail-invitation.svg</file>
+        <file>images/breeze/mail-mark-notjunk.svg</file>
     </qresource>
 </RCC>

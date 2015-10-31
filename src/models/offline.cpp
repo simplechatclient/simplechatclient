@@ -19,9 +19,11 @@
 
 #include <QAction>
 #include <QDateTime>
+#include "core/core.h"
 #include "common/convert.h"
 #include "common/log.h"
 #include "notification.h"
+#include "my_profile.h"
 #include "settings.h"
 #include "offline.h"
 
@@ -42,12 +44,34 @@ Offline::Offline()
 {
     offlineMessagesAction = new QAction(QIcon(":/images/breeze/mail-mark-unread.svg") , tr("Offline messages"), this);
     offlineMessagesAction->setVisible(false);
+
+    offmsgAllAction = new QAction(this);
+    offmsgAllAction->setIcon(QIcon(":/images/breeze/mail-mark-notjunk.svg"));
+    offmsgAllAction->setText(tr("Offline messages all"));
+    offmsgAllAction->setCheckable(true);
+    offmsgAllAction->setChecked(false);
+
+    offmsgFriendAction = new QAction(this);
+    offmsgFriendAction->setIcon(QIcon(":/images/breeze/mail-invitation.svg"));
+    offmsgFriendAction->setText(tr("Offline messages friend"));
+    offmsgFriendAction->setCheckable(true);
+    offmsgFriendAction->setChecked(false);
+
+    offmsgNoneAction = new QAction(this);
+    offmsgNoneAction->setIcon(QIcon(":/images/breeze/mail-mark-junk.svg"));
+    offmsgNoneAction->setText(tr("Offline messages none"));
+    offmsgNoneAction->setCheckable(true);
+    offmsgNoneAction->setChecked(false);
 }
 
 void Offline::init()
 {
     lOfflineNicks.clear();
     lOfflineMessages.clear();
+
+    connect(offmsgAllAction, SIGNAL(triggered()), this, SLOT(offmsgAllTriggered()));
+    connect(offmsgFriendAction, SIGNAL(triggered()), this, SLOT(offmsgFriendTriggered()));
+    connect(offmsgNoneAction, SIGNAL(triggered()), this, SLOT(offmsgNoneTriggered()));
 }
 
 void Offline::addMessage(qint64 iTime, const QString &strType, const QString &strNick, const QString &strMessage)
@@ -143,4 +167,34 @@ bool Offline::isEmptyNicks()
 int Offline::countNicks()
 {
     return lOfflineNicks.size();
+}
+
+void Offline::updateOffmsgStatus()
+{
+    offmsgAllAction->setChecked(false);
+    offmsgFriendAction->setChecked(false);
+    offmsgNoneAction->setChecked(false);
+
+    QString strOffmsg = MyProfile::instance()->get("offmsg");
+    if (strOffmsg == "all")
+        offmsgAllAction->setChecked(true);
+    else if (strOffmsg == "friend")
+        offmsgFriendAction->setChecked(true);
+    else if (strOffmsg == "none")
+        offmsgNoneAction->setChecked(true);
+}
+
+void Offline::offmsgAllTriggered()
+{
+    Core::instance()->network->send("NS SET offmsg all");
+}
+
+void Offline::offmsgFriendTriggered()
+{
+    Core::instance()->network->send("NS SET offmsg friend");
+}
+
+void Offline::offmsgNoneTriggered()
+{
+    Core::instance()->network->send("NS SET offmsg none");
 }

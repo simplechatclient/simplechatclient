@@ -49,14 +49,23 @@ public:
     QList<QString> getNicks();
     bool isEmptyNicks();
     int countNicks();
+    void updateOffmsgStatus();
 
     QAction *offlineMessagesAction;
+    QAction *offmsgAllAction;
+    QAction *offmsgFriendAction;
+    QAction *offmsgNoneAction;
 
 private:
     QMultiHash<QString, OnetOfflineMessage> lOfflineMessages;
     QList<QString> lOfflineNicks;
 
     void init();
+
+private slots:
+    void offmsgAllTriggered();
+    void offmsgFriendTriggered();
+    void offmsgNoneTriggered();
 };
 
 #endif // OFFLINE_H

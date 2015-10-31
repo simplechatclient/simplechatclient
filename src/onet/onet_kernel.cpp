@@ -1181,6 +1181,10 @@ void OnetKernel::raw_111n()
     if (strNick == strMe)
         MyProfile::instance()->set(strKey, strValue);
 
+    // update my offmsg
+    if ((strNick == strMe) && (strKey == "offmsg"))
+        Offline::instance()->updateOffmsgStatus();
+
     // get avatar
     if ((strKey == "avatar") && (!strValue.isEmpty()) && (Themes::instance()->isCurrentWithAvatar()))
     {

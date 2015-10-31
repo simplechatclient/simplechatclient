@@ -214,6 +214,9 @@ void MainWindow::createMenus()
     myMenu->addSeparator();
     myMenu->addAction(Busy::instance()->busyAction);
     myMenu->addAction(Away::instance()->awayAction);
+    myMenu->addAction(Offline::instance()->offmsgAllAction);
+    myMenu->addAction(Offline::instance()->offmsgFriendAction);
+    myMenu->addAction(Offline::instance()->offmsgNoneAction);
 
     // main menu
     sccMenu = new QMenu(tr("SCC"));

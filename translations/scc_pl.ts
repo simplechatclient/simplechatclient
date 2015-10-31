@@ -2630,6 +2630,18 @@
         <source>Offline messages</source>
         <translation>Wiadomości offline</translation>
     </message>
+    <message>
+        <source>Offline messages all</source>
+        <translation>Przyjmuj wiadomości offline od wszystkich</translation>
+    </message>
+    <message>
+        <source>Offline messages friend</source>
+        <translation>Przyjmuj wiadomości offline tylko od przyjaciół</translation>
+    </message>
+    <message>
+        <source>Offline messages none</source>
+        <translation>Blokuj całkowicie przyjmowanie wiadomości offline</translation>
+    </message>
 </context>
 <context>
     <name>OnetAuth</name>
