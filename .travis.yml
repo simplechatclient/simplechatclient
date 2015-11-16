@@ -19,3 +19,10 @@ script:
  - cmake . -DCMAKE_INSTALL_PREFIX=/usr/local
  - make
  - sudo make install
+notifications:
+  email:
+    recipients:
+      - piotr.luczko@gmail.com
+      - dmarkowicz@alari.pl
+    on_success: change
+    on_failure: always
