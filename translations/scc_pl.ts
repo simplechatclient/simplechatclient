@@ -1054,6 +1054,10 @@
         <translation>Pokój istnieje dni:</translation>
     </message>
     <message>
+        <source>Guardian</source>
+        <translation>Anioł stróż</translation>
+    </message>
+    <message>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>

@@ -646,7 +646,14 @@ void ChannelSettingsGui::addBan(const QString &strNick, const QString &strWho, c
     if (strIPNick.isEmpty())
     {
         item->setText(strNick);
-        item->setToolTip(QString("%1: %2 (%4)").arg(tr("Created by"), strWho, strDT));
+        if (strWho == "0")
+        {
+            item->setToolTip(QString("%1: %2 (%3)").arg(tr("Created by"), tr("Guardian"), strDT));
+        }
+        else
+        {
+            item->setToolTip(QString("%1: %2 (%3)").arg(tr("Created by"), strWho, strDT));
+        }
     }
     else
     {
@@ -655,7 +662,14 @@ void ChannelSettingsGui::addBan(const QString &strNick, const QString &strWho, c
         item->setData(OryginalBanMaskRole, strNick); // set original ban mask
         QString strFixedNick = strNick; strFixedNick.remove("*!*@");
         QString strIPHint = tr("IP Mask: %1").arg(strFixedNick);
-        item->setToolTip(QString("%1: %2 (%3) [%4]").arg(tr("Created by"), strWho, strDT, strIPHint));
+        if (strWho == "0")
+        {
+            item->setToolTip(QString("%1: %2 (%3) [%4]").arg(tr("Created by"), tr("Guardian"), strDT, strIPHint));
+        }
+        else
+        {
+            item->setToolTip(QString("%1: %2 (%3) [%4]").arg(tr("Created by"), strWho, strDT, strIPHint));
+        }
     }
 
     ((QListWidget*)ui.tabWidget_permissions->widget(2))->addItem(item);
