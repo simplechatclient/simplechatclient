@@ -13,7 +13,7 @@
    height="22"
    id="svg3109"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="menu.svg">
   <defs
      id="defs3111" />
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="32.137494"
+     inkscape:zoom="22.728684"
      inkscape:cx="16.834965"
-     inkscape:cy="11.075907"
+     inkscape:cy="11.638992"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -35,12 +35,13 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:window-width="1366"
-     inkscape:window-height="706"
+     inkscape:window-height="705"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
-     inkscape:snap-page="true">
+     inkscape:snap-page="true"
+     showguides="false">
     <inkscape:grid
        type="xygrid"
        id="grid4108"
@@ -91,7 +92,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="" />
       </cc:Work>
@@ -104,15 +105,17 @@
      transform="translate(-534.14288,-579.07648)">
     <path
        style="fill:#4d4d4d;fill-opacity:1;stroke:none"
-       d="m 537.14288,582.07648 c 0,0.66667 0,1.33333 0,2 5.33333,0 10.66667,0 16,0 0,-0.66667 0,-1.33333 0,-2 -5.33333,0 -10.66667,0 -16,0 z"
-       id="path4424" />
+       d="m 537.14288,583.07648 c 0,0.66667 0,1.33333 0,2 5.33333,0 10.66667,0 16,0 0,-0.66667 0,-1.33333 0,-2 -5.33333,0 -10.66667,0 -16,0 z"
+       id="path4424"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:#4d4d4d;fill-opacity:1;stroke:none"
        d="m 537.14288,589.07648 c 0,0.66667 0,1.33333 0,2 5.33333,0 10.66667,0 16,0 0,-0.66667 0,-1.33333 0,-2 -5.33333,0 -10.66667,0 -16,0 z"
        id="path4422" />
     <path
        style="fill:#4d4d4d;fill-opacity:1;stroke:none"
-       d="m 537.14288,596.07648 c 0,0.66667 0,1.33333 0,2 5.33333,0 10.66667,0 16,0 0,-0.66667 0,-1.33333 0,-2 -5.33333,0 -10.66667,0 -16,0 z"
-       id="path4163" />
+       d="m 537.14288,595.07648 c 0,0.66667 0,1.33333 0,2 5.33333,0 10.66667,0 16,0 0,-0.66667 0,-1.33333 0,-2 -5.33333,0 -10.66667,0 -16,0 z"
+       id="path4163"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

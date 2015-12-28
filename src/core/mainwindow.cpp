@@ -231,6 +231,7 @@ void MainWindow::createMenus()
     sccMenu->addAction(quitAction);
 
     mainToolButton = new QToolButton(this);
+    mainToolButton->setIconSize(QSize(24,24));
     mainToolButton->setIcon(QIcon(":/images/menu.svg"));
     mainToolButton->setText(tr("SCC"));
     mainToolButton->setMenu(sccMenu);
@@ -251,6 +252,7 @@ void MainWindow::createMenus()
     toolBar->setIconSize(QSize(22,22));
     toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolBar->addWidget(mainToolButton);
+    toolBar->addSeparator();
     toolBar->addAction(connectAction);
     toolBar->addAction(channelListAction);
     toolBar->addAction(channelHomesAction);
