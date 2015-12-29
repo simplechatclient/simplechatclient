@@ -56,6 +56,22 @@ QString findEmoticon(const QString &strEmoticon)
     return QString::null;
 }
 
+QString findEmoticonEmoi(const QString &strEmoticon)
+{
+    QString path;
+#ifdef Q_OS_WIN
+    path = QCoreApplication::applicationDirPath();
+#else
+    path = SCC_DATA_DIR;
+#endif
+
+    QString strEmoticonCheck = QString("%1/emoticons_emoi/%2").arg(path, strEmoticon+".png");
+    if (QFile::exists(strEmoticonCheck))
+        return strEmoticonCheck;
+    else
+        return QString::null;
+}
+
 void convertColor(QString &strData)
 {
     QList<QString> lColors = Utils::instance()->getColors();
@@ -156,6 +172,39 @@ void convertEmoticons(QString &strData, bool bInsertWidthHeight, bool qWebViewCo
             strData.replace(strEmoticonFull, QString("//%1").arg(strEmoticon));
     }
 }
+
+void convertEmoticonsEmoi(QString &strData, bool bInsertWidthHeight, bool qWebViewContext)
+{
+    QRegExp rx(":([\\w+-]+):");
+
+    int pos = 0;
+    while ((pos = rx.indexIn(strData, pos)) != -1)
+    {
+        QString strEmoticon = rx.cap(1);
+        QString strEmoticonFull = ":"+strEmoticon+":";
+
+        if (Settings::instance()->getBool("emoticons"))
+        {
+            QString strEmoticonPath = findEmoticonEmoi(strEmoticon);
+
+            if (!strEmoticonPath.isEmpty())
+            {
+#ifdef Q_OS_WIN
+                strEmoticonPath = "/"+strEmoticonPath;
+#endif
+                if (qWebViewContext)
+                    strEmoticonPath = "file://"+strEmoticonPath;
+
+                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"%2\" title=\"%2\" width=\"20\" height=\"20\" />").arg(strEmoticonPath, strEmoticon));
+            }
+            else
+                pos += rx.matchedLength();
+        }
+        else
+            pos += rx.matchedLength();
+    }
+}
+
 /*
 void convertEmoticonsToSlash(QString &strData)
 {
@@ -321,6 +370,7 @@ void Convert::convertText(QString &strData, bool bInsertWidthHeight, bool qWebVi
     convertColor(strData);
     convertFont(strData);
     convertEmoticons(strData, bInsertWidthHeight, qWebViewContext);
+    convertEmoticonsEmoi(strData, bInsertWidthHeight, qWebViewContext);
 }
 
 bool Convert::isBold(const QString &strData)

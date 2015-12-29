@@ -88,6 +88,7 @@ if (UNIX AND NOT APPLE)
 	install (DIRECTORY images/wallpaper DESTINATION ${SCC_DATA_DIR}/images)
 	install (DIRECTORY sounds DESTINATION ${SCC_DATA_DIR})
 	install (DIRECTORY emoticons DESTINATION ${SCC_DATA_DIR})
+	install (DIRECTORY emoticons_emoi DESTINATION ${SCC_DATA_DIR})
 endif (UNIX AND NOT APPLE)
 
 if (MINGW)
