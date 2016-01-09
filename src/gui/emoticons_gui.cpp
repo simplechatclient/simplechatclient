@@ -58,7 +58,7 @@ void EmoticonsThread::run()
         }
 
         if (!bData.isEmpty())
-            emit addEmoticon(strEmoticon, bData);
+            emit addEmoticon("//"+strEmoticon, bData);
     }
     emit sortEmoticons();
 
@@ -204,7 +204,7 @@ void EmoticonsGui::buttonInsert()
     QString strEmoticon = tab->listWidget->selectedItems().at(0)->data(EmoticonNameRole).toString();
 
     // insert
-    pInputLineWidget->insertText("//"+strEmoticon);
+    pInputLineWidget->insertText(strEmoticon);
 
     // close
     this->close();
