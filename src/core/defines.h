@@ -60,6 +60,12 @@ enum SortedListWidgetRoles
     SortedListWidgetStatusRole = Qt::UserRole+11
 };
 
+enum EmoticonsCategory
+{
+    EmoticonsStandard,
+    EmoticonsEmoji
+};
+
 const int MAX_OPEN_CHANNELS = 20+2; // 20 - onet limit, 2 - status,debug
 const int MAX_PUNISH_REASONS = 255;
 

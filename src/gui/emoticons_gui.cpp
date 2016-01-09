@@ -21,6 +21,7 @@
 #include <QDir>
 #include <QListWidget>
 #include <QPixmap>
+#include "core/defines.h"
 #include "common/config.h"
 #include "widgets/inputline_widget.h"
 #include "emoticons_gui.h"
@@ -31,9 +32,10 @@
 
 EmoticonsThread::EmoticonsThread() {}
 
-void EmoticonsThread::setDir(const QString &_strDir)
+void EmoticonsThread::setParams(const QString &_strDir, EmoticonsCategory _emoticonsCategory)
 {
     strDir = _strDir;
+    emoticonsCategory = _emoticonsCategory;
 }
 
 void EmoticonsThread::run()
@@ -41,7 +43,15 @@ void EmoticonsThread::run()
     QDir dEmoticonsDir = strDir;
 
     QStringList lSupportedEmoticons;
-    lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
+
+    if (emoticonsCategory == EmoticonsStandard)
+    {
+        lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
+    }
+    else if (emoticonsCategory == EmoticonsEmoji)
+    {
+        lSupportedEmoticons << "*.png";
+    }
 
     QStringList lFiles = dEmoticonsDir.entryList(lSupportedEmoticons, QDir::Files | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
 
@@ -58,14 +68,23 @@ void EmoticonsThread::run()
         }
 
         if (!bData.isEmpty())
-            emit addEmoticon("//"+strEmoticon, bData);
+        {
+            if (emoticonsCategory == EmoticonsStandard)
+            {
+                emit addEmoticon("//"+strEmoticon, bData);
+            }
+            else if (emoticonsCategory == EmoticonsEmoji)
+            {
+                emit addEmoticon(":"+strEmoticon+":", bData);
+            }
+        }
     }
     emit sortEmoticons();
 
     exec();
 }
 
-EmoticonsTabGui::EmoticonsTabGui(const QString &_strDir, QWidget *parent) : QWidget(parent)
+EmoticonsTabGui::EmoticonsTabGui(const QString &_strDir, EmoticonsCategory emoticonsCategory, QWidget *parent) : QWidget(parent)
 {
     listWidget = new QListWidget(this);
     listWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -82,7 +101,7 @@ EmoticonsTabGui::EmoticonsTabGui(const QString &_strDir, QWidget *parent) : QWid
     connect(&thread, SIGNAL(addEmoticon(const QString&, const QByteArray&)), this, SLOT(addEmoticon(const QString&, const QByteArray&)));
     connect(&thread, SIGNAL(sortEmoticons()), this, SLOT(sortEmoticons()));
 
-    thread.setDir(_strDir);
+    thread.setParams(_strDir, emoticonsCategory);
 }
 
 void EmoticonsTabGui::addEmoticon(const QString &strEmoticon, const QByteArray &bData)
@@ -132,6 +151,12 @@ void EmoticonsGui::createGui()
 
 void EmoticonsGui::setDefaultValues()
 {
+    createEmoticonsTabs();
+    createEmoticonsEmojiTabs();
+}
+
+void EmoticonsGui::createEmoticonsTabs()
+{
     QString path;
 #ifdef Q_OS_WIN
     path = QCoreApplication::applicationDirPath();
@@ -152,7 +177,33 @@ void EmoticonsGui::setDefaultValues()
         QStringList lFiles = dEmoticonsDir.entryList(lSupportedEmoticons, QDir::Files | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
         QString strFirstIconPath = dEmoticonsDir.absolutePath()+"/"+lFiles.first();
 
-        ui.tabWidget->addTab(new EmoticonsTabGui(dEmoticonsDir.absolutePath()), QIcon(strFirstIconPath), strDir);
+        ui.tabWidget->addTab(new EmoticonsTabGui(dEmoticonsDir.absolutePath(), EmoticonsStandard), QIcon(strFirstIconPath), strDir);
+    }
+}
+
+void EmoticonsGui::createEmoticonsEmojiTabs()
+{
+    QString path;
+#ifdef Q_OS_WIN
+    path = QCoreApplication::applicationDirPath();
+#else
+    path = SCC_DATA_DIR;
+#endif
+
+    QStringList lSupportedEmoticons;
+    lSupportedEmoticons << "*.png";
+
+    QDir dAllEmoticonsDirs = path+"/emoticons_emoji/";
+    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
+
+    foreach (const QString &strDir, lDirs)
+    {
+        QDir dEmoticonsDir = dAllEmoticonsDirs.absolutePath()+"/"+strDir;
+
+        QStringList lFiles = dEmoticonsDir.entryList(lSupportedEmoticons, QDir::Files | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
+        QString strFirstIconPath = dEmoticonsDir.absolutePath()+"/"+lFiles.first();
+
+        ui.tabWidget->addTab(new EmoticonsTabGui(dEmoticonsDir.absolutePath(), EmoticonsEmoji), QIcon(strFirstIconPath), "Emoji - "+strDir);
     }
 }
 

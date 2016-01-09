@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include <QThread>
+#include "core/defines.h"
 #include "ui_emoticons.h"
 class InputLineWidget;
 
@@ -40,10 +41,11 @@ class EmoticonsThread : public QThread
     Q_OBJECT
 public:
     EmoticonsThread();
-    void setDir(const QString &_strDir);
+    void setParams(const QString &_strDir, EmoticonsCategory _emoticonsCategory);
 
 private:
     QString strDir;
+    EmoticonsCategory emoticonsCategory;
 
 protected:
     void run();
@@ -57,7 +59,7 @@ class EmoticonsTabGui : public QWidget
 {
     Q_OBJECT
 public:
-    EmoticonsTabGui(const QString &_strDir, QWidget *parent = 0);
+    EmoticonsTabGui(const QString &_strDir, EmoticonsCategory emoticonsCategory, QWidget *parent = 0);
     QListWidget *listWidget;
     EmoticonsThread thread;
 
@@ -81,6 +83,9 @@ private:
     void createGui();
     void setDefaultValues();
     void createSignals();
+
+    void createEmoticonsTabs();
+    void createEmoticonsEmojiTabs();
 
 public slots:
     void tabChanged(int index);
