@@ -65,11 +65,16 @@ QString findEmoticonEmoi(const QString &strEmoticon)
     path = SCC_DATA_DIR;
 #endif
 
-    QString strEmoticonCheck = QString("%1/emoticons_emoi/%2").arg(path, strEmoticon+".png");
-    if (QFile::exists(strEmoticonCheck))
-        return strEmoticonCheck;
-    else
-        return QString::null;
+    QDir dAllEmoticonsDirs = path+"/emoticons_emoi/";
+    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    foreach (const QString &strDir, lDirs)
+    {
+        QString strEmoticonCheck = QString("%1/emoticons_emoi/%2/%3%4").arg(path, strDir, strEmoticon, ".png");
+        if (QFile::exists(strEmoticonCheck))
+            return strEmoticonCheck;
+    }
+    return QString::null;
 }
 
 void convertColor(QString &strData)

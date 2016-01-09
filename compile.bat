@@ -189,7 +189,7 @@ xcopy emoticons\*.png %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
 xcopy emoticons\*.bmp %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
 
 echo Copying emoticons emoi
-xcopy emoticons_emoi\*.png %DESTINATION%\emoticons_emoi\ /C /H /R /Y /Q 
+xcopy emoticons_emoi\*.png %DESTINATION%\emoticons_emoi\ /C /H /R /Y /Q /S
 
 echo Done!
 pause
