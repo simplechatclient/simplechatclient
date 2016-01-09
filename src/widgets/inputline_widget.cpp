@@ -157,6 +157,25 @@ bool InputLineWidget::event(QEvent *e)
                 strLastWord = strWord;
             }
         }
+        else if ((strWord.at(0) == ':'))
+        {
+            QList<CaseIgnoreString> lEmoticonsEmoji = Emoticons::instance()->listEmoticonsEmoji();
+
+            if (lEmoticonsEmoji.size() == 0)
+                return true;
+
+            if (strLastWord.isEmpty())
+            {
+                find.clear();
+                foreach (const QString &strEmoticonEmoji, lEmoticonsEmoji)
+                {
+                    if (strEmoticonEmoji.startsWith(strWord, Qt::CaseInsensitive))
+                        find.append(strEmoticonEmoji);
+                }
+
+                strLastWord = strWord;
+            }
+        }
         else
         {
             QList<CaseIgnoreString> usersList = Nick::instance()->getFromChannel(strChannel);

@@ -74,3 +74,36 @@ QList<CaseIgnoreString> Emoticons::listEmoticons()
 
     return lEmoticonsList;
 }
+
+QList<CaseIgnoreString> Emoticons::listEmoticonsEmoji()
+{
+    if (lEmoticonsEmojiList.size() != 0)
+        return lEmoticonsEmojiList;
+
+    QString path;
+#ifdef Q_OS_WIN
+    path = QCoreApplication::applicationDirPath();
+#else
+    path = SCC_DATA_DIR;
+#endif
+
+    QDir dAllEmoticonsDirs = path+"/emoticons_emoji/";
+    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    QStringList lSupportedEmoticons;
+    lSupportedEmoticons << "*.png";
+
+    foreach (const QString &strDir, lDirs)
+    {
+        QDir dEmoticonDir = QString("%1/emoticons_emoji/%2/").arg(path, strDir);
+        QFileInfoList lEmoticons = dEmoticonDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+        foreach (const QFileInfo &fEmoticon, lEmoticons)
+            lEmoticonsEmojiList.append(":"+fEmoticon.baseName()+":");
+    }
+
+    // sort
+    qStableSort(lEmoticonsEmojiList.begin(), lEmoticonsEmojiList.end());
+
+    return lEmoticonsEmojiList;
+}

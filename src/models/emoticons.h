@@ -33,9 +33,11 @@ public:
 
     Emoticons();
     QList<CaseIgnoreString> listEmoticons();
+    QList<CaseIgnoreString> listEmoticonsEmoji();
 
 private:
     QList<CaseIgnoreString> lEmoticonsList;
+    QList<CaseIgnoreString> lEmoticonsEmojiList;
 };
 
 #endif // EMOTICONS_H
