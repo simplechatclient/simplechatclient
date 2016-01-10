@@ -87,6 +87,9 @@ private:
     void createEmoticonsTabs();
     void createEmoticonsEmojiTabs();
 
+protected:
+    void resizeEvent(QResizeEvent *);
+
 public slots:
     void tabChanged(int index);
     void buttonInsert();

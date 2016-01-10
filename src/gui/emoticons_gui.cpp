@@ -21,6 +21,8 @@
 #include <QDir>
 #include <QListWidget>
 #include <QPixmap>
+#include <QResizeEvent>
+#include <QVBoxLayout>
 #include "core/defines.h"
 #include "common/config.h"
 #include "widgets/inputline_widget.h"
@@ -147,6 +149,13 @@ void EmoticonsGui::createGui()
 
     ui.pushButton_insert->setText(tr("Insert"));
     ui.buttonBox->button(QDialogButtonBox::Close)->setText(tr("Close"));
+}
+
+void EmoticonsGui::resizeEvent(QResizeEvent *)
+{
+    ui.tabWidget->setGeometry(10, 10, this->width()-20, this->height()-25-ui.pushButton_insert->height());
+    ui.pushButton_insert->setGeometry(10, this->height()-10-ui.pushButton_insert->height(), ui.pushButton_insert->width(), ui.pushButton_insert->height());
+    ui.buttonBox->setGeometry(this->width()-10-ui.buttonBox->width(), this->height()-10-ui.buttonBox->height(), ui.pushButton_insert->width(), ui.pushButton_insert->height());
 }
 
 void EmoticonsGui::setDefaultValues()
