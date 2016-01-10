@@ -18,6 +18,7 @@
  */
 
 #include <QStringList>
+#include <QRegularExpression>
 #include "models/settings.h"
 #include "replace.h"
 
@@ -44,7 +45,7 @@ void Replace::replaceEmots(QString &strData)
     lEmoticons[":$"] = "%Iskwaszony%";
     lEmoticons[";$"] = "%Ixkwas%";
     lEmoticons[";/"] = "%Ixsceptyk%";
-    //lEmoticons[":/"] = "%Isceptyczny%";
+    lEmoticons[":/"] = "%Isceptyczny%";
     lEmoticons[";D"] = "%Ixhehe%";
     lEmoticons[":D"] = "%Ihehe%";
     //lEmoticons["o_O"] = "%Iswir%";
@@ -78,21 +79,15 @@ void Replace::replaceEmots(QString &strData)
     lEmoticons["];->"] = "%Ixdiabel%";
     lEmoticons[";?"] = "%Ixco%";
 
-    QHashIterator<QString, QString> it(lEmoticons);
-    while (it.hasNext())
-    {
-        it.next();
+    QString strEmoticonsRegex = ";p|;s|:\\]|:P|:\\(\\(|;\\(|:d|\\?\\?|:\\)|:o|;>|;\\)\\)|:\\*|:\\||;D|;P|\\!\\!|;\\[|:\\$|;\\||:>|:x|:\\[|;\\)|:\\(|:\\/|:p|;<|;\\?|;\\$|\\];\\->|;\\*|:s|:D|:\\)\\)|:\\?|\\]:\\->|;\\(\\(|;x|;\\/|;o|;\\]|;d|:<";
 
-        QString strKey = it.key();
-        QString strValue = it.value();
+    QRegularExpression re("(?<!http)(?<!https)("+strEmoticonsRegex+")");
 
-        strData.replace(strKey, strValue);
+    QRegularExpressionMatchIterator i = re.globalMatch(strData);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        QString strEmoticon = match.captured(0);
+
+        strData.replace(strEmoticon, lEmoticons[strEmoticon]);
     }
-
-    // exception
-    // :/
-
-    // TODO fix in Qt 5.x
-    // using http://qt-project.org/doc/qt-5.0/qtcore/qregularexpression.html
-    if (!strData.contains(QRegExp("(http:|https:)//"))) strData.replace(":/", "%Isceptyczny%");
 }
