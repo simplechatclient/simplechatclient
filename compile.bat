@@ -183,10 +183,7 @@ xcopy sounds\*.wav %DESTINATION%\sounds\ /C /H /R /Y /Q
 echo Copying emoticons
 xcopy emoticons\LICENSE %DESTINATION%\emoticons\ /C /H /R /Y /Q 
 xcopy emoticons\*.gif %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
-xcopy emoticons\*.jpg %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
-xcopy emoticons\*.jpeg %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
 xcopy emoticons\*.png %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
-xcopy emoticons\*.bmp %DESTINATION%\emoticons\ /C /H /R /Y /Q /S
 
 echo Copying emoticons emoji
 xcopy emoticons_emoji\*.png %DESTINATION%\emoticons_emoji\ /C /H /R /Y /Q /S
