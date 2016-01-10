@@ -81,7 +81,7 @@ void Replace::replaceEmots(QString &strData)
 
     QString strEmoticonsRegex = ";p|;s|:\\]|:P|:\\(\\(|;\\(|:d|\\?\\?|:\\)|:o|;>|;\\)\\)|:\\*|:\\||;D|;P|\\!\\!|;\\[|:\\$|;\\||:>|:x|:\\[|;\\)|:\\(|:\\/|:p|;<|;\\?|;\\$|\\];\\->|;\\*|:s|:D|:\\)\\)|:\\?|\\]:\\->|;\\(\\(|;x|;\\/|;o|;\\]|;d|:<";
 
-    QRegularExpression re("(?<!http)(?<!https)("+strEmoticonsRegex+")");
+    QRegularExpression re("(?<!http)(?<!https)("+strEmoticonsRegex+")(?!\\B|\\w|\\S)");
 
     QRegularExpressionMatchIterator i = re.globalMatch(strData);
     while (i.hasNext()) {
