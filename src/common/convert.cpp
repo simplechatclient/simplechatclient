@@ -200,7 +200,7 @@ void convertEmoticonsEmoji(QString &strData, bool qWebViewContext)
                 if (qWebViewContext)
                     strEmoticonPath = "file://"+strEmoticonPath;
 
-                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"&#58;%2&#58;\" title=\"&#58;%2&#58;\" width=\"20\" height=\"20\" />").arg(strEmoticonPath, strEmoticon));
+                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"&#58;%2&#58;\" title=\"&#58;%2&#58;\" width=\"22\" height=\"22\" />").arg(strEmoticonPath, strEmoticon));
             }
             else
                 pos += rx.matchedLength();
