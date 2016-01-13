@@ -79,6 +79,9 @@ public:
     void removeAlternativeName(const QString &channel);
     QString getAlternativeName(const QString &channel);
     bool containsAlternativeName(const QString &channel);
+    // channel text
+    void setChannelText(const QString &channel, const QString &text);
+    QString getChannelText(const QString &channel);
     // tw
     TabWidget* getTw(const QString &channel);
     TopicWidget* getTopic(const QString &channel);
@@ -95,6 +98,7 @@ public:
 private:
     QHash<QString, OnetChannel> lChannels;
     QHash<QString, QString> lChannelAlternativeName;
+    QHash<QString, QString> lChannelsText;
 
     void clear();
 };

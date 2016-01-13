@@ -116,6 +116,7 @@ private:
     void createSignals();
     void addDefaultTabs();
     void firstRun();
+    void saveCurrentChannelText();
     void setTrayMenuVisible(bool visible);
 
 private slots:
@@ -146,6 +147,7 @@ private slots:
     void updateButtons();
     void tabCloseRequested(int index);
     void currentTabChanged(int index);
+    void tabBarClicked(int index);
 
 protected:
     void resizeEvent(QResizeEvent *);

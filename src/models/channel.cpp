@@ -48,6 +48,7 @@ void Channel::clear()
     removeAll();
 
     lChannelAlternativeName.clear();
+    lChannelsText.clear();
 }
 
 void Channel::add(const QString &channel)
@@ -315,6 +316,17 @@ void Channel::removeAlternativeName(const QString &channel)
 bool Channel::containsAlternativeName(const QString &channel)
 {
     return lChannelAlternativeName.contains(channel);
+}
+
+// channel text
+void Channel::setChannelText(const QString &channel, const QString &text)
+{
+    lChannelsText[channel] = text;
+}
+
+QString Channel::getChannelText(const QString &channel)
+{
+    return lChannelsText.value(channel, QString::null);
 }
 
 // tw

@@ -39,6 +39,7 @@ public:
     virtual ~ToolWidget();
     void showChannelSettings(bool bShow);
     void setDefaultValues();
+    QString getInputLine();
     void clearInputLine();
     void insertTextToInputLine(const QString &strText);
 

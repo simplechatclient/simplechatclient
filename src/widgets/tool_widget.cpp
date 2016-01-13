@@ -376,6 +376,11 @@ void ToolWidget::setDefaultValues()
     showModeration(false);
 }
 
+QString ToolWidget::getInputLine()
+{
+    return pInputLine->toPlainText();
+}
+
 void ToolWidget::clearInputLine()
 {
     pInputLine->clear();
