@@ -200,7 +200,7 @@ void EmoticonsGui::createEmoticonsEmojiTabs()
 #endif
 
     QStringList lSupportedEmoticons;
-    lSupportedEmoticons << "*.png";
+    lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
 
     QDir dAllEmoticonsDirs = path+"/emoticons_emoji/";
     QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);

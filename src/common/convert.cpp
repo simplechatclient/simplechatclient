@@ -68,11 +68,17 @@ QString findEmoticonEmoji(const QString &strEmoticon)
     QDir dAllEmoticonsDirs = path+"/emoticons_emoji/";
     QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
+    QStringList lSupportedEmoticons;
+    lSupportedEmoticons << ".gif" << ".jpg" << ".jpeg" << ".png" << ".bmp";
+
     foreach (const QString &strDir, lDirs)
     {
-        QString strEmoticonCheck = QString("%1/emoticons_emoji/%2/%3%4").arg(path, strDir, strEmoticon, ".png");
-        if (QFile::exists(strEmoticonCheck))
-            return strEmoticonCheck;
+        foreach (const QString &strSupportedEmoticon, lSupportedEmoticons)
+        {
+            QString strEmoticonCheck = QString("%1/emoticons_emoji/%2/%3%4").arg(path, strDir, strEmoticon, strSupportedEmoticon);
+            if (QFile::exists(strEmoticonCheck))
+                return strEmoticonCheck;
+        }
     }
     return QString::null;
 }

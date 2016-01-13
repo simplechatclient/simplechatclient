@@ -91,7 +91,7 @@ QList<CaseIgnoreString> Emoticons::listEmoticonsEmoji()
     QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
     QStringList lSupportedEmoticons;
-    lSupportedEmoticons << "*.png";
+    lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
 
     foreach (const QString &strDir, lDirs)
     {
