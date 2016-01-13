@@ -21,6 +21,7 @@
 #include <QKeyEvent>
 #include <QTextEdit>
 #include "models/channel.h"
+#include "models/channel_list.h"
 #include "common/commands.h"
 #include "core/core.h"
 #include "models/emoticons.h"
@@ -171,6 +172,26 @@ bool InputLineWidget::event(QEvent *e)
                 {
                     if (strEmoticonEmoji.startsWith(strWord, Qt::CaseInsensitive))
                         find.append(strEmoticonEmoji);
+                }
+
+                strLastWord = strWord;
+            }
+        }
+        else if ((strWord.at(0) == '#'))
+        {
+            QList<OnetChannelList> lChannelsList = ChannelList::instance()->getAll();
+
+            if (lChannelsList.size() == 0)
+                return true;
+
+            if (strLastWord.isEmpty())
+            {
+                find.clear();
+                foreach (const OnetChannelList &oChannelList, lChannelsList)
+                {
+                    QString strChannelName = oChannelList.name;
+                    if (strChannelName.startsWith(strWord, Qt::CaseInsensitive))
+                        find.append(strChannelName);
                 }
 
                 strLastWord = strWord;
