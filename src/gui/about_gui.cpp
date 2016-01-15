@@ -64,7 +64,7 @@ void AboutGui::setDefaultValues()
     strTitle += "<p>"+strVersion+"</p>";
 
     QString strAbout = "<p>"+tr("Simple chat client")+"</p>";
-    strAbout += "<p>&copy; 2015 by the Simple Chat Client Project</p>";
+    strAbout += "<p>&copy; 2016 by the Simple Chat Client Project</p>";
     strAbout += "<p><a style=\"text-decoration:none;\" href=\"http://simplechatclien.sf.net/\">"+tr("Home page")+"</a></p>";
     strAbout += "<p>"+tr("License")+" <a style=\"text-decoration:none;\" href=\"http://www.fsf.org/licensing/licenses/gpl.html\">GPL v3</a></p>";
 
