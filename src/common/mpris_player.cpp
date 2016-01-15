@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2009-2015 Dariusz Markowicz <dmarkowicz@alari.pl>
+ *   Copyright (C) 2009-2016 Dariusz Markowicz <dmarkowicz@alari.pl>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
