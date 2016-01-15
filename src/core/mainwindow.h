@@ -106,6 +106,8 @@ private:
     OnetKernel *pOnetKernel;
     OnetAuth *pOnetAuth;
 
+    int iPreviousTabIndex;
+
     // gui
     ToolWidget *pToolWidget;
 
@@ -116,7 +118,8 @@ private:
     void createSignals();
     void addDefaultTabs();
     void firstRun();
-    void saveCurrentChannelText();
+    void saveChannelText();
+    void restoreChannelText(int index, const QString &channel);
     void setTrayMenuVisible(bool visible);
 
 private slots:
@@ -147,7 +150,6 @@ private slots:
     void updateButtons();
     void tabCloseRequested(int index);
     void currentTabChanged(int index);
-    void tabBarClicked(int index);
 
 protected:
     void resizeEvent(QResizeEvent *);

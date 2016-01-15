@@ -86,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     pOnetKernel = new OnetKernel(pTabC);
     pOnetAuth = new OnetAuth();
 
+    // current tab index
+    iPreviousTabIndex = 0;
+
     // gui
     createGui();
 
@@ -320,7 +323,6 @@ void MainWindow::createSignals()
     // signals tab
     connect(pTabM, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
     connect(pTabM, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
-    connect(pTabM, SIGNAL(tabBarClicked(int)), this, SLOT(tabBarClicked(int)));
 
     // signals from network
     connect(Core::instance()->network, SIGNAL(socketStateChanged()), this, SLOT(updateButtons()));
@@ -665,9 +667,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     if (((k->key() == Qt::Key_Tab) && (k->modifiers() == Qt::ControlModifier)) ||
         ((k->key() == Qt::Key_Right) && (k->modifiers() == Qt::AltModifier)))
     {
-        // save current channel text
-        saveCurrentChannelText();
-
         // switch channel
         int index = pTabM->currentIndex();
         if (pTabM->count()-1 != index)
@@ -681,9 +680,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     else if (((k->key() == Qt::Key_Backtab) && (k->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier))) ||
             ((k->key() == Qt::Key_Left) && (k->modifiers() == Qt::AltModifier)))
     {
-        // save current channel text
-        saveCurrentChannelText();
-
         // switch channel
         int index = pTabM->currentIndex();
         if (index != 0)
@@ -704,9 +700,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 1)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(0);
         }
@@ -717,9 +710,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 2)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(1);
         }
@@ -730,9 +720,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 3)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(2);
         }
@@ -743,9 +730,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 4)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(3);
         }
@@ -756,9 +740,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 5)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(4);
         }
@@ -769,9 +750,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 6)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(5);
         }
@@ -782,9 +760,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 7)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(6);
         }
@@ -795,9 +770,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 8)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(7);
         }
@@ -808,9 +780,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 9)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(8);
         }
@@ -821,9 +790,6 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         if (pTabM->count() >= 10)
         {
-            // save current channel text
-            saveCurrentChannelText();
-
             // switch channel
             pTabM->setCurrentIndex(9);
         }
@@ -927,48 +893,49 @@ void MainWindow::setTabColor(const QString &strChannel, MessageCategory eMessage
 // change tab
 void MainWindow::changeCurrentTab(int index)
 {
-    // save current channel text
-    saveCurrentChannelText();
-
-    // change tab
     pTabM->setCurrentIndex(index);
 }
 
 // tab changed
 void MainWindow::currentTabChanged(int index)
 {
+    // save channel text
+    saveChannelText();
+
     // change tab color
     pTabM->setColor(index, QColor(Settings::instance()->get("default_color")));
-
-    // new channel
-    QString strNewChannel = Channel::instance()->getNameFromIndex(index);
 
     // clear input line
     pToolWidget->clearInputLine();
 
-    // restore last channel text
-    QString strLastText = Channel::instance()->getChannelText(strNewChannel);
-    pToolWidget->insertTextToInputLine(strLastText);
+    // new channel
+    QString strNewChannel = Channel::instance()->getNameFromIndex(index);
 
     // refresh tool buttons
     refreshToolButtons(strNewChannel);
+
+    // restore channel text
+    restoreChannelText(index, strNewChannel);
 }
 
-// tab prepare to change by click
-void MainWindow::tabBarClicked(int index)
-{
-    Q_UNUSED(index);
-
-    // save current channel text
-    saveCurrentChannelText();
-}
-
-// save current channel text - restore on channel switch
-void MainWindow::saveCurrentChannelText()
+// save channel text
+void MainWindow::saveChannelText()
 {
     QString strCurrentText = pToolWidget->getInputLine();
-    QString strCurrentChannel = Channel::instance()->getCurrentName();
+    QString strCurrentChannel = Channel::instance()->getNameFromIndex(iPreviousTabIndex);
+    // save
     Channel::instance()->setChannelText(strCurrentChannel, strCurrentText);
+}
+
+// restore channel text
+void MainWindow::restoreChannelText(int index, const QString &channel)
+{
+    // restore
+    QString strLastText = Channel::instance()->getChannelText(channel);
+    pToolWidget->insertTextToInputLine(strLastText);
+
+    // save index
+    iPreviousTabIndex = index;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
