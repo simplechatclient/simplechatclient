@@ -304,7 +304,6 @@ void MainWindow::createSignals()
     connect(camsAction, SIGNAL(triggered()), this, SLOT(openCams()));
     connect(notesAction, SIGNAL(triggered()), this, SLOT(openNotes()));
 
-    connect(notificationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(stopAnimatedTrayIcon()));
     connect(Awaylog::instance()->awaylogAction, SIGNAL(triggered()), this, SLOT(openAwaylog()));
     connect(Invite::instance()->inviteAction, SIGNAL(triggered()), this, SLOT(openInviteList()));
     connect(Offline::instance()->offlineMessagesAction, SIGNAL(triggered()), this, SLOT(openOfflineMessages()));
