@@ -62,6 +62,7 @@
 #include "gui/update_gui.h"
 #include "gui/webcam_gui.h"
 #include "widgets/tool_widget.h"
+#include "widgets/tool_button_menu.h"
 
 #ifdef Q_OS_WIN
     #include "common/kamerzysta.h"
@@ -221,8 +222,11 @@ void MainWindow::createMenus()
     myMenu->addAction(Offline::instance()->offmsgFriendAction);
     myMenu->addAction(Offline::instance()->offmsgNoneAction);
 
+    mainToolButton = new QToolButton(this);
+
     // main menu
-    sccMenu = new QMenu(tr("SCC"));
+    sccMenu = new ToolButtonMenu(mainToolButton, this);
+    sccMenu->setTitle(tr("SCC"));
     sccMenu->addAction(connectAction);
     sccMenu->addSeparator();
     sccMenu->addMenu(chatMenu);
@@ -233,13 +237,12 @@ void MainWindow::createMenus()
     sccMenu->addAction(aboutAction);
     sccMenu->addAction(quitAction);
 
-    mainToolButton = new QToolButton(this);
     mainToolButton->setIconSize(QSize(24,24));
     mainToolButton->setIcon(QIcon(":/images/menu.svg"));
     mainToolButton->setText(tr("SCC"));
     mainToolButton->setMenu(sccMenu);
     mainToolButton->setPopupMode(QToolButton::InstantPopup);
-    mainToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    mainToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     // notification
     notificationToolButton = new QToolButton(this);
@@ -250,12 +253,13 @@ void MainWindow::createMenus()
     notificationToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     notificationToolButton->setVisible(false);
 
+    QWidget* spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     // toolbar
     toolBar = addToolBar(tr("Navigation bar"));
     toolBar->setIconSize(QSize(22,22));
     toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    toolBar->addWidget(mainToolButton);
-    toolBar->addSeparator();
     toolBar->addAction(connectAction);
     toolBar->addAction(channelListAction);
     toolBar->addAction(channelHomesAction);
@@ -263,6 +267,8 @@ void MainWindow::createMenus()
     toolBar->addAction(camsAction);
     toolBar->addAction(notesAction);
     notificationAction = toolBar->addWidget(notificationToolButton);
+    toolBar->addWidget(spacer);
+    toolBar->addWidget(mainToolButton);
 
     // tray menu
     trayIconMenu = new QMenu();
@@ -648,13 +654,11 @@ void MainWindow::toolbarOrientationChanged(Qt::Orientation orientation)
     if (orientation == Qt::Horizontal)
     {
         toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        mainToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         notificationToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     }
     else
     {
         toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        mainToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
         notificationToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     }
 }

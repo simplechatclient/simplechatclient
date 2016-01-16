@@ -141,6 +141,7 @@ set (scc_SRCS
 	widgets/simple_percentage_widget.cpp
 	widgets/simple_rank_widget.cpp
 	widgets/simple_stats_widget.cpp
+	widgets/tool_button_menu.cpp
 	widgets/tool_widget.cpp
 	widgets/topic_widget.cpp
 )
@@ -244,6 +245,7 @@ set (scc_MOC_HDRS
 	widgets/simple_percentage_widget.h
 	widgets/simple_rank_widget.h
 	widgets/simple_stats_widget.h
+	widgets/tool_button_menu.h
 	widgets/tool_widget.h
 	widgets/topic_widget.h
 )
