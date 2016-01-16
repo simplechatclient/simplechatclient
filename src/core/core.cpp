@@ -24,6 +24,7 @@
 #include "mainwindow.h"
 #include "models/settings.h"
 #include "models/themes.h"
+#include "models/sound_notify.h"
 #include "models/update.h"
 #include "core.h"
 
@@ -90,6 +91,9 @@ void Core::createAndShowGui()
 
     // updates
     Update::instance()->checkUpdate();
+
+    // init sound
+    SoundNotify::instance()->prepare();
 }
 
 void Core::createSettings()

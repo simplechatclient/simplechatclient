@@ -51,6 +51,7 @@ public:
 
     SoundNotify();
     virtual ~SoundNotify();
+    void prepare();
     void play(NotifyCategory);
 
 private:

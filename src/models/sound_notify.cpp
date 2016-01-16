@@ -52,6 +52,15 @@ SoundNotify::~SoundNotify()
     delete music;
 }
 
+void SoundNotify::prepare()
+{
+    QString strSoundBeep = Settings::instance()->get("sound_beep");
+    music->setMedia(QUrl::fromLocalFile(strSoundBeep));
+    eCurrentCategory = Beep;
+
+    thread.setMedia(music);
+}
+
 void SoundNotify::play(NotifyCategory eCategory)
 {
     if (eCategory == Query)
