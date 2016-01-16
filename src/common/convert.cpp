@@ -167,14 +167,15 @@ void convertEmoticons(QString &strData, bool bInsertWidthHeight, bool qWebViewCo
                 if (bInsertWidthHeight)
                 {
                     QPixmap p(strEmoticonPath);
-                    strWidthHeight = " width=\""+QString::number(p.width())+"\" height=\""+QString::number(p.height())+"\"";
+                    strWidthHeight = "width=\""+QString::number(p.width())+"\" height=\""+QString::number(p.height())+"\"";
                 }
 #ifdef Q_OS_WIN
                 strEmoticonPath = "/"+strEmoticonPath;
 #endif
                 if (qWebViewContext)
                     strEmoticonPath = "file://"+strEmoticonPath;
-                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"//%2\" title=\"//%2\"%3 />").arg(strEmoticonPath, strEmoticon, strWidthHeight));
+
+                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"//%2\" title=\"//%2\" %3 />").arg(strEmoticonPath, strEmoticon, strWidthHeight));
             }
             else
                 strData.replace(strEmoticonFull, QString("//%1").arg(strEmoticon));
@@ -184,7 +185,7 @@ void convertEmoticons(QString &strData, bool bInsertWidthHeight, bool qWebViewCo
     }
 }
 
-void convertEmoticonsEmoji(QString &strData, bool qWebViewContext)
+void convertEmoticonsEmoji(QString &strData, bool bInsertWidthHeight, bool qWebViewContext)
 {
     QRegExp rx(":([\\w+-]+):");
 
@@ -200,13 +201,19 @@ void convertEmoticonsEmoji(QString &strData, bool qWebViewContext)
 
             if (!strEmoticonPath.isEmpty())
             {
+                QString strWidthHeight;
+                if (bInsertWidthHeight)
+                {
+                    QPixmap p(strEmoticonPath);
+                    strWidthHeight = "width=\""+QString::number(p.width())+"\" height=\""+QString::number(p.height())+"\"";
+                }
 #ifdef Q_OS_WIN
                 strEmoticonPath = "/"+strEmoticonPath;
 #endif
                 if (qWebViewContext)
                     strEmoticonPath = "file://"+strEmoticonPath;
 
-                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"&#58;%2&#58;\" title=\"&#58;%2&#58;\" width=\"22\" height=\"22\" />").arg(strEmoticonPath, strEmoticon));
+                strData.replace(strEmoticonFull, QString("<img src=\"%1\" alt=\"&#58;%2&#58;\" title=\"&#58;%2&#58;\" %3 />").arg(strEmoticonPath, strEmoticon, strWidthHeight));
             }
             else
                 pos += rx.matchedLength();
@@ -2434,7 +2441,7 @@ void Convert::convertText(QString &strData, bool bInsertWidthHeight, bool qWebVi
     convertFont(strData);
     convertEmoticons(strData, bInsertWidthHeight, qWebViewContext);
     // TODO convertUtf8ToEmoji(strData);
-    convertEmoticonsEmoji(strData, qWebViewContext);
+    convertEmoticonsEmoji(strData, bInsertWidthHeight, qWebViewContext);
 }
 
 bool Convert::isBold(const QString &strData)
