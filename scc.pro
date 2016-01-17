@@ -114,7 +114,6 @@ SOURCES += src/common/commands.cpp \
     src/widgets/simple_percentage_widget.cpp \
     src/widgets/simple_rank_widget.cpp \
     src/widgets/simple_stats_widget.cpp \
-    src/widgets/tool_button_menu.cpp \
     src/widgets/tool_widget.cpp \
     src/widgets/topic_widget.cpp \
     src/widgets/webcam_delegate.cpp
@@ -225,7 +224,6 @@ HEADERS += src/common/commands.h \
     src/widgets/simple_percentage_widget.h \
     src/widgets/simple_rank_widget.h \
     src/widgets/simple_stats_widget.h \
-    src/widgets/tool_button_menu.h \
     src/widgets/tool_widget.h \
     src/widgets/topic_widget.h \
     src/widgets/webcam_delegate.h

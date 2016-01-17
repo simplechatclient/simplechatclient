@@ -62,7 +62,6 @@
 #include "gui/update_gui.h"
 #include "gui/webcam_gui.h"
 #include "widgets/tool_widget.h"
-#include "widgets/tool_button_menu.h"
 
 #ifdef Q_OS_WIN
     #include "common/kamerzysta.h"
@@ -222,10 +221,8 @@ void MainWindow::createMenus()
     myMenu->addAction(Offline::instance()->offmsgFriendAction);
     myMenu->addAction(Offline::instance()->offmsgNoneAction);
 
-    mainToolButton = new QToolButton(this);
-
     // main menu
-    sccMenu = new ToolButtonMenu(mainToolButton, this);
+    sccMenu = new QMenu(this);
     sccMenu->setTitle(tr("SCC"));
     sccMenu->addAction(connectAction);
     sccMenu->addSeparator();
@@ -237,6 +234,7 @@ void MainWindow::createMenus()
     sccMenu->addAction(aboutAction);
     sccMenu->addAction(quitAction);
 
+    mainToolButton = new QToolButton(this);
     mainToolButton->setIconSize(QSize(24,24));
     mainToolButton->setIcon(QIcon(":/images/menu.svg"));
     mainToolButton->setText(tr("SCC"));
