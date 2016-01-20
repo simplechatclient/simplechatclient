@@ -233,6 +233,7 @@ void MainWindow::createMenus()
     sccMenu->addSeparator();
     sccMenu->addAction(aboutAction);
     sccMenu->addAction(quitAction);
+    sccMenu->setLayoutDirection(Qt::LeftToRight);
 
     mainToolButton = new QToolButton(this);
     mainToolButton->setIconSize(QSize(24,24));
@@ -241,6 +242,7 @@ void MainWindow::createMenus()
     mainToolButton->setMenu(sccMenu);
     mainToolButton->setPopupMode(QToolButton::InstantPopup);
     mainToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    mainToolButton->setLayoutDirection(Qt::RightToLeft);
 
     // notification
     notificationToolButton = new QToolButton(this);

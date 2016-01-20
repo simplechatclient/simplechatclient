@@ -214,5 +214,5 @@ void TabManager::channelsListClicked()
     }
 
     mChannelsList->show();
-    mChannelsList->exec(bChannelsList->mapToGlobal(QPoint(0, bChannelsList->height())));
+    mChannelsList->exec(bChannelsList->mapToGlobal(QPoint(-mChannelsList->sizeHint().width()+bChannelsList->width(), bChannelsList->height())));
 }
