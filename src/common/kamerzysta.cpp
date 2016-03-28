@@ -104,7 +104,7 @@ void Kamerzysta::getPath()
         {
             close();
 
-            QString strWebsite = "http://pliki.onet.pl/Onet.Kamerzysta,Komunikatory,Windows,112343.html";
+            QString strWebsite = "http://softonet.pl/Onet.Kamerzysta,Komunikatory,112343.html";
             QDesktopServices::openUrl(QUrl(strWebsite));
 
             return;
