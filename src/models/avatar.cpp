@@ -63,6 +63,7 @@ void Avatar::get(const QString &strNickOrChannel, const QString &strCategory, co
     QFileInfo fi(strUrl);
     QString strFile = fi.fileName();
     QString strPath = getAvatarPath(strFile);
+    QString strPathWithNick = getAvatarPath(QString(QCryptographicHash::hash(strNickOrChannel.toLatin1(), QCryptographicHash::Md5).toHex()));
 
     bool bDownload = true;
     if (QFile::exists(strPath))
@@ -83,6 +84,7 @@ void Avatar::get(const QString &strNickOrChannel, const QString &strCategory, co
         reply->setProperty("category", strCategory);
         reply->setProperty("file", strFile);
         reply->setProperty("path", strPath);
+        reply->setProperty("pathwithnickorchannel", strPathWithNick);
     }
     else
     {
@@ -101,6 +103,7 @@ void Avatar::httpFinished(QNetworkReply *reply)
     QString strCategory = reply->property("category").toString();
     QString strAvatarFile = reply->property("file").toString();
     QString strAvatarPath = reply->property("path").toString();
+    QString strPathWithNickOrChannel = reply->property("pathwithnickorchannel").toString();
 
     QVariant possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!possibleRedirectUrl.toUrl().isEmpty())
@@ -110,6 +113,7 @@ void Avatar::httpFinished(QNetworkReply *reply)
         replyRedirect->setProperty("category", strCategory);
         replyRedirect->setProperty("file", strAvatarFile);
         replyRedirect->setProperty("path", strAvatarPath);
+        replyRedirect->setProperty("pathwithnickorchannel", strPathWithNickOrChannel);
         return;
     }
 
@@ -118,6 +122,7 @@ void Avatar::httpFinished(QNetworkReply *reply)
         return;
 
     saveAvatar(strAvatarPath, bAvatar);
+    saveAvatar(strPathWithNickOrChannel, bAvatar);
     updateAvatar(strCategory, strNickOrChannel, strAvatarFile);
 }
 
@@ -168,6 +173,25 @@ QString Avatar::getAvatarPath(const QString &strAvatar)
         QDir().mkpath(path);
 
     return path+strAvatar;
+}
+
+bool Avatar::existAvatarPath(const QString &strAvatar)
+{
+    QString path;
+#ifdef Q_OS_WIN
+    path = QFileInfo(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).absoluteFilePath();
+    path += "/scc/";
+#else
+    path = QDir::homePath()+"/.scc/";
+#endif
+
+    path += "cache/avatars/";
+
+    // create dir if not exist
+    if (!QDir().exists(path))
+        QDir().mkpath(path);
+
+    return QFile::exists(path+strAvatar);
 }
 
 QString Avatar::getEmptyRegisteredUserAvatar()
