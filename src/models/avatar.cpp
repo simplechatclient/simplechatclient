@@ -63,7 +63,7 @@ void Avatar::get(const QString &strNickOrChannel, const QString &strCategory, co
     QFileInfo fi(strUrl);
     QString strFile = fi.fileName();
     QString strPath = getAvatarPath(strFile);
-    QString strPathWithNick = getAvatarPath(QString(QCryptographicHash::hash(strNickOrChannel.toLatin1(), QCryptographicHash::Md5).toHex()));
+    QString strPathWithNick = getAvatarPath(strNickOrChannel);
 
     bool bDownload = true;
     if (QFile::exists(strPath))
