@@ -39,7 +39,7 @@ exit
 
 if not exist %GIT_DIR%\bin\git.exe (
 if not exist %GIT_32_DIR%\bin\git.exe (
-echo Download Git 2.5.0 for Windows from https://github.com/git-for-windows/git/releases/download/v2.6.1.windows.1/Git-2.6.1-32-bit.exe
+echo Download Git 2.8.1 for Windows from https://github.com/git-for-windows/git/releases/download/v2.8.1.windows.1/Git-2.8.1-32-bit.exe
 pause
 exit
 )
