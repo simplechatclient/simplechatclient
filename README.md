@@ -1,4 +1,4 @@
-## [Simple Chat Client](http://simplechatclient.github.io "Simple Chat Client Offical Site") [![Join the chat at https://gitter.im/simplechatclient/simplechatclient](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/simplechatclient/simplechatclient)
+## [Simple Chat Client](https://simplechatclient.github.io "Simple Chat Client Offical Site") [![Join the chat at https://gitter.im/simplechatclient/simplechatclient](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/simplechatclient/simplechatclient)
 [![](https://img.shields.io/github/release/simplechatclient/simplechatclient.svg?label=Release)](https://github.com/simplechatclient/simplechatclient/releases/latest) [![](https://img.shields.io/github/downloads/simplechatclient/simplechatclient/latest/total.svg?label=Downloads)](https://github.com/simplechatclient/simplechatclient/releases/latest)
 [![Build Status](https://travis-ci.org/simplechatclient/simplechatclient.svg?branch=master)](https://travis-ci.org/simplechatclient/simplechatclient) 
 
@@ -13,12 +13,12 @@ The program of the assumptions is small, lightweight and stable client.
 
 ### Windows ###
 
-1. Download Windows Installer from [http://simplechatclient.github.io/download](http://simplechatclient.github.io/download)
+1. Download Windows Installer from [https://simplechatclient.github.io/download](https://simplechatclient.github.io/download)
 2. Run downloaded installer
 
 ### Linux ###
 
-1. Download Debian Installer from [http://simplechatclient.github.io/download](http://simplechatclient.github.io/download)
+1. Download Debian Installer from [https://simplechatclient.github.io/download](https://simplechatclient.github.io/download)
 2. Run downloaded installer
 
 ## Compiling
