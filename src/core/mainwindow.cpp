@@ -61,6 +61,7 @@
 #include "models/update.h"
 #include "gui/update_gui.h"
 #include "gui/webcam_gui.h"
+#include "gui/join_channel_gui.h"
 #include "widgets/tool_widget.h"
 
 #ifdef Q_OS_WIN
@@ -696,6 +697,21 @@ bool MainWindow::inputLineKeyEvent(QKeyEvent *k)
     {
         QString strChannel = Channel::instance()->getCurrentName();
         Channel::instance()->getChatView(strChannel)->search();
+        return true;
+    }
+    // ctrl+W
+    else if ((k->key() == Qt::Key_W) && (k->modifiers() == Qt::ControlModifier))
+    {
+        QString strChannel = Channel::instance()->getCurrentName();
+        Core::instance()->network->send(QString("PART %1").arg(strChannel));
+
+        return true;
+    }
+    // ctrl+T
+    else if ((k->key() == Qt::Key_T) && (k->modifiers() == Qt::ControlModifier))
+    {
+        JoinChannelGui(this).exec();
+
         return true;
     }
     // alt+1
