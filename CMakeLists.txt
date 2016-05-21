@@ -6,6 +6,9 @@ set (QT_MIN_VERSION "5.0.0")
 find_package(Qt5Core REQUIRED)
 find_package(Qt5LinguistTools)
 
+# cmake modules
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+
 # gcc minimum
 if (CMAKE_COMPILER_IS_GNUCXX)
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)

@@ -2,10 +2,10 @@ Package: simplechatclient
 Version: 2.2.0
 Section: net
 Maintainer: Piotr Luczko <piotr.luczko@gmail.com>
-Homepage: http://simplechatclient.github.io/
+Homepage: https://simplechatclient.github.io/
 Priority: standard
 Installed-Size: 22000
 Architecture: i386
-Depends: libc6, libgcc1, libstdc++6, libqca2(>=2.1.0), libssl, libqt5gui5, libqt5dbus5, libqt5core5, libqt5xml5, libqt5webkitwidgets5, libqt5webkit5, libqt5network5, libqt5multimedia5, libqt5widgets5, libqt5sql5, libqt5qml5, libqt5quick5, libqt5sensors5, libqt5positioning5, libqt5opengl5, libqt5printsupport5, libqt5multimediawidgets5, libqt5webchannel5, libqt5svg5
+Depends: libssl1.0.0, libqt5gui5, libqt5webkit5, libqca-qt5-2, libqt5multimedia5
 Description: Simple Chat Client
  Simple Chat Client to darmowy i otwarty, wieloplatformowy komunikator do rozmów na czacie czat.onet.pl

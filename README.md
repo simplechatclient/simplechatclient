@@ -39,8 +39,8 @@ QT_DIR
 
 ### Linux Debian/Ubuntu packages
 
-	cmake make pkg-config g++ libssl-dev libqca2(>=2.1.0) qtbase5-dev qttools5-dev qttools5-dev-tools
-	libqt5gui5-dev libqt5dbus5-dev libqt5core5-dev libqt5xml5-dev libqt5webkitwidgets5-dev libqt5webkit5-dev libqt5network5-dev libqt5multimedia5-dev libqt5widgets5-dev libqt5sql5-dev libqt5qml5-dev libqt5quick5-dev libqt5sensors5-dev libqt5positioning5-dev libqt5opengl5-dev libqt5printsupport5-dev libqt5multimediawidgets5-dev libqt5webchannel5-dev libqt5svg5-dev
+	cmake make pkg-config g++ qtbase5-dev libqt5webkit5-dev libqca-qt5-2-dev qtmultimedia5-dev libssl-dev
+	
 
 Install qca plugin from https://projects.kde.org/projects/kdesupport/qca/repository
 
