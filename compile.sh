@@ -13,4 +13,4 @@ make_install()
 	fi
 }
 
-cmake . -DCMAKE_INSTALL_PREFIX=/usr/local && make -j `nproc` && make_install
+cmake . -DCMAKE_INSTALL_PREFIX=/usr && make -j `nproc` && make_install

@@ -1,6 +1,6 @@
 #!/bin/bash
-cp /usr/local/bin/scc ./pkg-debian/usr/bin/scc
-cp -r /usr/local/share/scc/* ./pkg-debian/usr/share/scc/
+cp /usr/bin/scc ./pkg-debian/usr/bin/scc
+cp -r /usr/share/scc/* ./pkg-debian/usr/share/scc/
 
 chmod 755 ./pkg-debian/usr/bin/scc
 find ./pkg-debian/usr/share/scc/ -type d -exec chmod 755 {} \;
