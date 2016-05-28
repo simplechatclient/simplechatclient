@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QCryptographicHash>
 #include <QPainter>
 #include "models/avatar.h"
 #include "core/core.h"
@@ -119,8 +120,9 @@ void NickListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             }
             else
             {
-                if (Avatar::instance()->existAvatarPath(nick)) {
-                    userAvatar = Avatar::instance()->getAvatarPath(nick);
+                QString nickHash = QCryptographicHash::hash(nick.toLatin1(), QCryptographicHash::Md5).toHex();
+                if (Avatar::instance()->existAvatarPath(nickHash)) {
+                    userAvatar = Avatar::instance()->getAvatarPath(nickHash);
                 } else {
                     userAvatar = Avatar::instance()->getEmptyRegisteredUserAvatar();
                 }
