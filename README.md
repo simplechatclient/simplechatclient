@@ -40,7 +40,6 @@ QT_DIR
 ### Linux Debian/Ubuntu packages
 
 	cmake make pkg-config g++ qtbase5-dev libqt5webkit5-dev libqca-qt5-2-dev qtmultimedia5-dev libssl-dev
-	
 
 Install qca plugin from https://projects.kde.org/projects/kdesupport/qca/repository
 
