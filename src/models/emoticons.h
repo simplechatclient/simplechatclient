@@ -32,12 +32,21 @@ public:
     static Emoticons *instance();
 
     Emoticons();
-    QList<CaseIgnoreString> listEmoticons();
-    QList<CaseIgnoreString> listEmoticonsEmoji();
+    QList<EmoticonCategories> listCategories();
+    QList<CaseIgnoreString> listEmoticons(EmoticonCategory category);
+    QList<Emoticon> listEmoticonsFromPath(const QString &path);
 
 private:
-    QList<CaseIgnoreString> lEmoticonsList;
+    QList<Emoticon> lEmoticonsList;
+    QList<CaseIgnoreString> lEmoticonsStandardList;
     QList<CaseIgnoreString> lEmoticonsEmojiList;
+    QList<EmoticonCategories> lEmoticonsCategoryList;
+
+    void createLists();
+    void createEmoticonsList();
+    void createEmoticonsSimpleLists();
+    void createEMoticonsCategoryLists();
+
 };
 
 #endif // EMOTICONS_H

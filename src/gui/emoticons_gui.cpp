@@ -25,105 +25,13 @@
 #include <QVBoxLayout>
 #include "core/defines.h"
 #include "common/config.h"
+#include "models/emoticons.h"
 #include "widgets/inputline_widget.h"
 #include "emoticons_gui.h"
 
 #ifndef Q_OS_WIN
     #include "scc-config.h"
 #endif
-
-EmoticonsThread::EmoticonsThread() {}
-
-void EmoticonsThread::setParams(const QString &_strDir, EmoticonsCategory _emoticonsCategory)
-{
-    strDir = _strDir;
-    emoticonsCategory = _emoticonsCategory;
-}
-
-void EmoticonsThread::run()
-{
-    QDir dEmoticonsDir = strDir;
-
-    QStringList lSupportedEmoticons;
-
-    if (emoticonsCategory == EmoticonsStandard)
-    {
-        lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
-    }
-    else if (emoticonsCategory == EmoticonsEmoji)
-    {
-        lSupportedEmoticons << "*.png";
-    }
-
-    QStringList lFiles = dEmoticonsDir.entryList(lSupportedEmoticons, QDir::Files | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
-
-    foreach (const QString &strFileName, lFiles)
-    {
-        QString strEmoticon = QFileInfo(strFileName).baseName();
-
-        QByteArray bData;
-        QFile f(strDir+"/"+strFileName);
-        if (f.open(QIODevice::ReadOnly))
-        {
-            bData = f.readAll();
-            f.close();
-        }
-
-        if (!bData.isEmpty())
-        {
-            if (emoticonsCategory == EmoticonsStandard)
-            {
-                emit addEmoticon("//"+strEmoticon, bData);
-            }
-            else if (emoticonsCategory == EmoticonsEmoji)
-            {
-                emit addEmoticon(":"+strEmoticon+":", bData);
-            }
-        }
-    }
-    emit sortEmoticons();
-
-    exec();
-}
-
-EmoticonsTabGui::EmoticonsTabGui(const QString &_strDir, EmoticonsCategory emoticonsCategory, QWidget *parent) : QWidget(parent)
-{
-    listWidget = new QListWidget(this);
-    listWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    listWidget->setDragDropMode(QAbstractItemView::NoDragDrop);
-    listWidget->setViewMode(QListView::IconMode);
-    listWidget->setMovement(QListView::Static);
-    listWidget->setResizeMode(QListView::Adjust);
-    listWidget->show();
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(listWidget);
-    setLayout(mainLayout);
-
-    connect(&thread, SIGNAL(addEmoticon(const QString&, const QByteArray&)), this, SLOT(addEmoticon(const QString&, const QByteArray&)));
-    connect(&thread, SIGNAL(sortEmoticons()), this, SLOT(sortEmoticons()));
-
-    thread.setParams(_strDir, emoticonsCategory);
-}
-
-void EmoticonsTabGui::addEmoticon(const QString &strEmoticon, const QByteArray &bData)
-{
-    QPixmap pix;
-    if (!bData.isEmpty())
-        pix.loadFromData(bData);
-
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setIcon(QIcon(pix));
-    item->setData(EmoticonNameRole, strEmoticon);
-    item->setToolTip(strEmoticon);
-
-    listWidget->addItem(item);
-}
-
-void EmoticonsTabGui::sortEmoticons()
-{
-    listWidget->setSortingEnabled(true);
-}
 
 EmoticonsGui::EmoticonsGui(InputLineWidget *_pInputLineWidget, QWidget *parent) : QDialog(parent), pInputLineWidget(_pInputLineWidget)
 {
@@ -137,9 +45,11 @@ EmoticonsGui::EmoticonsGui(InputLineWidget *_pInputLineWidget, QWidget *parent) 
     setDefaultValues();
     createSignals();
 
-    // default read first tab
-    if (ui.tabWidget->count() != 0)
-        tabChanged(0);
+    // select first category
+    if (ui.listWidget_categories->count() > 0) {
+        ui.listWidget_categories->setCurrentRow(0);
+        categoryChanged(ui.listWidget_categories->item(0));
+    }
 }
 
 void EmoticonsGui::createGui()
@@ -151,117 +61,61 @@ void EmoticonsGui::createGui()
     ui.buttonBox->button(QDialogButtonBox::Close)->setText(tr("Close"));
 }
 
-void EmoticonsGui::resizeEvent(QResizeEvent *)
-{
-    ui.tabWidget->setGeometry(10, 10, this->width()-20, this->height()-25-ui.pushButton_insert->height());
-    ui.pushButton_insert->setGeometry(10, this->height()-10-ui.pushButton_insert->height(), ui.pushButton_insert->width(), ui.pushButton_insert->height());
-    ui.buttonBox->setGeometry(this->width()-10-ui.buttonBox->width(), this->height()-10-ui.buttonBox->height(), ui.pushButton_insert->width(), ui.pushButton_insert->height());
-}
-
 void EmoticonsGui::setDefaultValues()
 {
-    createEmoticonsTabs();
-    createEmoticonsEmojiTabs();
-}
-
-void EmoticonsGui::createEmoticonsTabs()
-{
-    QString path;
-#ifdef Q_OS_WIN
-    path = QCoreApplication::applicationDirPath();
-#else
-    path = SCC_DATA_DIR;
-#endif
-
-    QStringList lSupportedEmoticons;
-    lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
-
-    QDir dAllEmoticonsDirs = path+"/emoticons/";
-    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
-
-    foreach (const QString &strDir, lDirs)
-    {
-        QDir dEmoticonsDir = dAllEmoticonsDirs.absolutePath()+"/"+strDir;
-
-        QStringList lFiles = dEmoticonsDir.entryList(lSupportedEmoticons, QDir::Files | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
-        QString strFirstIconPath = dEmoticonsDir.absolutePath()+"/"+lFiles.first();
-
-        ui.tabWidget->addTab(new EmoticonsTabGui(dEmoticonsDir.absolutePath(), EmoticonsStandard), QIcon(strFirstIconPath), strDir);
-    }
-}
-
-void EmoticonsGui::createEmoticonsEmojiTabs()
-{
-    QString path;
-#ifdef Q_OS_WIN
-    path = QCoreApplication::applicationDirPath();
-#else
-    path = SCC_DATA_DIR;
-#endif
-
-    QStringList lSupportedEmoticons;
-    lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
-
-    QDir dAllEmoticonsDirs = path+"/emoticons_emoji/";
-    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
-
-    foreach (const QString &strDir, lDirs)
-    {
-        QDir dEmoticonsDir = dAllEmoticonsDirs.absolutePath()+"/"+strDir;
-
-        QStringList lFiles = dEmoticonsDir.entryList(lSupportedEmoticons, QDir::Files | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase);
-        QString strFirstIconPath = dEmoticonsDir.absolutePath()+"/"+lFiles.first();
-
-        ui.tabWidget->addTab(new EmoticonsTabGui(dEmoticonsDir.absolutePath(), EmoticonsEmoji), QIcon(strFirstIconPath), "Emoji - "+strDir);
-    }
+    createCategoriesList();
 }
 
 void EmoticonsGui::createSignals()
 {
-    connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    connect(ui.listWidget_emoticons, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(buttonInsert()));
+    connect(ui.listWidget_categories, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(categoryChanged(QListWidgetItem*)));
     connect(ui.pushButton_insert, SIGNAL(clicked()), this, SLOT(buttonInsert()));
     connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
+}
 
-    for (int i = 0; i < ui.tabWidget->count(); ++i)
-    {
-        EmoticonsTabGui *tab = (EmoticonsTabGui *)ui.tabWidget->widget(i);
-        connect(tab->listWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(buttonInsert()));
+void EmoticonsGui::createCategoriesList()
+{
+    QList<EmoticonCategories> lEmoticonsCategoriesList = Emoticons::instance()->listCategories();
+    foreach (EmoticonCategories emoticonsCategory, lEmoticonsCategoriesList) {
+
+        QListWidgetItem *item = new QListWidgetItem(ui.listWidget_categories);
+        item->setIcon(QIcon(emoticonsCategory.imagePath));
+        item->setText(emoticonsCategory.name);
+        item->setData(EmoticonDirectoryRole, emoticonsCategory.dir);
     }
 }
 
-EmoticonsGui::~EmoticonsGui()
+void EmoticonsGui::categoryChanged(QListWidgetItem *item)
 {
-    for (int i = 0; i < ui.tabWidget->count(); ++i)
-    {
-        EmoticonsTabGui *tab = (EmoticonsTabGui *)ui.tabWidget->widget(i);
-        tab->thread.quit();
-        tab->thread.wait();
-        tab->thread.deleteLater();
-    }
+    ui.listWidget_emoticons->clear();
+
+    QString path = item->data(EmoticonDirectoryRole).toString();
+    displayEmoticons(path);
 }
 
-void EmoticonsGui::tabChanged(int index)
+void EmoticonsGui::displayEmoticons(const QString &path)
 {
-    if (!lReadedTabIndex.contains(index))
-    {
-        lReadedTabIndex.append(index);
+    QList<Emoticon> lEmoticons = Emoticons::instance()->listEmoticonsFromPath(path);
 
-        EmoticonsTabGui *tab = (EmoticonsTabGui *)ui.tabWidget->widget(index);
-        tab->thread.start();
+    foreach (Emoticon eEmoticon, lEmoticons) {
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setIcon(QIcon(eEmoticon.path));
+        item->setData(Qt::UserRole, eEmoticon.nameWithPrefix);
+        item->setToolTip(eEmoticon.nameWithPrefix);
+
+        ui.listWidget_emoticons->addItem(item);
     }
+
+    ui.listWidget_emoticons->setSortingEnabled(true);
 }
 
 void EmoticonsGui::buttonInsert()
 {
-    if (ui.tabWidget->count() == 0) // not found tabs
+    if (ui.listWidget_emoticons->selectedItems().size() == 0)
         return;
 
-    EmoticonsTabGui *tab = (EmoticonsTabGui *)ui.tabWidget->currentWidget();
-
-    if (tab->listWidget->selectedItems().size() == 0)
-        return;
-
-    QString strEmoticon = tab->listWidget->selectedItems().at(0)->data(EmoticonNameRole).toString();
+    QString strEmoticon = ui.listWidget_emoticons->selectedItems().at(0)->data(Qt::UserRole).toString();
 
     // insert
     pInputLineWidget->insertText(strEmoticon);

@@ -33,39 +33,7 @@ QT_END_NAMESPACE
 
 enum EmoticonsRoles
 {
-    EmoticonNameRole = Qt::UserRole
-};
-
-class EmoticonsThread : public QThread
-{
-    Q_OBJECT
-public:
-    EmoticonsThread();
-    void setParams(const QString &_strDir, EmoticonsCategory _emoticonsCategory);
-
-private:
-    QString strDir;
-    EmoticonsCategory emoticonsCategory;
-
-protected:
-    void run();
-
-signals:
-    void addEmoticon(const QString &strEmoticon, const QByteArray &bData);
-    void sortEmoticons();
-};
-
-class EmoticonsTabGui : public QWidget
-{
-    Q_OBJECT
-public:
-    EmoticonsTabGui(const QString &_strDir, EmoticonsCategory emoticonsCategory, QWidget *parent = 0);
-    QListWidget *listWidget;
-    EmoticonsThread thread;
-
-public slots:
-    void addEmoticon(const QString &strEmoticon, const QByteArray &bData);
-    void sortEmoticons();
+    EmoticonDirectoryRole = Qt::UserRole,
 };
 
 class EmoticonsGui : public QDialog
@@ -73,25 +41,20 @@ class EmoticonsGui : public QDialog
     Q_OBJECT
 public:
     EmoticonsGui(InputLineWidget *_pInputLineWidget, QWidget *parent = 0);
-    virtual ~EmoticonsGui();
 
 private:
     Ui::uiEmoticons ui;
     InputLineWidget *pInputLineWidget;
-    QList<int> lReadedTabIndex;
 
     void createGui();
     void setDefaultValues();
     void createSignals();
 
-    void createEmoticonsTabs();
-    void createEmoticonsEmojiTabs();
-
-protected:
-    void resizeEvent(QResizeEvent *);
+    void createCategoriesList();
+    void displayEmoticons(const QString &path);
 
 public slots:
-    void tabChanged(int index);
+    void categoryChanged(QListWidgetItem *item);
     void buttonInsert();
 };
 

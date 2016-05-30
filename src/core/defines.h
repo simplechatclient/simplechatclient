@@ -60,10 +60,10 @@ enum SortedListWidgetRoles
     SortedListWidgetStatusRole = Qt::UserRole+11
 };
 
-enum EmoticonsCategory
+enum EmoticonCategory
 {
-    EmoticonsStandard,
-    EmoticonsEmoji
+    EmoticonStandard,
+    EmoticonEmoji
 };
 
 const int MAX_OPEN_CHANNELS = 20+2; // 20 - onet limit, 2 - status,debug
@@ -194,6 +194,24 @@ struct Theme
 {
     QString name;
     ThemeFlags::Flags flags;
+};
+
+struct Emoticon
+{
+    EmoticonCategory category;
+    QString path;
+    QString name;
+    QString nameWithPrefix;
+    QString dir;
+    QString dirAbsolute;
+};
+
+struct EmoticonCategories
+{
+    QString name;
+    EmoticonCategory category;
+    QString imagePath;
+    QString dir;
 };
 
 class CaseIgnoreString : public QString

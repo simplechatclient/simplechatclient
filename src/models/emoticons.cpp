@@ -42,11 +42,14 @@ Emoticons::Emoticons()
 {
 }
 
-QList<CaseIgnoreString> Emoticons::listEmoticons()
+void Emoticons::createLists()
 {
-    if (lEmoticonsList.size() != 0)
-        return lEmoticonsList;
+    createEmoticonsList();
+    createEmoticonsSimpleLists();
+}
 
+void Emoticons::createEmoticonsList()
+{
     QString path;
 #ifdef Q_OS_WIN
     path = QCoreApplication::applicationDirPath();
@@ -54,56 +57,120 @@ QList<CaseIgnoreString> Emoticons::listEmoticons()
     path = SCC_DATA_DIR;
 #endif
 
-    QDir dAllEmoticonsDirs = path+"/emoticons/";
-    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-
     QStringList lSupportedEmoticons;
     lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
 
-    foreach (const QString &strDir, lDirs)
-    {
-        QDir dEmoticonDir = QString("%1/emoticons/%2/").arg(path, strDir);
-        QFileInfoList lEmoticons = dEmoticonDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    // create emoticons standard list
 
-        foreach (const QFileInfo &fEmoticon, lEmoticons)
-            lEmoticonsList.append("//"+fEmoticon.baseName());
+    QDir dEmoticonsStandardDirs = path+"/emoticons/";
+    QStringList lEmoticonsSandardDirs = dEmoticonsStandardDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    foreach (const QString &strEmoticonStandardDir, lEmoticonsSandardDirs)
+    {
+        QDir dEmoticonStandardDir = QString("%1/emoticons/%2/").arg(path, strEmoticonStandardDir);
+        QFileInfoList lEmoticonsStandard = dEmoticonStandardDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+        foreach (const QFileInfo &fEmoticon, lEmoticonsStandard) {
+
+            Emoticon newEmoticon;
+            newEmoticon.category = EmoticonStandard;
+            newEmoticon.path = fEmoticon.absoluteFilePath();
+            newEmoticon.name = fEmoticon.baseName();
+            newEmoticon.nameWithPrefix = "//"+fEmoticon.baseName();
+            newEmoticon.dir = fEmoticon.dir().dirName();
+            newEmoticon.dirAbsolute = fEmoticon.absoluteDir().absolutePath();
+
+            lEmoticonsList.append(newEmoticon);
+        }
+
+        EmoticonCategories newEmoticonCategories;
+        newEmoticonCategories.name = strEmoticonStandardDir;
+        newEmoticonCategories.category = EmoticonStandard;
+        newEmoticonCategories.imagePath = dEmoticonStandardDir.absolutePath()+"/"+lEmoticonsStandard.first().baseName();
+        newEmoticonCategories.dir = dEmoticonStandardDir.absolutePath();
+        lEmoticonsCategoryList.append(newEmoticonCategories);
+    }
+
+    // create emoticons emoji list
+
+    QDir dEmoticonsEmojiDirs = path+"/emoticons_emoji/";
+    QStringList lEmoticonsEmojiDirs = dEmoticonsEmojiDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    foreach (const QString &strEmoticonEmojiDir, lEmoticonsEmojiDirs)
+    {
+        QDir dEmoticonEmojiDir = QString("%1/emoticons_emoji/%2/").arg(path, strEmoticonEmojiDir);
+        QFileInfoList lEmoticonsEmoji = dEmoticonEmojiDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+        foreach (const QFileInfo &fEmoticon, lEmoticonsEmoji) {
+
+            Emoticon newEmoticon;
+            newEmoticon.category = EmoticonEmoji;
+            newEmoticon.path = fEmoticon.absoluteFilePath();
+            newEmoticon.name = fEmoticon.baseName();
+            newEmoticon.nameWithPrefix = ":"+fEmoticon.baseName()+":";
+            newEmoticon.dir = fEmoticon.dir().dirName();
+            newEmoticon.dirAbsolute = fEmoticon.absoluteDir().absolutePath();
+
+            lEmoticonsList.append(newEmoticon);
+        }
+
+        EmoticonCategories newEmoticonCategories;
+        newEmoticonCategories.name = strEmoticonEmojiDir;
+        newEmoticonCategories.category = EmoticonEmoji;
+        newEmoticonCategories.imagePath = dEmoticonEmojiDir.absolutePath()+"/"+lEmoticonsEmoji.first().baseName();
+        newEmoticonCategories.dir = dEmoticonEmojiDir.absolutePath();
+        lEmoticonsCategoryList.append(newEmoticonCategories);
+    }
+}
+
+void Emoticons::createEmoticonsSimpleLists()
+{
+    foreach (Emoticon eEmoticon, lEmoticonsList) {
+        if (eEmoticon.category == EmoticonStandard) {
+            lEmoticonsStandardList.append(eEmoticon.nameWithPrefix);
+        } else if (eEmoticon.category == EmoticonEmoji) {
+            lEmoticonsEmojiList.append(eEmoticon.nameWithPrefix);
+        }
     }
 
     // sort
-    qStableSort(lEmoticonsList.begin(), lEmoticonsList.end());
-
-    return lEmoticonsList;
-}
-
-QList<CaseIgnoreString> Emoticons::listEmoticonsEmoji()
-{
-    if (lEmoticonsEmojiList.size() != 0)
-        return lEmoticonsEmojiList;
-
-    QString path;
-#ifdef Q_OS_WIN
-    path = QCoreApplication::applicationDirPath();
-#else
-    path = SCC_DATA_DIR;
-#endif
-
-    QDir dAllEmoticonsDirs = path+"/emoticons_emoji/";
-    QStringList lDirs = dAllEmoticonsDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-
-    QStringList lSupportedEmoticons;
-    lSupportedEmoticons << "*.gif" << "*.jpg" << "*.jpeg" << "*.png" << "*.bmp";
-
-    foreach (const QString &strDir, lDirs)
-    {
-        QDir dEmoticonDir = QString("%1/emoticons_emoji/%2/").arg(path, strDir);
-        QFileInfoList lEmoticons = dEmoticonDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-
-        foreach (const QFileInfo &fEmoticon, lEmoticons)
-            lEmoticonsEmojiList.append(":"+fEmoticon.baseName()+":");
-    }
+    qStableSort(lEmoticonsStandardList.begin(), lEmoticonsStandardList.end());
 
     // sort
     qStableSort(lEmoticonsEmojiList.begin(), lEmoticonsEmojiList.end());
+}
 
-    return lEmoticonsEmojiList;
+QList<EmoticonCategories> Emoticons::listCategories()
+{
+    if (lEmoticonsList.size() == 0) {
+        createLists();
+    }
+
+    return lEmoticonsCategoryList;
+}
+
+QList<CaseIgnoreString> Emoticons::listEmoticons(EmoticonCategory category)
+{
+    if (lEmoticonsList.size() == 0) {
+        createLists();
+    }
+
+    if (category == EmoticonEmoji) {
+        return lEmoticonsEmojiList;
+    } else {
+        return lEmoticonsStandardList;
+    }
+}
+
+QList<Emoticon> Emoticons::listEmoticonsFromPath(const QString &path)
+{
+    QList<Emoticon> list;
+
+    foreach (Emoticon eEmoticon, lEmoticonsList) {
+        if (eEmoticon.dirAbsolute == path) {
+            list.append(eEmoticon);
+        }
+    }
+
+    return list;
 }

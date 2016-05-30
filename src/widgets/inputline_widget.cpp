@@ -141,7 +141,7 @@ bool InputLineWidget::event(QEvent *e)
         }
         else if ((strWord.at(0) == '/') && (strWord.at(1) == '/'))
         {
-            QList<CaseIgnoreString> lEmoticons = Emoticons::instance()->listEmoticons();
+            QList<CaseIgnoreString> lEmoticons = Emoticons::instance()->listEmoticons(EmoticonStandard);
 
             if (lEmoticons.size() == 0)
                 return true;
@@ -160,7 +160,7 @@ bool InputLineWidget::event(QEvent *e)
         }
         else if ((strWord.at(0) == ':'))
         {
-            QList<CaseIgnoreString> lEmoticonsEmoji = Emoticons::instance()->listEmoticonsEmoji();
+            QList<CaseIgnoreString> lEmoticonsEmoji = Emoticons::instance()->listEmoticons(EmoticonEmoji);
 
             if (lEmoticonsEmoji.size() == 0)
                 return true;
