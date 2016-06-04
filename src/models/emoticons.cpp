@@ -63,12 +63,12 @@ void Emoticons::createEmoticonsList()
     // create emoticons standard list
 
     QDir dEmoticonsStandardDirs = path+"/emoticons/";
-    QStringList lEmoticonsSandardDirs = dEmoticonsStandardDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList lEmoticonsSandardDirs = dEmoticonsStandardDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
 
     foreach (const QString &strEmoticonStandardDir, lEmoticonsSandardDirs)
     {
         QDir dEmoticonStandardDir = QString("%1/emoticons/%2/").arg(path, strEmoticonStandardDir);
-        QFileInfoList lEmoticonsStandard = dEmoticonStandardDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+        QFileInfoList lEmoticonsStandard = dEmoticonStandardDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
 
         foreach (const QFileInfo &fEmoticon, lEmoticonsStandard) {
 
@@ -94,12 +94,12 @@ void Emoticons::createEmoticonsList()
     // create emoticons emoji list
 
     QDir dEmoticonsEmojiDirs = path+"/emoticons_emoji/";
-    QStringList lEmoticonsEmojiDirs = dEmoticonsEmojiDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList lEmoticonsEmojiDirs = dEmoticonsEmojiDirs.entryList(QStringList("*"), QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
 
     foreach (const QString &strEmoticonEmojiDir, lEmoticonsEmojiDirs)
     {
         QDir dEmoticonEmojiDir = QString("%1/emoticons_emoji/%2/").arg(path, strEmoticonEmojiDir);
-        QFileInfoList lEmoticonsEmoji = dEmoticonEmojiDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+        QFileInfoList lEmoticonsEmoji = dEmoticonEmojiDir.entryInfoList(lSupportedEmoticons, QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase | QDir::LocaleAware);
 
         foreach (const QFileInfo &fEmoticon, lEmoticonsEmoji) {
 

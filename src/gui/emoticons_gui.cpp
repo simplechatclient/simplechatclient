@@ -107,7 +107,7 @@ void EmoticonsGui::displayEmoticons(const QString &path)
         ui.listWidget_emoticons->addItem(item);
     }
 
-    ui.listWidget_emoticons->setSortingEnabled(true);
+//    ui.listWidget_emoticons->setSortingEnabled(true);
 }
 
 void EmoticonsGui::buttonInsert()
