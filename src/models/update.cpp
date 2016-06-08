@@ -33,7 +33,7 @@
     #include <QSysInfo>
 #endif
 
-#define UPDATE_URL_GITHUB "http://simplechatclient.github.io/update.xml"
+#define UPDATE_URL_GITHUB "https://simplechatclient.github.io/update.xml"
 #define UPDATE_URL_SOURCEFORGE "http://simplechatclien.sourceforge.net/update.xml"
 
 Update * Update::Instance = 0;
@@ -70,7 +70,7 @@ void Update::checkUpdate()
 void Update::updateRequest(const QString &strMethod, const QString &strUrl, const QString &strUrlMarker)
 {
     QString strAgentPlatform = this->getPlatform();
-    QString strAgentUrl = "http://simplechatclient.github.io";
+    QString strAgentUrl = "https://simplechatclient.github.io";
     QString strAgentProgram = "SimpleChatClient";
     QString strAgentVersion = Settings::instance()->get("version");
     QString strUserAgent = QString("Mozilla/5.0 (%1; +%2) %3/%4").arg(strAgentPlatform, strAgentUrl, strAgentProgram, strAgentVersion);

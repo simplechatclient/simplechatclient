@@ -28,7 +28,7 @@
 #include "models/settings.h"
 #include "update_gui.h"
 
-#define DOWNLOAD_LINK "http://simplechatclient.github.io/download"
+#define DOWNLOAD_LINK "https://simplechatclient.github.io/download"
 #define DOWNLOAD_SITE_LINK "https://github.com/simplechatclient/simplechatclient/releases/download/%1/scc-%2.exe"
 
 UpdateGui::UpdateGui(QWidget *parent) : QDialog(parent)
@@ -91,7 +91,7 @@ void UpdateGui::buttonDownload()
 #ifdef Q_OS_WIN
     QNetworkRequest request;
     request.setUrl(QUrl(QString(DOWNLOAD_SITE_LINK).arg(strShortVersion, strFullVersion)));
-    request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+http://simplechatclient.github.io)");
+    request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+https://simplechatclient.github.io)");
 
     accessManager->get(request);
 #else
@@ -145,7 +145,7 @@ void UpdateGui::networkFinished(QNetworkReply *reply)
     {
         QNetworkRequest request;
         request.setUrl(possibleRedirectUrl.toUrl());
-        request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+http://simplechatclient.github.io)");
+        request.setHeader(QNetworkRequest::UserAgentHeader, "SimpleChatClientUpdate (+https://simplechatclient.github.io)");
 
         QNetworkReply *pReply = accessManager->get(request);
         connect(pReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
@@ -183,5 +183,5 @@ void UpdateGui::showError(const QString &strError)
     ui.pushButton_download->hide();
 
     ui.label_title->setText("");
-    ui.label_content->setText(QString("<center><b>%1<br/>%2<br/><br/>%3<br/><a href=\"%4\">%4</a></b></center>").arg(tr("Error"), strError, tr("Visit homepage"), "http://simplechatclient.github.io"));
+    ui.label_content->setText(QString("<center><b>%1<br/>%2<br/><br/>%3<br/><a href=\"%4\">%4</a></b></center>").arg(tr("Error"), strError, tr("Visit homepage"), "https://simplechatclient.github.io"));
 }

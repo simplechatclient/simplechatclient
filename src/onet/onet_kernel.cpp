@@ -1421,8 +1421,8 @@ void OnetKernel::raw_160n()
 }
 
 // CS INFO #scc
-// :ChanServ!service@service.onet NOTICE scc_test :161 #scc :topicAuthor=Merovingian rank=0.9095 topicDate=1251579281 private=1 password= limit=0 type=0 createdDate=1247005186 vEmail=0 www=http://simplechatclient.github.io/ catMajor=4 catMinor=0 official=0 recommended=0 protected=0 moderated=0 avatar=http://foto0.m.onet.pl/_m/e7bd33787bb5cd96031db4034e5f1d54,1,19,0.jpg status=ok guardian=3 kickRejoin=0 auditorium=0
-// :ChanServ!service@service.onet NOTICE Merovingian :161 #scc :topicAuthor=Merovingian rank=1.7068 topicDate=1297944969 private=0 type=1 createdDate=1247005186 vEmail=1 www=http://simplechatclient.github.io/ catMajor=4 moderated=0 avatar=http://foto3.m.onet.pl/_m/97198666362c2c72c6311640f9e791cb,1,19,0-5-53-53-0.jpg guardian=3 email=merovirgian@gmail.com kickRejoin=60 auditorium=0
+// :ChanServ!service@service.onet NOTICE scc_test :161 #scc :topicAuthor=Merovingian rank=0.9095 topicDate=1251579281 private=1 password= limit=0 type=0 createdDate=1247005186 vEmail=0 www=https://simplechatclient.github.io/ catMajor=4 catMinor=0 official=0 recommended=0 protected=0 moderated=0 avatar=http://foto0.m.onet.pl/_m/e7bd33787bb5cd96031db4034e5f1d54,1,19,0.jpg status=ok guardian=3 kickRejoin=0 auditorium=0
+// :ChanServ!service@service.onet NOTICE Merovingian :161 #scc :topicAuthor=Merovingian rank=1.7068 topicDate=1297944969 private=0 type=1 createdDate=1247005186 vEmail=1 www=https://simplechatclient.github.io/ catMajor=4 moderated=0 avatar=http://foto3.m.onet.pl/_m/97198666362c2c72c6311640f9e791cb,1,19,0-5-53-53-0.jpg guardian=3 email=merovirgian@gmail.com kickRejoin=60 auditorium=0
 void OnetKernel::raw_161n()
 {
     if (strDataList.size() < 5) return;
