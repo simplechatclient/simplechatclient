@@ -5,11 +5,28 @@ matrix:
  allow_failures:
   - os: osx
 before_install:
- - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then ./.travis/before_install/osx.sh; fi
- - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then ./.travis/before_install/linux.sh; fi
+# linux
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo add-apt-repository --yes ppa:beineri/opt-qt551; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo apt-get update -qq; fi
+
+# osx
+ - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then brew update; fi
+ - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then brew install qt5; fi
 install:
- - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then ./.travis/install/osx.sh; fi
- - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then ./.travis/install/linux.sh; fi
+# linux
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo apt-get install make pkg-config g++-4.9 libssl-dev; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then wget --no-check-certificate http://cmake.org/files/v3.1/cmake-3.1.3-Linux-x86_64.tar.gz && tar -xzf cmake-3.1.3-Linux-x86_64.tar.gz && sudo cp -fR cmake-3.1.3-Linux-x86_64/* /usr; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then cmake --version; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo apt-get install qt55-meta-full; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then source /opt/qt55/bin/qt55-env.sh; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then git clone git://anongit.kde.org/qca; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then cd qca; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then cmake . -DBUILD_TESTS=OFF; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then make; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo make install; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then cd ..; fi
 script:
  - cmake . -DCMAKE_INSTALL_PREFIX=/usr/local
  - make
