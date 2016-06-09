@@ -1,28 +1,23 @@
+os:
+ - linux
+ - osx
+matrix:
+ allow_failures:
+  - os: osx
 before_install:
- - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
- - sudo add-apt-repository --yes ppa:beineri/opt-qt551
- - sudo apt-get update -qq
+ - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then ./.travis/before_install/osx.sh; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then ./.travis/before_install/linux.sh; fi
 install:
- - sudo apt-get install make pkg-config g++-4.9 libssl-dev
- - export CXX="g++-4.9" CC="gcc-4.9"
- - wget --no-check-certificate http://cmake.org/files/v3.1/cmake-3.1.3-Linux-x86_64.tar.gz && tar -xzf cmake-3.1.3-Linux-x86_64.tar.gz && sudo cp -fR cmake-3.1.3-Linux-x86_64/* /usr
- - cmake --version
- - sudo apt-get install qt55-meta-full
- - source /opt/qt55/bin/qt55-env.sh
- - git clone git://anongit.kde.org/qca
- - cd qca
- - cmake . -DBUILD_TESTS=OFF
- - make
- - sudo make install
- - cd ..
+ - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then ./.travis/install/osx.sh; fi
+ - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then ./.travis/install/linux.sh; fi
 script:
  - cmake . -DCMAKE_INSTALL_PREFIX=/usr/local
  - make
  - sudo make install
 notifications:
-  email:
-    recipients:
-      - piotr.luczko@gmail.com
-      - dmarkowicz@alari.pl
-    on_success: change
-    on_failure: always
+ email:
+  recipients:
+   - piotr.luczko@gmail.com
+   - dmarkowicz@alari.pl
+  on_success: change
+  on_failure: always
