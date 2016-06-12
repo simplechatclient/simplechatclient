@@ -18,30 +18,35 @@
  */
 
 #include <QDebug>
-#include <Qca-qt5/QtCrypto/QtCrypto>
 #include "simple_crypt.h"
 
-#ifdef Q_OS_WIN
-    #include <windows.h>
-#else
-    #include <unistd.h>
+#ifndef Q_OS_MAC
+	#include <Qca-qt5/QtCrypto/QtCrypto>
+
+	#ifdef Q_OS_WIN
+		#include <windows.h>
+	#else
+		#include <unistd.h>
+	#endif
 #endif
 
 SimpleCrypt::SimpleCrypt()
 {
-#ifdef Q_OS_WIN
-    char volName[256];
-    char fileSysName[256];
-    DWORD dwSerialNumber;
-    DWORD dwMaxComponentLen;
-    DWORD dwFileSysFlags;
+#ifndef Q_OS_MAC
+	#ifdef Q_OS_WIN
+		char volName[256];
+		char fileSysName[256];
+		DWORD dwSerialNumber;
+		DWORD dwMaxComponentLen;
+		DWORD dwFileSysFlags;
 
-    bool res = GetVolumeInformation("c:\\", volName, 256, &dwSerialNumber, &dwMaxComponentLen, &dwFileSysFlags, fileSysName, 256);
-    if (res)
-        strIv = QString::number(dwSerialNumber,10);
-#else
-    long lSerialNumber = gethostid();
-    strIv = QString::number(lSerialNumber, 10);
+		bool res = GetVolumeInformation("c:\\", volName, 256, &dwSerialNumber, &dwMaxComponentLen, &dwFileSysFlags, fileSysName, 256);
+		if (res)
+			strIv = QString::number(dwSerialNumber,10);
+	#else
+		long lSerialNumber = gethostid();
+		strIv = QString::number(lSerialNumber, 10);
+	#endif
 #endif
 
     if (strIv.isEmpty())
@@ -55,7 +60,7 @@ QString SimpleCrypt::encrypt(QString strKey, const QString &strData)
         qWarning() << tr("Error: crypt: Cannot encrypt - empty argument");
         return QString::null;
     }
-
+#ifndef Q_OS_MAC
     QCA::Initializer init;
 
     if ((!QCA::isSupported("aes256-cbc-pkcs7")) && (!QCA::isSupported("blowfish-cbc")))
@@ -88,6 +93,7 @@ QString SimpleCrypt::encrypt(QString strKey, const QString &strData)
         return QCA::arrayToHex(QCA::SecureArray(cipher.process(arg)).toByteArray());
     }
     else
+#endif
         return strData;
 }
 
@@ -98,7 +104,7 @@ QString SimpleCrypt::decrypt(QString strKey, const QString &strData)
         qWarning() << tr("Error: crypt: Cannot decrypt - empty argument");
         return QString::null;
     }
-
+#ifndef Q_OS_MAC
     QCA::Initializer init;
 
     if ((!QCA::isSupported("aes256-cbc-pkcs7")) && (!QCA::isSupported("blowfish-cbc")))
@@ -131,5 +137,6 @@ QString SimpleCrypt::decrypt(QString strKey, const QString &strData)
         return QCA::SecureArray(cipher.process(arg)).data();
     }
     else
+#endif
         return strData;
 }
