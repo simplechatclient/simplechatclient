@@ -171,7 +171,7 @@ void OnetAvatar::requestUploadImage(const QString &fileName, const QByteArray &d
 
     QNetworkReply *pReply = this->post(request, multiPart);
     multiPart->setParent(pReply);
-    QFileInfo info = QFile(fileName);
+    QFileInfo info(fileName);
     pReply->setProperty("fileName", info.fileName());
 }
 
