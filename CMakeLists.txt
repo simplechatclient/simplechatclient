@@ -13,8 +13,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
         message(FATAL_ERROR "G++ version must be at least 4.8!")
     endif()
-else()
-    message(WARNING "You are using an unsupported compiler!")
 endif()
 
 # optimization
@@ -62,13 +60,13 @@ add_subdirectory (translations)
 # configure
 configure_file (${CMAKE_SOURCE_DIR}/scc-config.h.cmake ${CMAKE_BINARY_DIR}/scc-config.h)
 
-if (UNIX AND NOT APPLE)
+if (UNIX)
 	message (STATUS " * install prefix: ${CMAKE_INSTALL_PREFIX}")
-endif (UNIX AND NOT APPLE)
+endif (UNIX)
 message (STATUS " * build type: ${CMAKE_BUILD_TYPE}")
 
 # install
-if (UNIX AND NOT APPLE)
+if (UNIX)
 	install (FILES AUTHORS ChangeLog LICENSE README.md scc.png TODO DESTINATION ${SCC_DATA_DIR})
 	install (FILES scc.desktop DESTINATION ${SCC_SHARE_DIR}/applications)
 	
@@ -91,14 +89,14 @@ if (UNIX AND NOT APPLE)
 	install (DIRECTORY sounds DESTINATION ${SCC_DATA_DIR})
 	install (DIRECTORY emoticons DESTINATION ${SCC_DATA_DIR})
 	install (DIRECTORY emoticons_emoji DESTINATION ${SCC_DATA_DIR})
-endif (UNIX AND NOT APPLE)
+endif (UNIX)
 
 if (MINGW)
 	install (FILES src/scc.exe DESTINATION ${CMAKE_SOURCE_DIR}/release)
 endif (MINGW)
 
 # uninstall
-if (UNIX AND NOT APPLE)
+if (UNIX)
 	configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
 	add_custom_target (uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-endif (UNIX AND NOT APPLE)
+endif (UNIX)

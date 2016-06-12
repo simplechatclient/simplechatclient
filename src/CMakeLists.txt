@@ -293,7 +293,8 @@ if (WIN32)
 	LIST (APPEND scc_SRCS
 		common/winamp.cpp
 	)
-else (WIN32)
+endif (WIN32)
+if (UNIX AND NOT APPLE)
 	find_package(Qt5DBus)
 	LIST (APPEND scc_MOC_HDRS
 		common/mpris_player.h
@@ -302,7 +303,7 @@ else (WIN32)
 	LIST (APPEND scc_SRCS
 		common/mpris_player.cpp
 	)
-endif (WIN32)
+endif (UNIX AND NOT APPLE)
 
 # qca2
 if (WIN32)
@@ -311,12 +312,13 @@ if (WIN32)
 	else (MINGW)
 		set (QCA2-QT5_LIBRARIES ${Qt5Core_DIR}/../../qca-qt5.lib)
 	endif (MINGW)
-else (WIN32)
+endif (WIN32)
+if (UNIX AND NOT APPLE)
 	find_package (QCA2-QT5 REQUIRED)
 	include_directories (${QCA2-QT5_INCLUDE_DIR})
 	link_directories (${QCA2-QT5_LIBRARIES})
 	add_definitions (${QCA2-QT5_DEFINITIONS})
-endif (WIN32)
+endif (UNIX AND NOT APPLE)
 
 # Tell CMake to run moc when necessary:
 set(CMAKE_AUTOMOC ON)
@@ -360,12 +362,17 @@ else (MINGW) # linux
 	add_executable (scc ${scc_SRCS} ${MOC_FILES} ${scc_HDRS} ${scc_QRC_SRCS} ${scc_UIS_H})
 endif (MINGW)
 
-target_link_libraries (scc Qt5::Widgets Qt5::Multimedia Qt5::Network Qt5::WebKit Qt5::WebKitWidgets Qt5::Xml ${QCA2-QT5_LIBRARIES})
-if (NOT WIN32)
+target_link_libraries (scc Qt5::Widgets Qt5::Multimedia Qt5::Network Qt5::WebKit Qt5::WebKitWidgets Qt5::Xml)
+
+if (NOT APPLE)
+	target_link_libraries (scc ${QCA2-QT5_LIBRARIES})
+endif (NOT APPLE)
+
+if (UNIX AND NOT APPLE)
 	target_link_libraries (scc Qt5::DBus)
-endif (NOT WIN32)
+endif (UNIX AND NOT APPLE)
 
 # install
-if (UNIX AND NOT APPLE)
+if (UNIX)
 	install (TARGETS scc DESTINATION ${SCC_BIN_DIR})
-endif (UNIX AND NOT APPLE)
+endif (UNIX)
