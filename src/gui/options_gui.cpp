@@ -251,6 +251,10 @@ void OptionsGui::createGui()
     winamp->setHidden(true);
 #endif
 
+#ifdef Q_OS_MAC
+    mpris->setHidden(true);
+#endif
+
     QListWidgetItem *notification = new QListWidgetItem(ui.listWidget_options);
     notification->setIcon(QIcon(":/images/breeze/help-hint.svg"));
     notification->setText(tr("Notification"));

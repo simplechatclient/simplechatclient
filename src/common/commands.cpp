@@ -28,10 +28,12 @@
 #include "models/utils.h"
 #include "commands.h"
 
-#ifdef Q_OS_WIN
-    #include "winamp.h"
-#else
-    #include "mpris_player.h"
+#ifndef Q_OS_MAC
+	#ifdef Q_OS_WIN
+		#include "winamp.h"
+	#else
+		#include "mpris_player.h"
+	#endif
 #endif
 
 Commands::Commands(const QString &_strChan, const QString &_strData) : strChan(_strChan), strData(_strData)
@@ -496,49 +498,51 @@ QString Commands::cmdMp3()
 {
     QString strMessage = QString::null;
 
-#ifdef Q_OS_WIN
-    const QString strPlayer = "Winamp";
-    Winamp *pWinamp = new Winamp();
-    bool bIsRunning = pWinamp->isRunning();
-    int iState = pWinamp->state();
-    delete pWinamp;
+#ifndef Q_OS_MAC
+	#ifdef Q_OS_WIN
+		const QString strPlayer = "Winamp";
+		Winamp *pWinamp = new Winamp();
+		bool bIsRunning = pWinamp->isRunning();
+		int iState = pWinamp->state();
+		delete pWinamp;
 
-    if (bIsRunning)
-    {
-        if (iState == 1)
-        {
-            Winamp *pWinamp = new Winamp();
-            QString strVersion = pWinamp->version();
-            QString strSong = pWinamp->song();
-            QString strPosition = pWinamp->position();
-            QString strLength = pWinamp->length();
-            delete pWinamp;
+		if (bIsRunning)
+		{
+			if (iState == 1)
+			{
+				Winamp *pWinamp = new Winamp();
+				QString strVersion = pWinamp->version();
+				QString strSong = pWinamp->song();
+				QString strPosition = pWinamp->position();
+				QString strLength = pWinamp->length();
+				delete pWinamp;
 
-            QString strWinamp = Settings::instance()->get("winamp");
+				QString strWinamp = Settings::instance()->get("winamp");
 
-            strWinamp.replace("$version", strVersion);
-            strWinamp.replace("$song", strSong);
-            strWinamp.replace("$position", strPosition);
-            strWinamp.replace("$length", strLength);
+				strWinamp.replace("$version", strVersion);
+				strWinamp.replace("$song", strSong);
+				strWinamp.replace("$position", strPosition);
+				strWinamp.replace("$length", strLength);
 
-            strMessage = strWinamp;
-        }
-        else if (iState == 3)
-            strMessage = tr("%1 is paused").arg(strPlayer);
-        else if (iState == 0)
-            strMessage = tr("%1 is not playing").arg(strPlayer);
-        else
-            strMessage = tr("%1 is not running").arg(strPlayer);
-    }
-    else
-        strMessage = tr("%1 is not running").arg(strPlayer);
-#else
-    const QString strPlayer = Settings::instance()->get("mpris_player");
-    const QString strService = Settings::instance()->get("mpris_service");
-    const QString strFormat = Settings::instance()->get("mpris_format");
+				strMessage = strWinamp;
+			}
+			else if (iState == 3)
+				strMessage = tr("%1 is paused").arg(strPlayer);
+			else if (iState == 0)
+				strMessage = tr("%1 is not playing").arg(strPlayer);
+			else
+				strMessage = tr("%1 is not running").arg(strPlayer);
+		}
+		else
+			strMessage = tr("%1 is not running").arg(strPlayer);
+	#else
+		const QString strPlayer = Settings::instance()->get("mpris_player");
+		const QString strService = Settings::instance()->get("mpris_service");
+		const QString strFormat = Settings::instance()->get("mpris_format");
 
-    MprisPlayer mprisPlayer;
-    strMessage = mprisPlayer.trackInfo(strPlayer, strService, strFormat);
+		MprisPlayer mprisPlayer;
+		strMessage = mprisPlayer.trackInfo(strPlayer, strService, strFormat);
+	#endif
 #endif
 
     return strMessage;
