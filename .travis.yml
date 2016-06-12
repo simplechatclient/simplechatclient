@@ -1,9 +1,6 @@
 os:
  - linux
  - osx
-matrix:
- allow_failures:
-  - os: osx
 before_install:
 # linux
  - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; fi
