@@ -91,8 +91,9 @@ void HtmlMessagesRenderer::fixContextMenu(QString &strData, MessageCategory eMes
                 if (!exYoutube_2.cap(1).isEmpty()) lYoutubeImages << exYoutube_2.cap(1);
                 if (!exYoutube_3.cap(1).isEmpty()) lYoutubeImages << exYoutube_3.cap(1);
 
-                QString strYoutubeLink = QString("<a onclick=\"return false\" name=\"youtube\" href=\"%1\"><img src=\"qrc:/images/breeze/media-playback-start.svg\" alt=\"%2\" /></a>").arg(strWord, tr("Watch video"));
-                strDataList[i] = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a> %3").arg(strWord, strWord, strYoutubeLink);
+//                QString strYoutubeLink = QString("<a onclick=\"return false\" name=\"youtube\" href=\"%1\"><img src=\"qrc:/images/breeze/media-playback-start.svg\" alt=\"%2\" /></a>").arg(strWord, tr("Watch video"));
+//                strDataList[i] = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a> %3").arg(strWord, strWord, strYoutubeLink);
+                strDataList[i] = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a>").arg(strWord, strWord);
             }
             else if (lSupportedImages.contains(QFileInfo(strWord).suffix().toLower()))
             {
@@ -136,8 +137,9 @@ void HtmlMessagesRenderer::fixContextMenu(QString &strData, MessageCategory eMes
                     if (!exYoutube_2.cap(1).isEmpty()) lYoutubeImages << exYoutube_2.cap(1);
                     if (!exYoutube_3.cap(1).isEmpty()) lYoutubeImages << exYoutube_3.cap(1);
 
-                    QString strYoutubeLink = QString("<a onclick=\"return false\" name=\"youtube\" href=\"%1\"><img src=\"qrc:/images/breeze/media-playback-start.svg\" alt=\"%2\" /></a>").arg(strAfterLink, tr("Watch video"));
-                    strAfterLink = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a> %3").arg(strAfterLink, strAfterLink, strYoutubeLink);
+//                    QString strYoutubeLink = QString("<a onclick=\"return false\" name=\"youtube\" href=\"%1\"><img src=\"qrc:/images/breeze/media-playback-start.svg\" alt=\"%2\" /></a>").arg(strAfterLink, tr("Watch video"));
+//                    strAfterLink = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a> %3").arg(strAfterLink, strAfterLink, strYoutubeLink);
+                    strAfterLink = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a>").arg(strAfterLink, strAfterLink);
                 }
                 else if (lSupportedImages.contains(QFileInfo(strAfterLink).suffix().toLower()))
                 {

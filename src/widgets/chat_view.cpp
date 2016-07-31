@@ -707,12 +707,12 @@ void ChatView::menuWebsite(QContextMenuEvent *event)
     menu.addSeparator();
     menu.addAction(QIcon(":/images/breeze/applications-internet.svg"), tr("Open link"), this, SLOT(openWebbrowser()));
 
-    QRegExp exYoutube_1("youtube.com/watch\\?.*v=([a-zA-Z0-9_-]{11})");
-    QRegExp exYoutube_2("youtube.com/v/([a-zA-Z0-9_-]{11})");
-    QRegExp exYoutube_3("youtu.be/([a-zA-Z0-9_-]{11})");
+//    QRegExp exYoutube_1("youtube.com/watch\\?.*v=([a-zA-Z0-9_-]{11})");
+//    QRegExp exYoutube_2("youtube.com/v/([a-zA-Z0-9_-]{11})");
+//    QRegExp exYoutube_3("youtu.be/([a-zA-Z0-9_-]{11})");
 
-    if ((strWebsite.contains(exYoutube_1)) || (strWebsite.contains(exYoutube_2)) || (strWebsite.contains(exYoutube_3)))
-        menu.addAction(QIcon(":/images/breeze/media-playback-start.svg"), tr("Watch video"), this, SLOT(watchVideo()));
+//    if ((strWebsite.contains(exYoutube_1)) || (strWebsite.contains(exYoutube_2)) || (strWebsite.contains(exYoutube_3)))
+//        menu.addAction(QIcon(":/images/breeze/media-playback-start.svg"), tr("Watch video"), this, SLOT(watchVideo()));
 
     QAction *copyLinkToClipboard = this->pageAction(QWebPage::CopyLinkToClipboard);
     copyLinkToClipboard->setIcon(QIcon(":/images/breeze/edit-copy.svg"));
