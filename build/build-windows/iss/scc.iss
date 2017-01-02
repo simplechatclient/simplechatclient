@@ -14,14 +14,24 @@ DefaultDirName={pf32}\SimpleChatClient
 DefaultGroupName=Simple Chat Client
 UninstallDisplayIcon={app}\scc.ico
 
+WizardSmallImageFile=scc.bmp
+
 Compression=lzma2
 SolidCompression=yes
+
 PrivilegesRequired=admin
 CloseApplications=force
+RestartApplications=no
+
+DisableReadyMemo=yes
+DisableReadyPage=yes
+DisableWelcomePage=yes
 DisableStartupPrompt=yes
 DisableDirPage=yes
 DisableProgramGroupPage=yes
 DisableFinishedPage=yes
+
+ShowLanguageDialog=auto
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
@@ -41,3 +51,23 @@ Name: "{commondesktop}\Simple Chat Client"; Filename: "{app}\scc.exe"
 [Run]
 Filename: "{tmp}\vcredist_x86.exe"; Parameters: "/q /norestart"; StatusMsg: Installing Visual C++ Redistributable Package...
 Filename: "{app}\scc.exe"; Description: "{cm:LaunchProgram,Simple Chat Client}"; Flags: nowait postinstall skipifsilent
+
+#define MyAppName "scc"
+#define MyAppExeName "scc.exe"
+
+[Code]
+function InitializeSetup(): Boolean;
+  var ErrorCode: Integer;
+begin
+  ShellExec('open','taskkill.exe','/f /im {#MyAppExeName}','',SW_HIDE,ewNoWait,ErrorCode);
+  ShellExec('open','tskill.exe',' {#MyAppName}','',SW_HIDE,ewNoWait,ErrorCode);
+  result := True;
+end;
+
+function InitializeUninstall(): Boolean;
+  var ErrorCode: Integer;
+begin
+  ShellExec('open','taskkill.exe','/f /im {#MyAppExeName}','',SW_HIDE,ewNoWait,ErrorCode);
+  ShellExec('open','tskill.exe',' {#MyAppName}','',SW_HIDE,ewNoWait,ErrorCode);
+  result := True;
+end;
