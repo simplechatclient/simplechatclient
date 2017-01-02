@@ -17,7 +17,11 @@ UninstallDisplayIcon={app}\scc.ico
 Compression=lzma2
 SolidCompression=yes
 PrivilegesRequired=admin
-CloseApplications=yes
+CloseApplications=force
+DisableStartupPrompt=yes
+DisableDirPage=yes
+DisableProgramGroupPage=yes
+DisableFinishedPage=yes
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
