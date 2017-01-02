@@ -40,7 +40,7 @@ void Settings::init()
 {
     clear();
 
-    set("version", "2.2.0.0");
+    set("version", "3.0.0.0");
 }
 
 void Settings::clear()

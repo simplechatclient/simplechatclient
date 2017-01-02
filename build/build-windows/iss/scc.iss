@@ -1,13 +1,13 @@
 [Setup]
 AppVerName=Simple Chat Client
-AppVersion=2.2.0
-VersionInfoVersion=2.2.0
-OutputBaseFilename=scc-2.2.0.0
+AppVersion=3.0.0
+VersionInfoVersion=3.0.0
+OutputBaseFilename=scc-3.0.0.0
 
 AppName=Simple Chat Client
 AppPublisher=Simple Chat Client
 AppPublisherURL=https://simplechatclient.github.io
-AppSupportURL=http://czat.onet.pl/scc,chat.html
+AppSupportURL=https://github.com/simplechatclient/simplechatclient/issues
 AppUpdatesURL=https://simplechatclient.github.io/download
 
 DefaultDirName={pf32}\SimpleChatClient

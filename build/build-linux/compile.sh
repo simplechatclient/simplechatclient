@@ -11,5 +11,5 @@ find . -type f ! -regex '.*\.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DE
 cd ..
 
 chmod 0644 ./pkg-debian/DEBIAN/md5sums
-fakeroot dpkg -b pkg-debian/ scc-2.2.0.0.deb
-fakeroot alien -c -k -r scc-2.2.0.0.deb
+fakeroot dpkg -b pkg-debian/ scc-3.0.0.0.deb
+fakeroot alien -c -k -r scc-3.0.0.0.deb

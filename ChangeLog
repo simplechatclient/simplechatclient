@@ -1,7 +1,7 @@
 ChangeLog for Simple Chat Client
 ========================= 
 
-Version 2.3.0
+Version 3.0.0
 ================================
 * Restore last text on switch channel
 * Auto-complete channels on tab clicked
