@@ -62,6 +62,8 @@ SOURCES += src/common/commands.cpp \
     src/gui/webcam_gui.cpp \
     src/gui/webcam_mini_gui.cpp \
     src/gui/webcam_standard_gui.cpp \
+    src/irc/irc_auth.cpp \
+    src/irc/irc_kernel.cpp \
     src/models/autoaway.cpp \
     src/models/avatar.cpp \
     src/models/away.cpp \
@@ -172,6 +174,8 @@ HEADERS += src/common/commands.h \
     src/gui/webcam_gui.h \
     src/gui/webcam_mini_gui.h \
     src/gui/webcam_standard_gui.h \
+    src/irc/irc_auth.h \
+    src/irc/irc_kernel.h \
     src/models/autoaway.h \
     src/models/avatar.h \
     src/models/away.h \
