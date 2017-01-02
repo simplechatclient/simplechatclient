@@ -128,6 +128,9 @@ set (scc_SRCS
 	onet/onet_kernel.cpp
 	onet/onet_utils.cpp
 
+	irc/irc_auth.cpp
+	irc/irc_kernel.cpp
+
 	tab/tab_container.cpp
 	tab/tab_manager.cpp
 	tab/tab_widget.cpp
