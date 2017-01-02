@@ -53,6 +53,7 @@
 #include "models/themes.h"
 #include "models/tray.h"
 #include "models/user_profile.h"
+#include "common/config.h"
 #include "irc/irc_kernel.h"
 
 IrcKernel::IrcKernel(TabContainer *_pTabC) : pTabC(_pTabC)
@@ -187,6 +188,7 @@ void IrcKernel::raw_join()
     strIP = strIP.right(strIP.length()-strIP.indexOf('@')-1);
 
     QString strChannel = strDataList.at(2);
+    if (strChannel.at(0) == ':') strChannel.remove(0,1);
 
     QString strSuffix;
     if (!strDataList.value(3).isEmpty())
@@ -242,7 +244,7 @@ void IrcKernel::raw_join()
         }
         else
         {
-            Core::instance()->network->send(QString("NS INFO %1 s").arg(strNick));
+            // Core::instance()->network->send(QString("NS INFO %1 s").arg(strNick));
         }
     }
 
@@ -254,8 +256,8 @@ void IrcKernel::raw_join()
             Nick::instance()->setSex(strNick, strSex.at(0));
     }
 
-    if ((strNick == strMe) && (strChannel.at(0) != '^'))
-        Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
+    //if ((strNick == strMe) && (strChannel.at(0) != '^'))
+        //Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
 }
 
 // :scc_test!51976824@3DE379.B7103A.6CF799.6902F4 PART #scc
@@ -275,6 +277,7 @@ void IrcKernel::raw_part()
     strIP = strIP.right(strIP.length()-strIP.indexOf('@')-1);
 
     QString strChannel = strDataList.at(2);
+    if (strChannel.at(0) == ':') strChannel.remove(0,1);
 
     QString strReason;
     for (int i = 3; i < strDataList.size(); ++i) { if (i != 3) strReason += " "; strReason += strDataList.at(i); }
@@ -608,10 +611,10 @@ void IrcKernel::raw_mode()
             if ((strNick == Settings::instance()->get("nick")) && (strFlag == "+r"))
             {
                 // channel homes
-                Core::instance()->network->send("CS HOMES");
+                // Core::instance()->network->send("CS HOMES");
 
                 // get my stats
-                Core::instance()->network->send(QString("RS INFO %1").arg(Settings::instance()->get("nick")));
+                // Core::instance()->network->send(QString("RS INFO %1").arg(Settings::instance()->get("nick")));
             }
         }
     }
@@ -1001,8 +1004,16 @@ void IrcKernel::raw_001()
     // channel settings
     ChannelSettings::instance()->clear();
 
-    // protocol
-    Core::instance()->network->send("PROTOCTL ONETNAMESX");
+    // login
+    QString strMe = Settings::instance()->get("nick");
+    Config *pConfig = new Config(ProfileConfig, strMe);
+    QString strPassword = pConfig->get("pass");
+    delete pConfig;
+
+    // decrypt pass
+    if (!strPassword.isEmpty()) {
+        Core::instance()->network->send(QString("PRIVMSG NickServ IDENTIFY %1").arg(strPassword));
+    }
 
     // busy
     Settings::instance()->setBool("busy", false);
@@ -1011,8 +1022,8 @@ void IrcKernel::raw_001()
     Settings::instance()->setBool("away", false);
 
     // auto busy
-    if (Settings::instance()->getBool("auto_busy"))
-        Core::instance()->network->send("BUSY 1");
+    //if (Settings::instance()->getBool("auto_busy"))
+        //Core::instance()->network->send("BUSY 1");
 
     // ignore favourites
     if (Settings::instance()->getBool("autojoin_favourites"))
@@ -1042,7 +1053,7 @@ void IrcKernel::raw_001()
     }
 
     // channel list
-    Core::instance()->network->send("SLIST  R- 0 0 100 null");
+    Core::instance()->network->send("LIST");
 
     // update last active
     Settings::instance()->set("last_active", QString::number(QDateTime::currentMSecsSinceEpoch()));
@@ -2852,7 +2863,7 @@ void IrcKernel::raw_353()
                 }
                 else
                 {
-                    Core::instance()->network->send(QString("NS INFO %1 s").arg(strCleanNick));
+                    // Core::instance()->network->send(QString("NS INFO %1 s").arg(strCleanNick));
                 }
             }
         }

@@ -88,8 +88,6 @@ const int FLAG_SCREENER_INT = 1;
 const int FLAG_VOICE_INT = 0;
 const int FLAG_UNKNOWN_INT = -1;
 
-#define IRC
-
 #define STATUS_WINDOW "Status"
 #define DEBUG_WINDOW "Debug"
 

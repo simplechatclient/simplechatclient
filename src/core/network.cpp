@@ -259,8 +259,12 @@ void Network::write(const QString &strData)
         if (Settings::instance()->getBool("debug"))
             Message::instance()->showMessage(DEBUG_WINDOW, "-> "+strData, MessageDefault);
 
+#ifdef IRC
+        QByteArray bISOData = (strData+"\r\n").toLatin1();
+#else
         QTextCodec *codec = QTextCodec::codecForName("ISO-8859-2");
         QByteArray bISOData = codec->fromUnicode(strData+"\r\n");
+#endif
 
         if (socket->write(bISOData) == -1)
         {
@@ -309,8 +313,12 @@ void Network::recv()
         // set active
         iActive = QDateTime::currentMSecsSinceEpoch();
 
+#ifdef IRC
+        QString strData = QString(data);
+#else
         QTextCodec *codec = QTextCodec::codecForName("ISO-8859-2");
         QString strData = codec->toUnicode(data);
+#endif
 
         // disabled due to bug in detection iso/utf
         /*
