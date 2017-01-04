@@ -54,6 +54,7 @@
 #include "models/tray.h"
 #include "models/user_profile.h"
 #include "common/config.h"
+#include "common/simple_crypt.h"
 #include "irc/irc_kernel.h"
 
 IrcKernel::IrcKernel(TabContainer *_pTabC) : pTabC(_pTabC)
@@ -1004,14 +1005,21 @@ void IrcKernel::raw_001()
     // channel settings
     ChannelSettings::instance()->clear();
 
-    // login
+    // me
     QString strMe = Settings::instance()->get("nick");
+
+    // login
     Config *pConfig = new Config(ProfileConfig, strMe);
     QString strPassword = pConfig->get("pass");
     delete pConfig;
 
-    // decrypt pass
+    // got password
     if (!strPassword.isEmpty()) {
+        // decrypt pass
+        SimpleCrypt *pSimpleCrypt = new SimpleCrypt();
+        strPassword = pSimpleCrypt->decrypt(strMe, strPassword);
+        delete pSimpleCrypt;
+
         Core::instance()->network->send(QString("PRIVMSG NickServ IDENTIFY %1").arg(strPassword));
     }
 

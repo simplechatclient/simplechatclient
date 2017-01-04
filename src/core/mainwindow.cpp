@@ -531,7 +531,7 @@ void MainWindow::updateButtons()
             connectAction->setIcon(QIcon(":/images/breeze/network-disconnect.svg"));
         }
     }
-
+#ifndef IRC
     if (bUpdateMenu)
     {
         QString strNick = Settings::instance()->get("nick");
@@ -559,6 +559,7 @@ void MainWindow::updateButtons()
             myAvatarAction->setEnabled(false);
         }
     }
+#endif
 }
 
 void MainWindow::openOptions()
