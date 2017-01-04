@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowGeometry();
     createActions();
     createMenus();
+    disableActions();
 
     // classes
     pTabM = new TabManager(this);
@@ -363,6 +364,30 @@ void MainWindow::createSignals()
 #else
     connect(pOnetAuth, SIGNAL(updateNick(const QString&)), this, SLOT(updateNick(const QString&)));
     connect(pOnetAuth, SIGNAL(authStateChanged()), this, SLOT(updateButtons()));
+#endif
+}
+
+void MainWindow::disableActions()
+{
+#ifdef IRC
+    channelListAction->setEnabled(false);
+    channelHomesAction->setEnabled(false);
+    channelFavouritesAction->setEnabled(false);
+    friendsAction->setEnabled(false);
+    ignoreAction->setEnabled(false);
+    findNickAction->setEnabled(false);
+
+    myStatsAction->setEnabled(false);
+    myProfileAction->setEnabled(false);
+    myAvatarAction->setEnabled(false);
+
+    camsAction->setEnabled(false);
+
+    Busy::instance()->busyAction->setEnabled(false);
+    Away::instance()->awayAction->setEnabled(false);
+    Offline::instance()->offmsgAllAction->setEnabled(false);
+    Offline::instance()->offmsgFriendAction->setEnabled(false);
+    Offline::instance()->offmsgNoneAction->setEnabled(false);
 #endif
 }
 

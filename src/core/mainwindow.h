@@ -126,6 +126,7 @@ private:
     void createActions();
     void createMenus();
     void createSignals();
+    void disableActions();
     void addDefaultTabs();
     void firstRun();
     void saveChannelText();
