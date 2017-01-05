@@ -22,7 +22,7 @@
 
 #include "defines.h"
 class QTimer;
-class QTcpSocket;
+class QSslSocket;
 #include <QAbstractSocket>
 #include <QThread>
 
@@ -48,7 +48,7 @@ public slots:
 private:
     QString strServer;
     int iPort;
-    QTcpSocket *socket;
+    QSslSocket *socket;
     QTimer *timerPong;
     QTimer *timerPing;
     QTimer *timerQueue;

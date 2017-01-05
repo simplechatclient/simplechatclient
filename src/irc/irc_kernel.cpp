@@ -1061,7 +1061,7 @@ void IrcKernel::raw_001()
     }
 
     // channel list
-    Core::instance()->network->send("LIST");
+    //Core::instance()->network->send("LIST");
 
     // update last active
     Settings::instance()->set("last_active", QString::number(QDateTime::currentMSecsSinceEpoch()));

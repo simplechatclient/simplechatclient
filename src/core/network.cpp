@@ -18,7 +18,7 @@
  */
 
 #include <QDateTime>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QTimer>
 #include <QTextCodec>
 #include "models/autoaway.h"
@@ -46,7 +46,7 @@ Network::Network(const QString &_strServer, int _iPort) : strServer(_strServer),
     timerQueue = new QTimer();
     timerQueue->setInterval(300); // 0.3 sec
 
-    socket = new QTcpSocket(this);
+    socket = new QSslSocket(this);
     socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
     socket->setSocketOption(QAbstractSocket::KeepAliveOption, 0);
 
@@ -165,7 +165,14 @@ void Network::connect()
         clearAll();
 
         // connect
-        socket->connectToHost(strServer, iPort);
+        socket->connectToHostEncrypted(strServer, iPort);
+
+        // wait for encrypted
+        if (!socket->waitForEncrypted()) {
+            QString strError = "Error: Wait for encrypted failed!";
+            Message::instance()->showMessageAll(strError, MessageError);
+            disconnect();
+        }
     }
     else
     {
@@ -408,6 +415,7 @@ void Network::timeoutQueue()
         return;
     }
 
+    // write
     if (msgSendQueue.size() > 0)
         write(msgSendQueue.takeFirst());
     else

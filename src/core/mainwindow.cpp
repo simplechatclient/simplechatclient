@@ -559,6 +559,8 @@ void MainWindow::updateButtons()
             myAvatarAction->setEnabled(false);
         }
     }
+#else
+    Q_UNUSED(bUpdateMenu);
 #endif
 }
 

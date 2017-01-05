@@ -79,7 +79,7 @@ void Core::init()
     // network
 #ifdef IRC
     QString strServer = "irc.pirc.pl";
-    int iPort = 6667;
+    int iPort = 7002;
 #else
     QString strServer = "czat-app.onet.pl";
     int iPort = 5015;

@@ -76,6 +76,7 @@ void IrcAuth::authorize(QString _strNick, QString _strPass)
     {
         Core::instance()->network->send(QString("USER %1 * * :%1").arg(strNick));
         Core::instance()->network->send(QString("NICK %1").arg(strNick));
+        Core::instance()->network->send("STARTTLS");
     }
 
     Settings::instance()->setBool("authorizing", false);
