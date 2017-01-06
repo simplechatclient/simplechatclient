@@ -19,6 +19,7 @@
 
 #include <QDir>
 #include <QUuid>
+#include <QDateTime>
 #include "models/settings.h"
 #include "xml.h"
 #include "config.h"
@@ -66,6 +67,7 @@ Config::Config(ConfigCategory _eConfigCategory, QString _strProfile) : eConfigCa
                     user = list.first().fileName();
                 else
                 {
+                    qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
                     int randomValue = qrand() % 999;
                     user = "nick_tymczasowy"+QString::number(randomValue);
                 }
