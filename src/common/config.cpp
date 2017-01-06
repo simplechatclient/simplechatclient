@@ -67,7 +67,7 @@ Config::Config(ConfigCategory _eConfigCategory, QString _strProfile) : eConfigCa
                 else
                 {
                     int randomValue = qrand() % 999;
-                    user = "~nick_tymczasowy"+QString::number(randomValue);
+                    user = "nick_tymczasowy"+QString::number(randomValue);
                 }
 
                 Settings::instance()->set("current_profile", user);

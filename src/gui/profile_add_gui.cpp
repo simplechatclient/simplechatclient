@@ -60,6 +60,8 @@ void ProfileAddGui::setDefaultValues()
 {
     ui.radioButton_unregistered_nick->setChecked(true);
     hidePass();
+
+    ui.pushButton_register_nick->setVisible(false);
 }
 
 void ProfileAddGui::createSignals()
@@ -88,8 +90,8 @@ void ProfileAddGui::hidePass()
     QString strNick = ui.lineEdit_nick->text().trimmed();
 
     // fix nick
-    if ((!strNick.isEmpty()) && (strNick.at(0) != '~'))
-        ui.lineEdit_nick->setText("~"+strNick);
+    //if ((!strNick.isEmpty()) && (strNick.at(0) != '~'))
+        //ui.lineEdit_nick->setText("~"+strNick);
 
     ui.lineEdit_nick->setFocus();
 }
@@ -102,8 +104,8 @@ void ProfileAddGui::showPass()
     QString strNick = ui.lineEdit_nick->text().trimmed();
 
     // fix nick
-    if ((!strNick.isEmpty()) && (strNick.at(0) == '~'))
-        ui.lineEdit_nick->setText(strNick.remove(0,1));
+    //if ((!strNick.isEmpty()) && (strNick.at(0) == '~'))
+        //ui.lineEdit_nick->setText(strNick.remove(0,1));
 
     ui.lineEdit_nick->setFocus();
 }
@@ -130,23 +132,23 @@ void ProfileAddGui::buttonOk()
     if (ui.radioButton_unregistered_nick->isChecked())
     {
         // fix nick
-        if (strNick.at(0) != '~')
-            strNick = "~"+strNick;
+        //if (strNick.at(0) != '~')
+            //strNick = "~"+strNick;
 
         strPass = QString::null;
     }
     else if (ui.radioButton_registered_nick->isChecked())
     {
         // fix nick
-        if (strNick.at(0) == '~')
-            strNick.remove(0,1);
+        //if (strNick.at(0) == '~')
+            //strNick.remove(0,1);
 
         strPass = ui.lineEdit_password->text();
     }
 
     // fix nick
-    if ((strPass.isEmpty()) && (strNick.at(0) != '~'))
-        strNick = '~'+strNick;
+    //if ((strPass.isEmpty()) && (strNick.at(0) != '~'))
+        //strNick = '~'+strNick;
 
     // fix too long nick
     if ((strPass.isEmpty()) && (strNick.size() > 32))

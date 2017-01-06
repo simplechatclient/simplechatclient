@@ -262,10 +262,12 @@ QString HtmlMessagesRenderer::renderer(QString strData, MessageCategory eMessage
             // is valid avatar
             if (strUserAvatar.isEmpty())
             {
-                if (strNick.at(0) == '~')
-                    strUserAvatar = Avatar::instance()->getEmptyUnregisteredUserAvatarBig();
-                else
-                    strUserAvatar = Avatar::instance()->getEmptyRegisteredUserAvatarBig();
+//                if (strNick.at(0) == '~')
+//                    strUserAvatar = Avatar::instance()->getEmptyUnregisteredUserAvatarBig();
+//                else
+//                    strUserAvatar = Avatar::instance()->getEmptyRegisteredUserAvatarBig();
+
+                strUserAvatar = Avatar::instance()->getEmptyRegisteredUserAvatarBig();
             }
             else
                 strUserAvatar = Avatar::instance()->getAvatarPath(strUserAvatar);

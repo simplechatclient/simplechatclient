@@ -370,24 +370,24 @@ void MainWindow::createSignals()
 void MainWindow::disableActions()
 {
 #ifdef IRC
-    channelListAction->setEnabled(false);
-    channelHomesAction->setEnabled(false);
-    channelFavouritesAction->setEnabled(false);
-    friendsAction->setEnabled(false);
-    ignoreAction->setEnabled(false);
-    findNickAction->setEnabled(false);
+    channelListAction->setVisible(false);
+    channelHomesAction->setVisible(false);
+    channelFavouritesAction->setVisible(false);
+    friendsAction->setVisible(false);
+    ignoreAction->setVisible(false);
+    findNickAction->setVisible(false);
 
-    myStatsAction->setEnabled(false);
-    myProfileAction->setEnabled(false);
-    myAvatarAction->setEnabled(false);
+    myStatsAction->setVisible(false);
+    myProfileAction->setVisible(false);
+    myAvatarAction->setVisible(false);
 
-    camsAction->setEnabled(false);
+    camsAction->setVisible(false);
 
-    Busy::instance()->busyAction->setEnabled(false);
-    Away::instance()->awayAction->setEnabled(false);
-    Offline::instance()->offmsgAllAction->setEnabled(false);
-    Offline::instance()->offmsgFriendAction->setEnabled(false);
-    Offline::instance()->offmsgNoneAction->setEnabled(false);
+    Busy::instance()->busyAction->setVisible(false);
+    Away::instance()->awayAction->setVisible(false);
+    Offline::instance()->offmsgAllAction->setVisible(false);
+    Offline::instance()->offmsgFriendAction->setVisible(false);
+    Offline::instance()->offmsgNoneAction->setVisible(false);
 #endif
 }
 

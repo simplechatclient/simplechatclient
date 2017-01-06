@@ -143,7 +143,7 @@ void Network::authorize()
 
     // nick & pass is null
     if ((strNick.isEmpty()) && (strPass.isEmpty()))
-        strNick = "~test";
+        strNick = "test";
 
     // decrypt pass
     if (!strPass.isEmpty())
@@ -166,13 +166,6 @@ void Network::connect()
 
         // connect
         socket->connectToHostEncrypted(strServer, iPort);
-
-        // wait for encrypted
-        if (!socket->waitForEncrypted()) {
-            QString strError = "Error: Wait for encrypted failed!";
-            Message::instance()->showMessageAll(strError, MessageError);
-            disconnect();
-        }
     }
     else
     {

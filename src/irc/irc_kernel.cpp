@@ -638,6 +638,11 @@ void IrcKernel::raw_privmsg()
     for (int i = 3; i < strDataList.size(); ++i) { if (i != 3) strMessage += " "; strMessage += strDataList.at(i); }
     if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
 
+    // ctcp version
+    if (strMessage == QString("%1VERSION%1").arg(QString(QByteArray("\x01")))) {
+        return;
+    }
+
     // convert emots //
     Convert::simpleReverseConvert(strMessage);
     // convert emots :)
@@ -1032,6 +1037,9 @@ void IrcKernel::raw_001()
     // auto busy
     //if (Settings::instance()->getBool("auto_busy"))
         //Core::instance()->network->send("BUSY 1");
+
+    // block CTCP
+    Core::instance()->network->send(QString("MODE %1 +T").arg(strMe));
 
     // ignore favourites
     if (Settings::instance()->getBool("autojoin_favourites"))
@@ -2919,7 +2927,7 @@ void IrcKernel::raw_372()
     for (int i = 3; i < strDataList.size(); ++i) { if (i != 3) strMessage += " "; strMessage += strDataList.at(i); }
     if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
 
-    Message::instance()->showMessage(STATUS_WINDOW, strMessage, MessageDefault);
+    // Message::instance()->showMessage(STATUS_WINDOW, strMessage, MessageDefault);
 }
 
 // INFO
@@ -2932,9 +2940,9 @@ void IrcKernel::raw_374()
 // :cf1f4.onet 375 scc_test :cf1f4.onet message of the day
 void IrcKernel::raw_375()
 {
-    QString strDisplay = tr("Message Of The Day:");
+    //QString strDisplay = tr("Message Of The Day:");
 
-    Message::instance()->showMessage(STATUS_WINDOW, strDisplay, MessageDefault);
+    //Message::instance()->showMessage(STATUS_WINDOW, strDisplay, MessageDefault);
 }
 
 // MOTD
