@@ -49,6 +49,7 @@ Network::Network(const QString &_strServer, int _iPort) : strServer(_strServer),
     socket = new QSslSocket(this);
     socket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
     socket->setSocketOption(QAbstractSocket::KeepAliveOption, 0);
+    socket->setPeerVerifyMode(QSslSocket::VerifyPeer);
 
     QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(recv()));
     QObject::connect(socket, SIGNAL(connected()), this, SLOT(connected()));
