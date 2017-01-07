@@ -64,11 +64,11 @@ protected:
 
 private slots:
     void allCellDoubleClicked(int row, int column);
-    void teenCellDoubleClicked(int row, int column);
-    void commonCellDoubleClicked(int row, int column);
-    void eroticCellDoubleClicked(int row, int column);
-    void thematicCellDoubleClicked(int row, int column);
-    void regionalCellDoubleClicked(int row, int column);
+//    void teenCellDoubleClicked(int row, int column);
+//    void commonCellDoubleClicked(int row, int column);
+//    void eroticCellDoubleClicked(int row, int column);
+//    void thematicCellDoubleClicked(int row, int column);
+//    void regionalCellDoubleClicked(int row, int column);
     void createList();
     void buttonClear();
     void showAdvOptions();

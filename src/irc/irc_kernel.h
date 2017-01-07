@@ -157,6 +157,9 @@ private slots:
     void raw_318();
     void raw_319();
     void raw_320();
+    void raw_321();
+    void raw_322();
+    void raw_323();
     void raw_324();
     void raw_329();
     void raw_332();

@@ -370,7 +370,6 @@ void MainWindow::createSignals()
 void MainWindow::disableActions()
 {
 #ifdef IRC
-    channelListAction->setVisible(false);
     channelHomesAction->setVisible(false);
     channelFavouritesAction->setVisible(false);
     friendsAction->setVisible(false);

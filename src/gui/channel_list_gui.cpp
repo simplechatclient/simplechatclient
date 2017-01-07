@@ -75,18 +75,18 @@ void ChannelListGui::createGui()
     ui.checkBox_recommended->setText(tr("Recommended"));
 
     ui.tabWidget->setTabText(0, tr("All"));
-    ui.tabWidget->setTabText(1, tr("Teen"));
-    ui.tabWidget->setTabText(2, tr("Common"));
-    ui.tabWidget->setTabText(3, tr("Erotic"));
-    ui.tabWidget->setTabText(4, tr("Thematic"));
-    ui.tabWidget->setTabText(5, tr("Regional"));
+//    ui.tabWidget->setTabText(1, tr("Teen"));
+//    ui.tabWidget->setTabText(2, tr("Common"));
+//    ui.tabWidget->setTabText(3, tr("Erotic"));
+//    ui.tabWidget->setTabText(4, tr("Thematic"));
+//    ui.tabWidget->setTabText(5, tr("Regional"));
 
     ui.tabWidget->setTabIcon(0, QIcon(":/images/breeze/accessories-dictionary.svg"));
-    ui.tabWidget->setTabIcon(1, QIcon(":/images/breeze/applications-education-university.svg"));
-    ui.tabWidget->setTabIcon(2, QIcon(":/images/breeze/system-users.svg"));
-    ui.tabWidget->setTabIcon(3, QIcon(":/images/breeze/taxes-finances.svg"));
-    ui.tabWidget->setTabIcon(4, QIcon(":/images/breeze/karbon.svg"));
-    ui.tabWidget->setTabIcon(5, QIcon(":/images/breeze/applications-education-language.svg"));
+//    ui.tabWidget->setTabIcon(1, QIcon(":/images/breeze/applications-education-university.svg"));
+//    ui.tabWidget->setTabIcon(2, QIcon(":/images/breeze/system-users.svg"));
+//    ui.tabWidget->setTabIcon(3, QIcon(":/images/breeze/taxes-finances.svg"));
+//    ui.tabWidget->setTabIcon(4, QIcon(":/images/breeze/karbon.svg"));
+//    ui.tabWidget->setTabIcon(5, QIcon(":/images/breeze/applications-education-language.svg"));
 
     ui.buttonBox->button(QDialogButtonBox::Retry)->setText(tr("Refresh"));
     ui.buttonBox->button(QDialogButtonBox::Close)->setText(tr("Close"));
@@ -97,7 +97,7 @@ void ChannelListGui::createGui()
 void ChannelListGui::refresh()
 {
     ChannelList::instance()->clear();
-    Core::instance()->network->send("SLIST  R- 0 0 100 null");
+    Core::instance()->network->send("LIST");
     createList();
 }
 
@@ -111,23 +111,26 @@ void ChannelListGui::setDefaultValues()
     ui.groupBox_type->hide();
     ui.groupBox_category->hide();
 
+    // irc
+    ui.checkBox_show_adv_options->setVisible(false);
+
     // need refresh
     qint64 iCheckRefresh = QDateTime::currentMSecsSinceEpoch() - ChannelList::instance()->getTime();
     if ((ChannelList::instance()->getStatus() == StatusCompleted) && (iCheckRefresh > 3600000)) // 3600
     {
         ChannelList::instance()->clear();
-        Core::instance()->network->send("SLIST  R- 0 0 100 null");
+        Core::instance()->network->send("LIST");
     }
 }
 
 void ChannelListGui::createSignals()
 {
     connect(ui.tableWidget_all, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(allCellDoubleClicked(int,int)));
-    connect(ui.tableWidget_teen, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(teenCellDoubleClicked(int,int)));
-    connect(ui.tableWidget_common, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(commonCellDoubleClicked(int,int)));
-    connect(ui.tableWidget_erotic, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(eroticCellDoubleClicked(int,int)));
-    connect(ui.tableWidget_thematic, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(thematicCellDoubleClicked(int,int)));
-    connect(ui.tableWidget_regional, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(regionalCellDoubleClicked(int,int)));
+//    connect(ui.tableWidget_teen, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(teenCellDoubleClicked(int,int)));
+//    connect(ui.tableWidget_common, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(commonCellDoubleClicked(int,int)));
+//    connect(ui.tableWidget_erotic, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(eroticCellDoubleClicked(int,int)));
+//    connect(ui.tableWidget_thematic, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(thematicCellDoubleClicked(int,int)));
+//    connect(ui.tableWidget_regional, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(regionalCellDoubleClicked(int,int)));
     connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(refresh()));
     connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
 
@@ -221,7 +224,8 @@ void ChannelListGui::clearFields()
 void ChannelListGui::clearLists()
 {
     QStringList lLabels;
-    lLabels << tr("Channel name") << tr("Number of persons") << tr("Category") << tr("Type");
+    //lLabels << tr("Channel name") << tr("Number of persons") << tr("Category") << tr("Type");
+    lLabels << tr("Channel name") << tr("Number of persons");
 
     QList<QTableWidget *> tables = ui.tabWidget->findChildren<QTableWidget *>();
     foreach (QTableWidget *table, tables) {
@@ -292,11 +296,11 @@ void ChannelListGui::createList()
     }
 
     ui.tableWidget_all->setRowCount(iAllCount);
-    ui.tableWidget_teen->setRowCount(iTeenCount);
-    ui.tableWidget_common->setRowCount(iCommonCount);
-    ui.tableWidget_erotic->setRowCount(iEroticCount);
-    ui.tableWidget_thematic->setRowCount(iThematicCount);
-    ui.tableWidget_regional->setRowCount(iRegionalCount);
+//    ui.tableWidget_teen->setRowCount(iTeenCount);
+//    ui.tableWidget_common->setRowCount(iCommonCount);
+//    ui.tableWidget_erotic->setRowCount(iEroticCount);
+//    ui.tableWidget_thematic->setRowCount(iThematicCount);
+//    ui.tableWidget_regional->setRowCount(iRegionalCount);
 
     // table counters
     int iAllRow = 0;
@@ -323,55 +327,55 @@ void ChannelListGui::createList()
             ui.tableWidget_all->setItem(iAllRow, 0, new QTableWidgetItem(strName));
             ui.tableWidget_all->setItem(iAllRow, 1, new QTableWidgetItem());
             ui.tableWidget_all->item(iAllRow, 1)->setData(Qt::DisplayRole, iPeople);
-            ui.tableWidget_all->setItem(iAllRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
-            ui.tableWidget_all->setItem(iAllRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
+//            ui.tableWidget_all->setItem(iAllRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
+//            ui.tableWidget_all->setItem(iAllRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
             iAllRow++;
 
-            if (iType == 1)
-            {
-                ui.tableWidget_teen->setItem(iTeenRow, 0, new QTableWidgetItem(strName));
-                ui.tableWidget_teen->setItem(iTeenRow, 1, new QTableWidgetItem());
-                ui.tableWidget_teen->item(iTeenRow, 1)->setData(Qt::DisplayRole, iPeople);
-                ui.tableWidget_teen->setItem(iTeenRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
-                ui.tableWidget_teen->setItem(iTeenRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
-                iTeenRow++;
-            }
-            else if (iType == 2)
-            {
-                ui.tableWidget_common->setItem(iCommonRow, 0, new QTableWidgetItem(strName));
-                ui.tableWidget_common->setItem(iCommonRow, 1, new QTableWidgetItem());
-                ui.tableWidget_common->item(iCommonRow, 1)->setData(Qt::DisplayRole, iPeople);
-                ui.tableWidget_common->setItem(iCommonRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
-                ui.tableWidget_common->setItem(iCommonRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
-                iCommonRow++;
-            }
-            else if (iType == 3)
-            {
-                ui.tableWidget_erotic->setItem(iEroticRow, 0, new QTableWidgetItem(strName));
-                ui.tableWidget_erotic->setItem(iEroticRow, 1, new QTableWidgetItem());
-                ui.tableWidget_erotic->item(iEroticRow, 1)->setData(Qt::DisplayRole, iPeople);
-                ui.tableWidget_erotic->setItem(iEroticRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
-                ui.tableWidget_erotic->setItem(iEroticRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
-                iEroticRow++;
-            }
-            else if (iType == 4)
-            {
-                ui.tableWidget_thematic->setItem(iThematicRow, 0, new QTableWidgetItem(strName));
-                ui.tableWidget_thematic->setItem(iThematicRow, 1, new QTableWidgetItem());
-                ui.tableWidget_thematic->item(iThematicRow, 1)->setData(Qt::DisplayRole, iPeople);
-                ui.tableWidget_thematic->setItem(iThematicRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
-                ui.tableWidget_thematic->setItem(iThematicRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
-                iThematicRow++;
-            }
-            else if (iType == 5)
-            {
-                ui.tableWidget_regional->setItem(iRegionalRow, 0, new QTableWidgetItem(strName));
-                ui.tableWidget_regional->setItem(iRegionalRow, 1, new QTableWidgetItem());
-                ui.tableWidget_regional->item(iRegionalRow, 1)->setData(Qt::DisplayRole, iPeople);
-                ui.tableWidget_regional->setItem(iRegionalRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
-                ui.tableWidget_regional->setItem(iRegionalRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
-                iRegionalRow++;
-            }
+//            if (iType == 1)
+//            {
+//                ui.tableWidget_teen->setItem(iTeenRow, 0, new QTableWidgetItem(strName));
+//                ui.tableWidget_teen->setItem(iTeenRow, 1, new QTableWidgetItem());
+//                ui.tableWidget_teen->item(iTeenRow, 1)->setData(Qt::DisplayRole, iPeople);
+//                ui.tableWidget_teen->setItem(iTeenRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
+//                ui.tableWidget_teen->setItem(iTeenRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
+//                iTeenRow++;
+//            }
+//            else if (iType == 2)
+//            {
+//                ui.tableWidget_common->setItem(iCommonRow, 0, new QTableWidgetItem(strName));
+//                ui.tableWidget_common->setItem(iCommonRow, 1, new QTableWidgetItem());
+//                ui.tableWidget_common->item(iCommonRow, 1)->setData(Qt::DisplayRole, iPeople);
+//                ui.tableWidget_common->setItem(iCommonRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
+//                ui.tableWidget_common->setItem(iCommonRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
+//                iCommonRow++;
+//            }
+//            else if (iType == 3)
+//            {
+//                ui.tableWidget_erotic->setItem(iEroticRow, 0, new QTableWidgetItem(strName));
+//                ui.tableWidget_erotic->setItem(iEroticRow, 1, new QTableWidgetItem());
+//                ui.tableWidget_erotic->item(iEroticRow, 1)->setData(Qt::DisplayRole, iPeople);
+//                ui.tableWidget_erotic->setItem(iEroticRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
+//                ui.tableWidget_erotic->setItem(iEroticRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
+//                iEroticRow++;
+//            }
+//            else if (iType == 4)
+//            {
+//                ui.tableWidget_thematic->setItem(iThematicRow, 0, new QTableWidgetItem(strName));
+//                ui.tableWidget_thematic->setItem(iThematicRow, 1, new QTableWidgetItem());
+//                ui.tableWidget_thematic->item(iThematicRow, 1)->setData(Qt::DisplayRole, iPeople);
+//                ui.tableWidget_thematic->setItem(iThematicRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
+//                ui.tableWidget_thematic->setItem(iThematicRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
+//                iThematicRow++;
+//            }
+//            else if (iType == 5)
+//            {
+//                ui.tableWidget_regional->setItem(iRegionalRow, 0, new QTableWidgetItem(strName));
+//                ui.tableWidget_regional->setItem(iRegionalRow, 1, new QTableWidgetItem());
+//                ui.tableWidget_regional->item(iRegionalRow, 1)->setData(Qt::DisplayRole, iPeople);
+//                ui.tableWidget_regional->setItem(iRegionalRow, 2, new QTableWidgetItem(Utils::instance()->convertChannelCatToString(iCat, bModerated, bRecommended)));
+//                ui.tableWidget_regional->setItem(iRegionalRow, 3, new QTableWidgetItem(Utils::instance()->convertChannelTypeToString(iType)));
+//                iRegionalRow++;
+//            }
         }
     }
 
@@ -456,88 +460,88 @@ void ChannelListGui::allCellDoubleClicked(int row, int column)
     this->close();
 }
 
-void ChannelListGui::teenCellDoubleClicked(int row, int column)
-{
-    Q_UNUSED (column);
+//void ChannelListGui::teenCellDoubleClicked(int row, int column)
+//{
+//    Q_UNUSED (column);
 
-    QString strChannel = ui.tableWidget_teen->item(row, 0)->text();
-    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//    QString strChannel = ui.tableWidget_teen->item(row, 0)->text();
+//    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
 
-    this->close();
-}
+//    this->close();
+//}
 
-void ChannelListGui::commonCellDoubleClicked(int row, int column)
-{
-    Q_UNUSED (column);
+//void ChannelListGui::commonCellDoubleClicked(int row, int column)
+//{
+//    Q_UNUSED (column);
 
-    QString strChannel = ui.tableWidget_common->item(row, 0)->text();
-    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//    QString strChannel = ui.tableWidget_common->item(row, 0)->text();
+//    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
 
-    this->close();
-}
+//    this->close();
+//}
 
-void ChannelListGui::eroticCellDoubleClicked(int row, int column)
-{
-    Q_UNUSED (column);
+//void ChannelListGui::eroticCellDoubleClicked(int row, int column)
+//{
+//    Q_UNUSED (column);
 
-    QString strChannel = ui.tableWidget_erotic->item(row, 0)->text();
+//    QString strChannel = ui.tableWidget_erotic->item(row, 0)->text();
 
-    if (Utils::instance()->isErotic(strChannel))
-    {
-        if (Settings::instance()->getBool("age_check"))
-        {
-            QMessageBox msgBox;
-            msgBox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.557, stop:0 rgba(198, 0, 0, 255), stop:1 rgba(255, 0, 0, 255));");
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setWindowIcon(QIcon(":/images/logo16x16.png"));
-            msgBox.setWindowTitle(tr("Warning"));
-            msgBox.setText(QString("%1\n%2").arg(tr("Erotic category may contain content intended only for adults."), tr("To enter you must be over 18 years.")));
-            QPushButton *exitButton = msgBox.addButton(tr("Exit"), QMessageBox::AcceptRole);
-            exitButton->setIcon(QIcon(":/images/breeze/dialog-cancel.svg"));
-            QPushButton *enterButton = msgBox.addButton(tr("Enter"), QMessageBox::RejectRole);
-            enterButton->setIcon(QIcon(":/images/breeze/dialog-ok.svg"));
-            msgBox.exec();
+//    if (Utils::instance()->isErotic(strChannel))
+//    {
+//        if (Settings::instance()->getBool("age_check"))
+//        {
+//            QMessageBox msgBox;
+//            msgBox.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.557, stop:0 rgba(198, 0, 0, 255), stop:1 rgba(255, 0, 0, 255));");
+//            msgBox.setIcon(QMessageBox::Warning);
+//            msgBox.setWindowIcon(QIcon(":/images/logo16x16.png"));
+//            msgBox.setWindowTitle(tr("Warning"));
+//            msgBox.setText(QString("%1\n%2").arg(tr("Erotic category may contain content intended only for adults."), tr("To enter you must be over 18 years.")));
+//            QPushButton *exitButton = msgBox.addButton(tr("Exit"), QMessageBox::AcceptRole);
+//            exitButton->setIcon(QIcon(":/images/breeze/dialog-cancel.svg"));
+//            QPushButton *enterButton = msgBox.addButton(tr("Enter"), QMessageBox::RejectRole);
+//            enterButton->setIcon(QIcon(":/images/breeze/dialog-ok.svg"));
+//            msgBox.exec();
 
-            if (msgBox.clickedButton() == enterButton)
-            {
-                Settings::instance()->setBool("age_check", false);
-                Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
-            }
-        }
-        else
-        {
-            Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//            if (msgBox.clickedButton() == enterButton)
+//            {
+//                Settings::instance()->setBool("age_check", false);
+//                Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//            }
+//        }
+//        else
+//        {
+//            Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
 
-            this->close();
-        }
-    }
-    else
-    {
-        Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//            this->close();
+//        }
+//    }
+//    else
+//    {
+//        Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
 
-        this->close();
-    }
-}
+//        this->close();
+//    }
+//}
 
-void ChannelListGui::thematicCellDoubleClicked(int row, int column)
-{
-    Q_UNUSED (column);
+//void ChannelListGui::thematicCellDoubleClicked(int row, int column)
+//{
+//    Q_UNUSED (column);
 
-    QString strChannel = ui.tableWidget_thematic->item(row, 0)->text();
-    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//    QString strChannel = ui.tableWidget_thematic->item(row, 0)->text();
+//    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
 
-    this->close();
-}
+//    this->close();
+//}
 
-void ChannelListGui::regionalCellDoubleClicked(int row, int column)
-{
-    Q_UNUSED (column);
+//void ChannelListGui::regionalCellDoubleClicked(int row, int column)
+//{
+//    Q_UNUSED (column);
 
-    QString strChannel = ui.tableWidget_regional->item(row, 0)->text();
-    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
+//    QString strChannel = ui.tableWidget_regional->item(row, 0)->text();
+//    Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
 
-    this->close();
-}
+//    this->close();
+//}
 
 void ChannelListGui::buttonClear()
 {
@@ -567,11 +571,11 @@ void ChannelListGui::resizeEvent(QResizeEvent *)
     ui.verticalLayoutWidget->setGeometry(QRect(10, 10, this->width()-20, this->height()-20));
     ui.tabWidget->setGeometry(QRect(215, 0, this->width()-235, this->height()-50));
     ui.tableWidget_all->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
-    ui.tableWidget_teen->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
-    ui.tableWidget_common->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
-    ui.tableWidget_erotic->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
-    ui.tableWidget_thematic->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
-    ui.tableWidget_regional->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
+//    ui.tableWidget_teen->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
+//    ui.tableWidget_common->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
+//    ui.tableWidget_erotic->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
+//    ui.tableWidget_thematic->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
+//    ui.tableWidget_regional->setGeometry(QRect(0, 0, ui.tabWidget->width()-10, ui.tabWidget->height()-35));
 }
 
 void ChannelListGui::keyPressEvent(QKeyEvent *event)

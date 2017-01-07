@@ -442,7 +442,7 @@ void NickListWidget::contextMenuEvent(QContextMenuEvent *e)
     menu->addAction(QIcon(":/images/breeze/user-identity.svg"), strSelectedNick, this, SLOT(nick()));
     menu->addSeparator();
 //    menu->addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
-//    menu->addAction(QIcon(":/images/breeze/user-properties.svg"), tr("Whois"), this, SLOT(whois()));
+    menu->addAction(QIcon(":/images/breeze/user-properties.svg"), tr("Whois"), this, SLOT(whois()));
 //    if (strSelectedNick.at(0) != '~')
 //    {
 //        menu->addAction(QIcon(":/images/breeze/view-pim-contacts.svg"), tr("Profile"), this, SLOT(profile()));

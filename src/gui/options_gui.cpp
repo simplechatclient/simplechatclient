@@ -265,9 +265,7 @@ void OptionsGui::createGui()
     webcam->setText(tr("Webcam"));
     webcam->setToolTip(tr("Webcam"));
 
-#ifndef Q_OS_WIN
     webcam->setHidden(true);
-#endif
 
     QListWidgetItem *updates = new QListWidgetItem(ui.listWidget_options);
     updates->setIcon(QIcon(":/images/breeze/system-software-update.svg"));

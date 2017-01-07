@@ -1069,7 +1069,7 @@ void IrcKernel::raw_001()
     }
 
     // channel list
-    //Core::instance()->network->send("LIST");
+    Core::instance()->network->send("LIST");
 
     // update last active
     Settings::instance()->set("last_active", QString::number(QDateTime::currentMSecsSinceEpoch()));
@@ -2707,6 +2707,39 @@ void IrcKernel::raw_320()
 
     QString strDisplay = QString("* %1 %2").arg(strNick, strTitle);
     Message::instance()->showMessageActive(strDisplay, MessageInfo);
+}
+
+// :legowisko.pirc.pl 321 nick_tymczasowy293 Channel :Users  Name
+void IrcKernel::raw_321()
+{
+    //
+}
+
+// :legowisko.pirc.pl 322 nick_tymczasowy293 #akap 2 :[+ntr] temat
+void IrcKernel::raw_322()
+{
+    if (ChannelList::instance()->getStatus() == StatusCompleted)
+        return;
+
+    QString strChannelName = strDataList.at(3);
+    int iChannelPeople = QString(strDataList.at(4)).toInt();
+
+    OnetChannelList oChannelList;
+    oChannelList.name = strChannelName;
+    oChannelList.people = iChannelPeople;
+    oChannelList.cat = 0;
+    oChannelList.type = 0;
+    oChannelList.moderated = false;
+    oChannelList.recommended = false;
+
+    ChannelList::instance()->add(oChannelList);
+}
+
+// :legowisko.pirc.pl 323 nick_tymczasowy293 :End of /LIST
+void IrcKernel::raw_323()
+{
+    ChannelList::instance()->setStatus(StatusCompleted);
+    ChannelList::instance()->setTime(QDateTime::currentMSecsSinceEpoch());
 }
 
 // :cf1f4.onet 324 Darom #gorący_pokój +DFJcnt 2 20 4
