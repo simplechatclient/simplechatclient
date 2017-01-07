@@ -956,6 +956,7 @@ void IrcKernel::raw_nick()
     strNick = strNick.left(strNick.indexOf('!'));
 
     QString strNewNick = strDataList.at(2);
+    if (strNewNick.at(0) == ':') strNewNick.remove(0,1);
 
     QString strDisplay = QString(tr("* %1 changed nick to %2")).arg(strNick, strNewNick);
 
