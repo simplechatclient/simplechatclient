@@ -66,7 +66,7 @@ enum EmoticonCategory
     EmoticonEmoji
 };
 
-const int MAX_OPEN_CHANNELS = 20+2; // 20 - onet limit, 2 - status,debug
+const int MAX_OPEN_CHANNELS = 999;
 const int MAX_PUNISH_REASONS = 255;
 
 const int HOURS_IN_DAY = 24;
