@@ -51,8 +51,8 @@ void IrcAuth::authorize(QString _strNick, QString _strPass)
     Settings::instance()->setBool("authorizing", true);
     emit authStateChanged();
 
-    strFullNick = _strNick.left(32);
-    strNick = (_strNick.at(0) == '~' ? _strNick.remove(0,1).left(31) : _strNick.left(32));
+    strFullNick = _strNick.left(30);
+    strNick = (_strNick.at(0) == '~' ? _strNick.remove(0,1).left(29) : _strNick.left(30));
     strPass = _strPass;
     strNickLen = QString::number(strNick.length());
     bRegisteredNick = strFullNick.at(0) != '~';

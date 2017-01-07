@@ -441,50 +441,50 @@ void NickListWidget::contextMenuEvent(QContextMenuEvent *e)
     QMenu *menu = new QMenu(strSelectedNick);
     menu->addAction(QIcon(":/images/breeze/user-identity.svg"), strSelectedNick, this, SLOT(nick()));
     menu->addSeparator();
-    menu->addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
-    menu->addAction(QIcon(":/images/breeze/user-properties.svg"), tr("Whois"), this, SLOT(whois()));
-    if (strSelectedNick.at(0) != '~')
-    {
-        menu->addAction(QIcon(":/images/breeze/view-pim-contacts.svg"), tr("Profile"), this, SLOT(profile()));
-        if ((strNickModes.contains(FLAG_CAM_PUB)) || (strNickModes.contains(FLAG_CAM_PRIV)))
-        {
-            if (Settings::instance()->get("webcam") == "system")
-            {
-#ifdef Q_OS_WIN
-                if (bKamerzystaExists)
-                    menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam"), this, SLOT(kamerzysta()));
-                else
-                    menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
-#else
-                menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
-#endif
-            }
-            else // internal
-            {
-                menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
-            }
-        }
-    }
+//    menu->addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
+//    menu->addAction(QIcon(":/images/breeze/user-properties.svg"), tr("Whois"), this, SLOT(whois()));
+//    if (strSelectedNick.at(0) != '~')
+//    {
+//        menu->addAction(QIcon(":/images/breeze/view-pim-contacts.svg"), tr("Profile"), this, SLOT(profile()));
+//        if ((strNickModes.contains(FLAG_CAM_PUB)) || (strNickModes.contains(FLAG_CAM_PRIV)))
+//        {
+//            if (Settings::instance()->get("webcam") == "system")
+//            {
+//#ifdef Q_OS_WIN
+//                if (bKamerzystaExists)
+//                    menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam"), this, SLOT(kamerzysta()));
+//                else
+//                    menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
+//#else
+//                menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
+//#endif
+//            }
+//            else // internal
+//            {
+//                menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
+//            }
+//        }
+//    }
     menu->addMenu(mInvite);
-    if (strSelfModes.contains(FLAG_REGISTERED))
-    {
-        menu->addMenu(friends);
-        menu->addMenu(ignore);
-    }
-    if (iSelfMaxModes >= FLAG_HALFOP_INT)
-    {
-        menu->addSeparator();
-        menu->addAction(QIcon(":/images/breeze/im-kick-user.svg"), tr("Kick From Channel"), this, SLOT(kick()));
-        menu->addMenu(mKick);
-        menu->addAction(QIcon(":/images/breeze/im-ban-user.svg"), tr("Ban From Channel"), this, SLOT(ban()));
-        menu->addMenu(mKickAndBan);
-        menu->addAction(QIcon(":/images/breeze/im-user-busy.svg"), tr("IP Ban"), this, SLOT(ipban()));
-    }
-    if (!privilege->isEmpty())
-    {
-        menu->addSeparator();
-        menu->addMenu(privilege);
-    }
+//    if (strSelfModes.contains(FLAG_REGISTERED))
+//    {
+//        menu->addMenu(friends);
+//        menu->addMenu(ignore);
+//    }
+//    if (iSelfMaxModes >= FLAG_HALFOP_INT)
+//    {
+//        menu->addSeparator();
+//        menu->addAction(QIcon(":/images/breeze/im-kick-user.svg"), tr("Kick From Channel"), this, SLOT(kick()));
+//        menu->addMenu(mKick);
+//        menu->addAction(QIcon(":/images/breeze/im-ban-user.svg"), tr("Ban From Channel"), this, SLOT(ban()));
+//        menu->addMenu(mKickAndBan);
+//        menu->addAction(QIcon(":/images/breeze/im-user-busy.svg"), tr("IP Ban"), this, SLOT(ipban()));
+//    }
+//    if (!privilege->isEmpty())
+//    {
+//        menu->addSeparator();
+//        menu->addMenu(privilege);
+//    }
 
     menu->popup(e->globalPos());
 }

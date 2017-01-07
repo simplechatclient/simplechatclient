@@ -2856,6 +2856,7 @@ void IrcKernel::raw_353()
 
             QString strPrefix;
             if (strCleanNick.contains(FLAG_OWNER)) { strCleanNick.remove(FLAG_OWNER); strPrefix.append(FLAG_OWNER); }
+            if (strCleanNick.contains(FLAG_ADMIN)) { strCleanNick.remove(FLAG_ADMIN); strPrefix.append(FLAG_ADMIN); }
             if (strCleanNick.contains(FLAG_OP)) { strCleanNick.remove(FLAG_OP); strPrefix.append(FLAG_OP); }
             if (strCleanNick.contains(FLAG_HALFOP)) { strCleanNick.remove(FLAG_HALFOP); strPrefix.append(FLAG_HALFOP); }
             if (strCleanNick.contains(FLAG_MOD)) { strCleanNick.remove(FLAG_MOD); strPrefix.append(FLAG_MOD); }

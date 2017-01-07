@@ -79,8 +79,8 @@ const int NOTICE_ERROR = 102 | 0x070000;
 const int NOTICE_QUESTION = 103 | 0x070000;
 
 const int FLAG_DEV_INT = 64;
-const int FLAG_ADMIN_INT = 32;
-const int FLAG_OWNER_INT = 16;
+const int FLAG_OWNER_INT = 32;
+const int FLAG_ADMIN_INT = 16;
 const int FLAG_OP_INT = 8;
 const int FLAG_HALFOP_INT = 4;
 const int FLAG_MOD_INT = 2;
@@ -96,19 +96,23 @@ const int FLAG_UNKNOWN_INT = -1;
 #define FLAG_BUSY "b"
 #define FLAG_CAM_PRIV "V"
 #define FLAG_CAM_PUB "W"
-#define FLAG_VOICE "+"
-#define FLAG_SCREENER "="
-#define FLAG_MOD "!"
-#define FLAG_HALFOP "%"
-#define FLAG_OP "@"
-#define FLAG_OWNER "`"
-#define FLAG_ADMIN "o"
+
 #define FLAG_DEV "O"
+#define FLAG_OWNER "~"
+#define FLAG_ADMIN "&"
+#define FLAG_OP "@"
+#define FLAG_HALFOP "%"
+#define FLAG_MOD "!"
+#define FLAG_SCREENER "="
+#define FLAG_VOICE "+"
 #define FLAG_BOT "B"
 
 #define PERMISSION_OWNER "q"
+#define PERMISSION_ADMIN "a"
 #define PERMISSION_OP "o"
 #define PERMISSION_HALFOP "h"
+#define PERMISSION_VOICE "v"
+
 #define PERMISSION_BAN "b"
 #define PERMISSION_INVITE "I"
 
