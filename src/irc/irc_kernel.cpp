@@ -612,7 +612,7 @@ void IrcKernel::raw_mode()
             if ((strNick == Settings::instance()->get("nick")) && (strFlag == "+r"))
             {
                 // channel homes
-                // Core::instance()->network->send("CS HOMES");
+                // Core::instance()->network->send("PRIVMSG NickServ alist");
 
                 // get my stats
                 // Core::instance()->network->send(QString("RS INFO %1").arg(Settings::instance()->get("nick")));
@@ -808,7 +808,7 @@ void IrcKernel::raw_topic()
     }
 
     // get info
-    Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
+    // Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
 }
 
 // :~test34534!anonymous@2294E8.94913F.A00186.1A3C28 INVREJECT Merovingian #Scrabble
@@ -1954,7 +1954,7 @@ void IrcKernel::raw_250n()
         Message::instance()->showMessageActive(strDisplay, MessageInfo);
 
         // homes
-        Core::instance()->network->send(QString("CS HOMES"));
+        // Core::instance()->network->send(QString("PRIVMSG NickServ alist"));
 
         // join
         Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
@@ -2197,9 +2197,9 @@ void IrcKernel::raw_257n()
 {
     if (strDataList.size() < 5) return;
 
-    QString strChannel = strDataList.at(4);
+    //QString strChannel = strDataList.at(4);
 
-    Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
+    //Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
 }
 
 // ADMIN
@@ -2232,7 +2232,7 @@ void IrcKernel::raw_258n()
     // display
     Message::instance()->showMessage(strChannel, strDisplay, MessageInfo);
 
-    Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
+    //Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
 }
 
 // ADMIN
@@ -2317,7 +2317,7 @@ void IrcKernel::raw_261n()
         Message::instance()->showMessageActive(strDisplay, MessageInfo);
 
         // homes
-        Core::instance()->network->send(QString("CS HOMES"));
+        // Core::instance()->network->send(QString("PRIVMSG NickServ alist"));
 
         // part
         if (Channel::instance()->contains(strChannel))
@@ -3336,13 +3336,13 @@ void IrcKernel::raw_412n()
 {
     if (strDataList.size() < 5) return;
 
-    QString strNick = strDataList.at(4);
-    QString strMe = Settings::instance()->get("nick");
+//    QString strNick = strDataList.at(4);
+//    QString strMe = Settings::instance()->get("nick");
 
-    if (strNick == strMe)
-        Core::instance()->network->send(QString("RS INFO %1").arg(strNick));
-    else
-        Core::instance()->network->send(QString("NS INFO %1 s").arg(strNick));
+//    if (strNick == strMe)
+//        Core::instance()->network->send(QString("RS INFO %1").arg(strNick));
+//    else
+//        Core::instance()->network->send(QString("NS INFO %1 s").arg(strNick));
 }
 
 // RS INFO istota_bezduszna
