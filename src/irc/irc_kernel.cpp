@@ -109,16 +109,16 @@ void IrcKernel::kernel(const QString &_strData)
 
         if ((strDataList.at(1) == "NOTICE") && (!strDataList.value(3).isEmpty()))
         {
-            if ((strDataList.at(3).length() != 4) || (strDataList.at(3) == ":***"))
-            {
+//            if ((strDataList.at(3).length() != 4) || (strDataList.at(3) == ":***"))
+//            {
                 raw_notice();
-            }
-            else
-            {
-                QString strCmd3 = strDataList.at(3).mid(1);
-                if (strCmd3.size() != 3 || !QMetaObject::invokeMethod(this, QString("raw_" + strCmd3 + "n").toStdString().c_str(), Qt::DirectConnection))
-                    bUnknownRaw3 = true;
-            }
+//            }
+//            else
+//            {
+//                QString strCmd3 = strDataList.at(3).mid(1);
+//                if (strCmd3.size() != 3 || !QMetaObject::invokeMethod(this, QString("raw_" + strCmd3 + "n").toStdString().c_str(), Qt::DirectConnection))
+//                    bUnknownRaw3 = true;
+//            }
         }
         else
             bUnknownRaw3 = true;
