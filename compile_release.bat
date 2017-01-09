@@ -106,11 +106,6 @@ xcopy %QT_DIR%\bin\Qt5WebKitWidgets.dll %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\bin\Qt5Widgets.dll       %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\bin\Qt5Xml.dll           %DESTINATION%\ /C /H /R /Y /Q
 
-echo Copying Qt 5.4 dependency
-xcopy %QT_DIR%\bin\icuin53.dll           %DESTINATION%\ /C /H /R /Y /Q
-xcopy %QT_DIR%\bin\icuuc53.dll           %DESTINATION%\ /C /H /R /Y /Q
-xcopy %QT_DIR%\bin\icudt53.dll           %DESTINATION%\ /C /H /R /Y /Q
-
 echo Copying Qt 5.5 dependency
 xcopy %QT_DIR%\bin\icuin54.dll           %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\bin\icuuc54.dll           %DESTINATION%\ /C /H /R /Y /Q

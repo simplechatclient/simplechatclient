@@ -1697,11 +1697,16 @@ void IrcKernel::raw_320()
 
     QString strNick = strDataList.at(3);
 
-    QString strTitle;
-    for (int i = 4; i < strDataList.size(); ++i) { if (i != 4) strTitle += " "; strTitle += strDataList.at(i); }
-    if ((!strTitle.isEmpty()) && (strTitle.at(0) == ':')) strTitle.remove(0,1);
+    QString strMessage;
+    for (int i = 4; i < strDataList.size(); ++i) { if (i != 4) strMessage += " "; strMessage += strDataList.at(i); }
+    if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
 
-    QString strDisplay = QString("* %1 %2").arg(strNick, strTitle);
+    QString strDisplay;
+    if (strMessage == "a Network Administrator")
+        strDisplay = QString(tr("* %1 is a Network Administrator")).arg(strNick);
+    else
+        strDisplay = QString("* %1 %2").arg(strNick, strMessage);
+
     Message::instance()->showMessageActive(strDisplay, MessageInfo);
 }
 
@@ -2033,10 +2038,7 @@ void IrcKernel::raw_379()
     if (strMessage.contains("modes"))
     {
         QString strUserModes = strMessage;
-        strUserModes.remove("usermodes "); // version <= 1.1
-        //strUserModes.remove("is using modes "); // version >= 1.2
-        strUserModes.remove("[");
-        strUserModes.remove("]");
+        strUserModes.remove("is using modes ");
 
         QString strMessage = QString(tr("* %1 is using modes %2")).arg(strNick, strUserModes);
         Message::instance()->showMessageActive(strMessage, MessageInfo);

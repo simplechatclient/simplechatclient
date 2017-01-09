@@ -3157,6 +3157,10 @@
         <translation>* %1 jest zalogowany jako %2</translation>
     </message>
     <message>
+        <source>* %1 is a Network Administrator</source>
+        <translation>* %1 jest administratorem sieci</translation>
+    </message>
+    <message>
         <source>Too many results</source>
         <translation>Zbyt wiele wyników</translation>
     </message>
