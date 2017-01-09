@@ -109,16 +109,7 @@ void IrcKernel::kernel(const QString &_strData)
 
         if ((strDataList.at(1) == "NOTICE") && (!strDataList.value(3).isEmpty()))
         {
-//            if ((strDataList.at(3).length() != 4) || (strDataList.at(3) == ":***"))
-//            {
-                raw_notice();
-//            }
-//            else
-//            {
-//                QString strCmd3 = strDataList.at(3).mid(1);
-//                if (strCmd3.size() != 3 || !QMetaObject::invokeMethod(this, QString("raw_" + strCmd3 + "n").toStdString().c_str(), Qt::DirectConnection))
-//                    bUnknownRaw3 = true;
-//            }
+            raw_notice();
         }
         else
             bUnknownRaw3 = true;
@@ -1114,574 +1105,6 @@ void IrcKernel::raw_005()
     }
 }
 
-// :Onet-Informuje!bot@service.onet NOTICE Merovingian :100 #gorący_pokój 1279807200 :Zapraszamy na spotkanie z Rafałem Głogowskim, ratownikiem krakowskiego WOPRU. Jak zachowywać się nad wodą? Na co zwracać uwagę?
-// :Onet-Informuje!bot@service.onet NOTICE $* :100 #Podróże 1291377600 :Wolontariat w Afryce - czy warto spróbować?
-void IrcKernel::raw_100n()
-{
-    if (strDataList.size() < 6) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strTime = strDataList.at(5);
-
-    qint64 iTime = QDateTime::fromTime_t(strTime.toInt()).toMSecsSinceEpoch();
-    qint64 iCurrentTime = QDateTime::currentMSecsSinceEpoch();
-    int iTimeResult = (iTime - iCurrentTime)/1000;
-    QString strTimeResult;
-
-    int iSeconds = iTimeResult % SECONDS_IN_MINUTE ;
-    int iInMinutes = iTimeResult / SECONDS_IN_MINUTE ;
-    int iMinutes = iInMinutes % MINUTES_IN_HOUR ;
-    int iInHours = iInMinutes / MINUTES_IN_HOUR ;
-    int iHours = iInHours % HOURS_IN_DAY ;
-    int iDays = iInHours / HOURS_IN_DAY ;
-
-    if (iDays > 0)
-        strTimeResult += QString("%1d ").arg(iDays);
-    if (iHours > 0)
-        strTimeResult += QString("%1h ").arg(iHours);
-    if (iMinutes > 0)
-        strTimeResult += QString("%1m ").arg(iMinutes);
-    if (iSeconds >= 0)
-        strTimeResult += QString("%1s ").arg(iSeconds);
-
-    QString strMessage;
-    for (int i = 6; i < strDataList.size(); ++i) { if (i != 6) strMessage += " "; strMessage += strDataList.at(i); }
-    if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
-
-    strMessage.replace("&#8211;", "-");
-    strMessage.replace("&#8212;", "-");
-    strMessage.replace("&#8216;", "`");
-    strMessage.replace("&#8217;", "`");
-    strMessage.replace("&#8218;", ",");
-    strMessage.replace("&#8220;", "\"");
-    strMessage.replace("&#8221;", "\"");
-    strMessage.replace("&#8222;", "\"");
-    strMessage.replace("&#8230;", "...");
-
-    QString strDisplay;
-    if (iTime < iCurrentTime)
-        strDisplay = QString(tr("* %1 In progress on channel %2")).arg(strMessage, strChannel);
-    else
-        strDisplay = QString(tr("* %1 Starting in %2 on channel %3")).arg(strMessage, strTimeResult, strChannel);
-
-    Message::instance()->showMessage(STATUS_WINDOW, strDisplay, MessageNotice);
-}
-
-// :GuardServ!service@service.onet NOTICE scc_test :109 #scc :rzucanie mięsem nie będzie tolerowane
-void IrcKernel::raw_109n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage;
-    for (int i = 5; i < strDataList.size(); ++i) { if (i != 5) strMessage += " "; strMessage += strDataList.at(i); }
-    if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
-    if (!strMessage.isEmpty()) strMessage[0] = strMessage.at(0).toUpper();
-
-    strMessage = QString("* %1").arg(strMessage);
-
-    // display
-    Message::instance()->showMessage(strChannel, strMessage, MessageNotice);
-}
-
-// NS INFO aleksa7
-// :NickServ!service@service.onet NOTICE Merovingian :111 aleksa7 type :2
-void IrcKernel::raw_111n()
-{
-    if (strDataList.size() < 7) return;
-
-    QString strNick = strDataList.at(4);
-    QString strKey = strDataList.at(5);
-
-    QString strValue;
-    for (int i = 6; i < strDataList.size(); ++i) { if (i != 6) strValue += " "; strValue += strDataList.at(i); }
-    if ((!strValue.isEmpty()) && (strValue.at(0) == ':')) strValue.remove(0,1);
-
-    QString strMe = Settings::instance()->get("nick");
-
-    // set user info
-    if ((UserProfile::instance()->getNick() == strNick) && (UserProfile::instance()->getStatus() != StatusCompleted))
-        UserProfile::instance()->set(strKey, strValue);
-
-    // set my profile
-    if (strNick == strMe)
-        MyProfile::instance()->set(strKey, strValue);
-
-    // update my offmsg
-    if ((strNick == strMe) && (strKey == "offmsg"))
-        Offline::instance()->updateOffmsgStatus();
-
-    // get avatar
-    if ((strKey == "avatar") && (!strValue.isEmpty()) && (Themes::instance()->isCurrentWithAvatar()))
-    {
-        QString strAvatar = Nick::instance()->getAvatar(strNick);
-        if ((strAvatar.isEmpty()) || (strAvatar != strValue))
-            Avatar::instance()->get(strNick, "nick", strValue);
-        else
-            Nick::instance()->setAvatar(strNick, strAvatar);
-    }
-
-    // get sex
-    if ((strKey == "sex") && (!strValue.isEmpty()))
-    {
-        QChar cSex = strValue.at(0);
-        Nick::instance()->setSex(strNick, cSex);
-    }
-}
-
-// NS INFO aleksa7
-// :NickServ!service@service.onet NOTICE Merovingian :112 aleksa7 :end of user info
-void IrcKernel::raw_112n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    if (UserProfile::instance()->getNick() == strNick)
-        UserProfile::instance()->setStatus(StatusCompleted);
-}
-
-// NS FRIENDS
-// :NickServ!service@service.onet NOTICE scc_test :121 :scc_test Merovingian Succubi Radowsky
-void IrcKernel::raw_121n()
-{
-    if (strDataList.size() < 5) return;
-
-    for (int i = 4; i < strDataList.size(); ++i)
-    {
-        QString strNick = strDataList.at(i);
-        if (strNick.at(0) == ':') strNick.remove(0,1);
-
-        // nothing
-    }
-}
-
-// NS FRIENDS
-// :NickServ!service@service.onet NOTICE scc_test :122 :end of friend list
-void IrcKernel::raw_122n()
-{
-}
-
-// :NickServ!service@service.onet NOTICE Merovingian :123 mokka00 Viola_de_luxe :friend nick changed
-void IrcKernel::raw_123n()
-{
-    if (strDataList.size() < 6) return;
-
-    QString strOldNick = strDataList.at(4);
-    if (strOldNick.at(0) == ':') strOldNick.remove(0,1);
-
-    QString strNewNick = strDataList.at(5);
-    if (strNewNick.at(0) == ':') strNewNick.remove(0,1);
-
-    QString strDisplay = QString(tr("* %1 changed nickname to %2 from your friend list")).arg(strOldNick, strNewNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-}
-
-// NS IGNORE
-// :NickServ!service@service.onet NOTICE scc_test :131 :arabeska22 test wilk ~test
-void IrcKernel::raw_131n()
-{
-    if (strDataList.size() < 5) return;
-
-    for (int i = 4; i < strDataList.size(); ++i)
-    {
-        QString strNick = strDataList.at(i);
-        if (strNick.at(0) == ':') strNick.remove(0,1);
-
-        Ignore::instance()->add(strNick);
-    }
-}
-
-// NS IGNORE
-// :NickServ!service@service.onet NOTICE scc_test :132 :end of ignore list
-void IrcKernel::raw_132n()
-{
-}
-
-// :NickServ!service@service.onet NOTICE Merovingian :133 test_nick test_nick_nowy :ignored nick changed
-void IrcKernel::raw_133n()
-{
-    if (strDataList.size() < 6) return;
-
-    QString strOldNick = strDataList.at(4);
-    if (strOldNick.at(0) == ':') strOldNick.remove(0,1);
-
-    QString strNewNick = strDataList.at(5);
-    if (strNewNick.at(0) == ':') strNewNick.remove(0,1);
-
-    QString strDisplay = QString(tr("* %1 changed nickname to %2 from your ignored list")).arg(strOldNick, strNewNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-}
-
-// NS FAVOURITES
-// :NickServ!service@service.onet NOTICE scc_test :141 :#Scrabble #Quiz #scc
-void IrcKernel::raw_141n()
-{
-    if (strDataList.size() < 5) return;
-
-    for (int i = 4; i < strDataList.size(); ++i)
-    {
-        QString strChannel = strDataList.at(i);
-        if (strChannel.at(0) == ':') strChannel.remove(0,1);
-
-        ChannelFavourites::instance()->add(strChannel);
-    }
-}
-
-// NS FAVOURITES
-// :NickServ!service@service.onet NOTICE scc_test :142 :end of favourites list
-void IrcKernel::raw_142n()
-{
-    // join favourites
-    if (!Settings::instance()->getBool("ignore_favourites"))
-    {
-        Settings::instance()->setBool("ignore_favourites", true);
-
-        QList<CaseIgnoreString> lChannelsCaseIgnore = ChannelFavourites::instance()->getAllCaseIgnoreSorted();
-        if (lChannelsCaseIgnore.isEmpty())
-            return;
-
-        QString strMassJoin;
-        foreach (const QString &strChannel, lChannelsCaseIgnore)
-        {
-            if (!Channel::instance()->contains(strChannel))
-            {
-                if (strMassJoin.isEmpty())
-                    strMassJoin += "JOIN "+strChannel;
-                else
-                    strMassJoin += ","+strChannel;
-            }
-        }
-        Core::instance()->network->send(strMassJoin);
-    }
-}
-
-// CS HOMES
-// :ChanServ!service@service.onet NOTICE scc_test :151 :h#scc
-// NS OFFLINE
-// :NickServ!service@service.onet NOTICE Merovingian :151 :jubee_blue
-void IrcKernel::raw_151n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 4) return;
-        if (ChannelHomes::instance()->getStatus() == StatusCompleted) return;
-
-        for (int i = 4; i < strDataList.size(); ++i)
-        {
-            QString strChannel = strDataList.at(i);
-            if (strChannel.at(0) == ':') strChannel.remove(0,1);
-
-            QString strFlag;
-            if (strChannel.at(0) != '#')
-            {
-                strFlag = strChannel.at(0);
-                strChannel = strChannel.remove(0,1); // remove status
-            }
-
-            ChannelHomes::instance()->add(strChannel, strFlag);
-        }
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 4) return;
-
-        for (int i = 4; i < strDataList.size(); ++i)
-        {
-            QString strNick = strDataList.at(i);
-            if (strNick.at(0) == ':') strNick.remove(0,1);
-
-            Offline::instance()->addNick(strNick);
-        }
-    }
-}
-
-// CS HOMES
-// :ChanServ!service@service.onet NOTICE scc_test :152 :end of homes list
-// NS OFFLINE
-// :NickServ!service@service.onet NOTICE Merovingian :152 :end of offline senders list
-void IrcKernel::raw_152n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 4) return;
-
-        ChannelHomes::instance()->setStatus(StatusCompleted);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-    }
-}
-
-// CS INFO #scc
-// :ChanServ!service@service.onet NOTICE scc_test :160 #scc :Simple Chat Client;
-void IrcKernel::raw_160n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strTopic;
-    for (int i = 5; i < strDataList.size(); ++i) { if (i != 5) strTopic += " "; strTopic += strDataList.at(i); }
-    if ((!strTopic.isEmpty()) && (strTopic.at(0) == ':')) strTopic.remove(0,1);
-
-    // set topic in channel settings
-    if (ChannelSettings::instance()->getChannel() == strChannel)
-        ChannelSettings::instance()->setInfo("topic", strTopic);
-
-    // set topic in widget
-    if (Channel::instance()->contains(strChannel))
-        Channel::instance()->setTopic(strChannel, strTopic);
-}
-
-// CS INFO #scc
-// :ChanServ!service@service.onet NOTICE scc_test :161 #scc :topicAuthor=Merovingian rank=0.9095 topicDate=1251579281 private=1 password= limit=0 type=0 createdDate=1247005186 vEmail=0 www=https://simplechatclient.github.io/ catMajor=4 catMinor=0 official=0 recommended=0 protected=0 moderated=0 avatar=http://foto0.m.onet.pl/_m/e7bd33787bb5cd96031db4034e5f1d54,1,19,0.jpg status=ok guardian=3 kickRejoin=0 auditorium=0
-// :ChanServ!service@service.onet NOTICE Merovingian :161 #scc :topicAuthor=Merovingian rank=1.7068 topicDate=1297944969 private=0 type=1 createdDate=1247005186 vEmail=1 www=https://simplechatclient.github.io/ catMajor=4 moderated=0 avatar=http://foto3.m.onet.pl/_m/97198666362c2c72c6311640f9e791cb,1,19,0-5-53-53-0.jpg guardian=3 email=merovirgian@gmail.com kickRejoin=60 auditorium=0
-void IrcKernel::raw_161n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-    QHash<QString,QString> mKeyValue;
-
-    for (int i = 5; i < strDataList.size(); ++i)
-    {
-        QString strLine = strDataList.at(i);
-        if (i == 5) strLine.remove(0,1);
-        QString strKey = strLine.left(strLine.indexOf("="));
-        QString strValue = strLine.right(strLine.length() - strLine.indexOf("=")-1);
-
-        mKeyValue.insert(strKey, strValue);
-    }
-
-    // channel settins - data
-    if (ChannelSettings::instance()->getChannel() == strChannel)
-    {
-        QHashIterator <QString, QString> it(mKeyValue);
-        while (it.hasNext())
-        {
-            it.next();
-
-            ChannelSettings::instance()->setInfo(it.key(), it.value());
-        }
-    }
-
-    // opened channel
-    if (Channel::instance()->contains(strChannel))
-    {
-        // channel info
-        if (!Channel::instance()->getDisplayedOptions(strChannel))
-        {
-            if (mKeyValue.value("moderated") == "1")
-            {
-                QString strDisplay = QString(tr("* Channel %1 is moderated").arg(strChannel));
-                Message::instance()->showMessage(strChannel, strDisplay, MessageInfo);
-            }
-/*
-            if (mKeyValue.value("private") == "1")
-            {
-                QString strDisplay = QString(tr("* Channel %1 is private").arg(strChannel));
-                Message::instance()->showMessage(strChannel, strDisplay, MessageInfo);
-            }
-*/
-            Channel::instance()->setDisplayedOptions(strChannel, true);
-        }
-
-        // update topic author
-        QString strTopicAuthor = mKeyValue.value("topicAuthor");
-        QString strTopicDate = mKeyValue.value("topicDate");
-        if ((!strTopicAuthor.isEmpty()) && (!strTopicDate.isEmpty()))
-        {
-            QString strDT = QDateTime::fromTime_t(strTopicDate.toInt()).toString("dd MMM yyyy hh:mm:ss");
-            QString strTopicDetails = QString("%1 (%2)").arg(strTopicAuthor, strDT);
-            Channel::instance()->setAuthorTopic(strChannel, strTopicDetails);
-        }
-    }
-
-    // avatar
-    QString strAvatarUrl = mKeyValue.value("avatar");
-    if (!strAvatarUrl.isEmpty())
-    {
-        QString strChannelAvatar = Channel::instance()->getAvatar(strChannel);
-        QString strChannelHomesAvatar = ChannelHomes::instance()->getAvatar(strChannel);
-        QString strChannelFavouritesAvatar = ChannelFavourites::instance()->getAvatar(strChannel);
-
-        if ((!strChannelAvatar.isEmpty()) && (strChannelAvatar == strAvatarUrl) &&
-            (!strChannelHomesAvatar.isEmpty()) && (strChannelHomesAvatar == strAvatarUrl) &&
-            (!strChannelFavouritesAvatar.isEmpty()) && (strChannelFavouritesAvatar == strAvatarUrl))
-        {
-            Channel::instance()->setAvatar(strChannel, strChannelAvatar);
-            ChannelHomes::instance()->setAvatar(strChannel, strChannelHomesAvatar);
-            ChannelFavourites::instance()->setAvatar(strChannel, strChannelFavouritesAvatar);
-        }
-        else
-            Avatar::instance()->get(strChannel, "channel", strAvatarUrl);
-    }
-}
-
-// CS INFO #lunar
-// :ChanServ!service@service.onet NOTICE scc_test :162 #lunar :q,Merovingian o,Radowsky o,aleksa7 o,chanky o,osa1987 h,scc_test o,MajkeI
-void IrcKernel::raw_162n()
-{
-    if (strDataList.size() < 6) return;
-
-    QString strChannel = strDataList.at(4);
-
-    if (ChannelSettings::instance()->getChannel() == strChannel)
-    {
-        for (int i = 5; i < strDataList.size(); ++i)
-        {
-            QString strLine = strDataList.at(i);
-            if (i == 5) strLine.remove(0,1);
-            QString strKey = strLine.left(strLine.indexOf(","));
-            QString strValue = strLine.right(strLine.length() - strLine.indexOf(",")-1);
-
-            if ((!strKey.isEmpty()) && (!strValue.isEmpty()))
-                ChannelSettings::instance()->setPermission(strKey, strValue);
-        }
-    }
-}
-
-// CS INFO #scc
-// :ChanServ!service@service.onet NOTICE Merovingian :163 #scc I Olka Merovingian 1289498809 :
-// :ChanServ!service@service.onet NOTICE Merovingian :163 #scc b test!*@* Merovingian 1289498776 :
-// :ChanServ!service@service.onet NOTICE Merovingian :163 #scc b *!*@haxgu3xx7ptcn4u72yrkbp4daq Merovingian 1289497781 :Tony_Montana
-void IrcKernel::raw_163n()
-{
-    if (strDataList.size() < 10) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strFlag = strDataList.at(5);
-    QString strNick = strDataList.at(6);
-    QString strWho = strDataList.at(7);
-    QString strDT = strDataList.at(8);
-    QString strIPNick = strDataList.at(9);
-    if (strIPNick.at(0) == ':') strIPNick.remove(0,1);
-
-    strDT = QDateTime::fromTime_t(strDT.toInt()).toString("dd MMM yyyy hh:mm:ss");
-
-    if ((ChannelSettings::instance()->getChannel() == strChannel) && (ChannelSettings::instance()->getStatusInfo() != StatusCompleted))
-        ChannelSettings::instance()->setPermission(strFlag, QString("%1;%2;%3;%4").arg(strNick, strWho, strDT, strIPNick));
-}
-
-// CS INFO #scc
-// :ChanServ!service@service.onet NOTICE scc_test :164 #scc :end of channel info
-void IrcKernel::raw_164n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    if (ChannelSettings::instance()->getChannel() == strChannel)
-        ChannelSettings::instance()->setStatusInfo(StatusCompleted);
-}
-
-// CS INFO #Relax
-// :ChanServ!service@service.onet NOTICE ~test :165 #Relax :Nie ważne, czy szukasz dobrej zabawy, ...
-void IrcKernel::raw_165n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strDescription;
-    for (int i = 5; i < strDataList.size(); ++i) { if (i != 5) strDescription += " "; strDescription += strDataList.at(i); }
-    if ((!strDescription.isEmpty()) && (strDescription.at(0) == ':')) strDescription.remove(0,1);
-
-    if (ChannelSettings::instance()->getChannel() == strChannel)
-        ChannelSettings::instance()->setInfo("desc", strDescription);
-}
-
-// RS INFO Merovingian
-// :RankServ!service@service.onet NOTICE Merovingian :170 Merovingian :histActive=edgbcebbdccecbdbbccbcdcdccbabb histTotal=ijqkhhlfihiqlnqjlmmllomkohqfji idleTime=14020283 noise=101660 relationsFriend=91 relationsIgnored=0 sessionsTime=19023384 words=361679
-void IrcKernel::raw_170n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    if (strNick != Settings::instance()->get("nick")) return; // not my nick
-
-    for (int i = 5; i < strDataList.size(); ++i)
-    {
-        QString strLine = strDataList.at(i);
-        if (i == 5) strLine.remove(0,1);
-        QString strKey = strLine.left(strLine.indexOf("="));
-        QString strValue = strLine.right(strLine.length() - strLine.indexOf("=")-1);
-
-        MyStats::instance()->set(strKey, strValue);
-    }
-}
-
-// RS INFO Merovingian
-// :RankServ!service@service.onet NOTICE Merovingian :171 Merovingian :end of user stats
-void IrcKernel::raw_171n()
-{
-}
-
-// RS INFO #scc
-// :RankServ!service@service.onet NOTICE Merovingian :175 #scc :histActiveTime=1d9a,6a4,b1b,12c3,157b,3c5a,981,8e9d,5b14,4ea4,1970,198c,2cbd,3505,5500,dc8a,a263,5635,3ab5,232a,2bad,2f51,359f,3b2a,100f,4a17,1c32,15c1,4290,2b06 histNoise=ba,14,4a,82,71,147,3b,3df,301,1d7,e5,99,109,f2,118,69f,432,21f,16d,c0,f0,110,110,144,51,18a,fb,75,1d9,e9 histRelationsFavourite=28,28,29,29,29,29,29,29,29,29,29,29,29,28,28,28,28,28,28,27,28,2a,2b,2a,2a,2b,2b,2b,2c,2c
-// :RankServ!service@service.onet NOTICE Merovingian :175 #scc :histSessionsTime=bf9e4,40439,b7be0,66e21,6273f,6e8ff,8af6e,7fdad,7a6ad,766a3,621d0,728be,718cc,83f03,b5c1f,9ae59,96d4e,82724,7c192,8f166,8fef5,6f35d,9384a,87f97,7e031,a3e97,64f00,c2a84,ad3b4,8999b histWebcamTime=aa4,162a,f4a,0,3afa,2c,edc,44a,fe7,1d9,fb0,3e1,1531,33d5,15dc,b5c,2d6d,5c0d,0,48f2,1f85,2111,7a2,2251,25e,fea,1ecb,1445,143c,2280
-// :RankServ!service@service.onet NOTICE Merovingian :175 #scc :histWords=247,4d,aa,1a3,130,3f3,a2,dfd,a21,5e8,245,185,379,2f0,41e,161d,1194,8a4,454,2ec,35f,30d,424,493,bc,426,33d,f7,705,307 noise=80619 relationsFavourite=40 visits=78 words=268782
-void IrcKernel::raw_175n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QHash<QString,QString> mKeyValue;
-    for (int i = 5; i < strDataList.size(); ++i)
-    {
-        QString strLine = strDataList.at(i);
-        if (i == 5) strLine.remove(0,1);
-        QString strKey = strLine.left(strLine.indexOf("="));
-        QString strValue = strLine.right(strLine.length() - strLine.indexOf("=")-1);
-
-        mKeyValue.insert(strKey, strValue);
-    }
-
-    if ((ChannelSettings::instance()->getChannel() == strChannel) && (ChannelSettings::instance()->getStatusStats() != StatusCompleted))
-    {
-        QHashIterator <QString, QString> it(mKeyValue);
-        while (it.hasNext())
-        {
-            it.next();
-
-            ChannelSettings::instance()->setStats(it.key(), it.value());
-        }
-    }
-}
-
-// :RankServ!service@service.onet NOTICE Merovingian :176 #scc :end of channel stats
-void IrcKernel::raw_176n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    if (ChannelSettings::instance()->getChannel() == strChannel)
-        ChannelSettings::instance()->setStatusStats(StatusCompleted);
-}
-
-// NS SET city
-// :NickServ!service@service.onet NOTICE Merovingian :210 :nothing changed
-void IrcKernel::raw_210n()
-{
-}
-
 // STATS l
 // <server> 211 <nick> irc1.sprynet.com 0 49243278 3327277 22095880 1208863 :134450
 void IrcKernel::raw_211()
@@ -1693,22 +1116,6 @@ void IrcKernel::raw_211()
     strMessage = "* "+strMessage;
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// NS SET city
-// :NickServ!service@service.onet NOTICE scc_test :211 city :value unset
-void IrcKernel::raw_211n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(2);
-    QString strKey = strDataList.at(4);
-
-    QString strMe = Settings::instance()->get("nick");
-
-    // set my profile
-    if (strNick == strMe)
-        MyProfile::instance()->set(strKey, QString::null);
 }
 
 // STATS m
@@ -1769,58 +1176,6 @@ void IrcKernel::raw_219()
 {
 }
 
-// NS FRIENDS ADD aaa
-// :NickServ!service@service.onet NOTICE scc_test :220 aaa :friend added to list
-void IrcKernel::raw_220n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Added the nickname %1 to a friends list")).arg(strNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-}
-
-// NS FRIENDS DEL aaa
-// :NickServ!service@service.onet NOTICE scc_test :221 scc_test :friend removed from list
-void IrcKernel::raw_221n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Removed the nickname %1 from your friends list")).arg(strNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-}
-
-// NS IGNORE ADD ~test
-// :NickServ!service@service.onet NOTICE scc_test :230 ~test :ignore added to list
-void IrcKernel::raw_230n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Added %1 to your ignore list")).arg(strNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-
-    Ignore::instance()->add(strNick);
-}
-
-// NS IGNORE DEL aaa
-// :NickServ!service@service.onet NOTICE scc_test :231 ~test :ignore removed from list
-void IrcKernel::raw_231n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Removed %1 from your ignore list")).arg(strNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-
-    Ignore::instance()->remove(strNick);
-}
-
 // STATS m
 // <server> 240 <nick> :<info>
 void IrcKernel::raw_240()
@@ -1833,34 +1188,6 @@ void IrcKernel::raw_240()
     strMessage = "* "+strMessage;
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// NS FAVOURITES ADD scc
-// :NickServ!service@service.onet NOTICE scc_test :240 #scc :favourite added to list
-void IrcKernel::raw_240n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Added %1 channel to your favorites list")).arg(strChannel);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-
-    ChannelFavourites::instance()->add(strChannel);
-}
-
-// NS FAVOURITES DEL scc
-// :NickServ!service@service.onet NOTICE scc_test :241 #scc :favourite removed from list
-void IrcKernel::raw_241n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Removed channel %1 from your favorites list")).arg(strChannel);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-
-    ChannelFavourites::instance()->remove(strChannel);
 }
 
 // STATS u
@@ -1932,87 +1259,10 @@ void IrcKernel::raw_249()
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
-// CS REGISTER czesctoja
-// :ChanServ!service@service.onet NOTICE scc_test :250 #czesctoja :channel registered
-// NS OFFLINE MSG nick text
-// :NickServ!service@service.onet NOTICE Merovingian :250 scc_test :offline message sent
-void IrcKernel::raw_250n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strChannel = strDataList.at(4);
-
-        QString strDisplay = QString(tr("* Successfully created a channel %1")).arg(strChannel);
-        Message::instance()->showMessageActive(strDisplay, MessageInfo);
-
-        // homes
-        // Core::instance()->network->send(QString("PRIVMSG NickServ :ALIST"));
-
-        // join
-        Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-
-        QString strDisplay = QString(tr("* Offline message sent to %1")).arg(strNick);
-        Message::instance()->showMessageActive(strDisplay, MessageInfo);
-    }
-}
-
 // LUSERS
 // :cf1f4.onet 251 Merovingian :There are 2300 users and 5 invisible on 10 servers
 void IrcKernel::raw_251()
 {
-}
-
-// CS DROP czesctoja
-// :ChanServ!service@service.onet NOTICE scc_test :251 #czesctoja :has been dropped
-// NS OFFLINE GET scc_test
-// :NickServ!service@service.onet NOTICE Merovingian :251 scc_test 1291386193 msg :test message
-// :NickServ!service@service.onet NOTICE scc_test :251 Merovingian 1308924405 quote :zostawiam ci wiadomosc
-// :NickServ!service@service.onet NOTICE scc_test :251 Merovingian 1308924406 reply :spoko
-void IrcKernel::raw_251n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strChannel = strDataList.at(4);
-
-        QString strDisplay = QString(tr("* Channel %1 has been removed")).arg(strChannel);
-        Message::instance()->showMessageActive(strDisplay, MessageMode);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-        qint64 iTime = QDateTime::fromTime_t(strDataList.at(5).toInt()).toMSecsSinceEpoch();
-        QString strType = strDataList.at(6);
-
-        QString strMessage;
-        for (int i = 7; i < strDataList.size(); ++i) { if (i != 7) strMessage += " "; strMessage += strDataList.at(i); }
-        if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
-
-        Offline::instance()->addMessage(iTime, strType, strNick, strMessage);
-    }
 }
 
 // LUSERS
@@ -2021,72 +1271,10 @@ void IrcKernel::raw_252()
 {
 }
 
-// CS DROP czesctoja
-// :ChanServ!service@service.onet NOTICE #testabc :252 scc_test :has dropped this channel
-// NS OFFLINE REJECT scc_test
-// :NickServ!service@service.onet NOTICE Merovingian :252 scc_test :offline messages rejected
-void IrcKernel::raw_252n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strChannel = strDataList.at(2);
-
-        QString strDisplay = QString(tr("* Confirmed the removal of the channel %1")).arg(strChannel);
-        Message::instance()->showMessageActive(strDisplay, MessageMode);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-
-        QString strDisplay = QString(tr("* Offline messages rejected from %1")).arg(strNick);
-        Message::instance()->showMessageActive(strDisplay, MessageInfo);
-    }
-}
-
 // LUSERS
 // :cf1f4.onet 253 Merovingian 1 :unknown connections
 void IrcKernel::raw_253()
 {
-}
-
-// CS TRANSFER %1 %2
-// :ChanServ!service@service.onet NOTICE scc_test :253 #test_scc_moj Merovingian :channel owner changed
-// NS OFFLINE QUOTE merovingian
-// :NickServ!service@service.onet NOTICE scc_test :253 merovingian :offline messages quoted to sender
-void IrcKernel::raw_253n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 6) return;
-
-        QString strChannel = strDataList.at(4);
-        QString strWho = strDataList.at(2);
-        QString strNick = strDataList.at(5);
-
-        QString strDisplay = QString(tr("* %1 is now the owner of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-
-        // display
-        Message::instance()->showMessage(strChannel, strDisplay, MessageMode);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-    }
 }
 
 // LUSERS
@@ -2095,39 +1283,10 @@ void IrcKernel::raw_254()
 {
 }
 
-// CS TRANSFER #test_scc_moj Merovingian
-// :ChanServ!service@service.onet NOTICE #test_scc_moj :254 scc_test Merovingian :changed channel owner
-void IrcKernel::raw_254n()
-{
-    if (strDataList.size() < 6) return;
-
-    QString strChannel = strDataList.at(2);
-    QString strWho = strDataList.at(4);
-    QString strNick = strDataList.at(5);
-
-    QString strDisplay = QString(tr("* %1 is now the owner of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-
-    // display
-    Message::instance()->showMessage(strChannel, strDisplay, MessageMode);
-}
-
 // LUSERS
 // :cf1f4.onet 255 Merovingian :I have 568 clients and 1 servers
 void IrcKernel::raw_255()
 {
-}
-
-// CS BAN #scc ADD cos
-// :ChanServ!service@service.onet NOTICE scc_test :255 #scc +b cos :channel privilege changed
-void IrcKernel::raw_255n()
-{
-    if (strDataList.size() < 7) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strNick = strDataList.at(6);
-
-    QString strDisplay = QString(tr("* Changing privileges confirmed for %1 at %2")).arg(strNick, strChannel);
-    Message::instance()->showMessageActive(strDisplay, MessageMode);
 }
 
 // ADMIN
@@ -2144,40 +1303,6 @@ void IrcKernel::raw_256()
     Message::instance()->showMessage(STATUS_WINDOW, strMessage, MessageInfo);
 }
 
-// :ChanServ!service@service.onet NOTICE #scc :256 Merovingian +o scc_test :channel privilege changed
-void IrcKernel::raw_256n()
-{
-    if (strDataList.size() < 7) return;
-
-    QString strChannel = strDataList.at(2);
-    QString strWho = strDataList.at(4);
-    QString strFlag = strDataList.at(5);
-    QString strNick = strDataList.at(6);
-    QString strDisplay;
-
-    if (strFlag == "+q") strDisplay = QString(tr("* %1 is now the owner of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-q") strDisplay = QString(tr("* %1 is no longer the owner of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+o") strDisplay = QString(tr("* %1 is now super-operator on the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-o") strDisplay = QString(tr("* %1 is no longer super-operator on the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+h") strDisplay = QString(tr("* %1 is now the operator of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-h") strDisplay = QString(tr("* %1 is no longer the operator of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+v") strDisplay = QString(tr("* %1 is now a guest of channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-v") strDisplay = QString(tr("* %1 is no longer a guest of channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+X") strDisplay = QString(tr("* %1 is now moderator of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-X") strDisplay = QString(tr("* %1 is no longer moderating channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+Y") strDisplay = QString(tr("* %1 is now screener channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-Y") strDisplay = QString(tr("* %1 is no longer a screener channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+b") strDisplay = QString(tr("* %1 is now on the banned list in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-b") strDisplay = QString(tr("* %1 is no longer on the banned list in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+I") strDisplay = QString(tr("* %1 is now on the list of invitees in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-I") strDisplay = QString(tr("* %1 is no longer on the list of invitees in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else
-        strDisplay = QString(tr("* %1 now has a flag %2 (set by %3)")).arg(strNick, strFlag, strWho);
-
-    // display
-    Message::instance()->showMessage(strChannel, strDisplay, MessageMode);
-}
-
 // ADMIN
 // :cf1f1.onet 257 ~test :Name     - Czat Admin
 void IrcKernel::raw_257()
@@ -2190,16 +1315,6 @@ void IrcKernel::raw_257()
     strMessage = "* "+strMessage;
 
     Message::instance()->showMessage(STATUS_WINDOW, strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :257 #scc * :settings changed
-void IrcKernel::raw_257n()
-{
-    if (strDataList.size() < 5) return;
-
-    //QString strChannel = strDataList.at(4);
-
-    //Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
 }
 
 // ADMIN
@@ -2216,25 +1331,6 @@ void IrcKernel::raw_258()
     Message::instance()->showMessage(STATUS_WINDOW, strMessage, MessageInfo);
 }
 
-// :ChanServ!service@service.onet NOTICE #glupia_nazwa :258 ovo_ d :channel settings changed
-// :ChanServ!service@service.onet NOTICE #scc :258 Merovingian * :channel settings changed
-// *tdisa
-void IrcKernel::raw_258n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(2);
-    QString strNick = strDataList.at(4);
-    //QString strGroup = strDataList.at(5);
-
-    QString strDisplay = QString(tr("* %1 changed channel %2 settings")).arg(strNick, strChannel);
-
-    // display
-    Message::instance()->showMessage(strChannel, strDisplay, MessageInfo);
-
-    //Core::instance()->network->send(QString("CS INFO %1 i").arg(strChannel));
-}
-
 // ADMIN
 // :cf1f1.onet 259 ~test :E-Mail   - czat_admin@czat.onet.pl
 void IrcKernel::raw_259()
@@ -2247,103 +1343,6 @@ void IrcKernel::raw_259()
     strMessage = "* "+strMessage;
 
     Message::instance()->showMessage(STATUS_WINDOW, strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :259 #scc :nothing changed
-void IrcKernel::raw_259n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Nothing changed in %1")).arg(strChannel);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :260 Merovingian #scc +o :channel privilege changed
-void IrcKernel::raw_260n()
-{
-    // copy raw 256
-    if (strDataList.size() < 7) return;
-
-    QString strChannel = strDataList.at(5);
-    QString strWho = strDataList.at(4);
-    QString strFlag = strDataList.at(6);
-    QString strNick = strDataList.at(2);
-    QString strDisplay;
-
-    if (strFlag == "+q") strDisplay = QString(tr("* %1 is now the owner of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-q") strDisplay = QString(tr("* %1 is no longer the owner of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+o") strDisplay = QString(tr("* %1 is now super-operator on the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-o") strDisplay = QString(tr("* %1 is no longer super-operator on the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+h") strDisplay = QString(tr("* %1 is now the operator of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-h") strDisplay = QString(tr("* %1 is no longer the operator of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+v") strDisplay = QString(tr("* %1 is now a guest of channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-v") strDisplay = QString(tr("* %1 is no longer a guest of channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+X") strDisplay = QString(tr("* %1 is now moderator of the channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-X") strDisplay = QString(tr("* %1 is no longer moderating channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+Y") strDisplay = QString(tr("* %1 is now screener channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-Y") strDisplay = QString(tr("* %1 is no longer a screener channel %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+b") strDisplay = QString(tr("* %1 is now on the banned list in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-b") strDisplay = QString(tr("* %1 is no longer on the banned list in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "+I") strDisplay = QString(tr("* %1 is now on the list of invitees in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else if (strFlag == "-I") strDisplay = QString(tr("* %1 is no longer on the list of invitees in %2 (set by %3)")).arg(strNick, strChannel, strWho);
-    else
-        strDisplay = QString(tr("* %1 now has a flag %2 (set by %3)")).arg(strNick, strFlag, strWho);
-
-    // display
-    Message::instance()->showMessage(strChannel, strDisplay, MessageMode);
-}
-
-// CS DROP #czesctoja
-// :ChanServ!service@service.onet NOTICE scc_test :261 scc_test #czesctoja :has dropped this channel
-// NS LIST aaa
-// :NickServ!service@service.onet NOTICE Merovingian :261 aa_PrezesCiemnosci gaafa7 jaanka9 Naatasza23 zaak_333 Agaaaaaaaa ~Faajny25 kubaaa19 ~Amaadeusz_x misiaa_40
-void IrcKernel::raw_261n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 6) return;
-
-        QString strChannel = strDataList.at(5);
-
-        QString strDisplay = QString(tr("* Successfully removed channel %1")).arg(strChannel);
-        Message::instance()->showMessageActive(strDisplay, MessageInfo);
-
-        // homes
-        // Core::instance()->network->send(QString("PRIVMSG NickServ :ALIST"));
-
-        // part
-        if (Channel::instance()->contains(strChannel))
-            Core::instance()->network->send(QString("PART %1").arg(strChannel));
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 4) return;
-        if (FindNick::instance()->getStatus() == StatusCompleted) return;
-
-        for (int i = 4; i < strDataList.size(); ++i)
-            FindNick::instance()->add(strDataList.at(i));
-    }
-}
-
-// :NickServ!service@service.onet NOTICE Merovingian :262 aa :end of list
-void IrcKernel::raw_262n()
-{
-    FindNick::instance()->setStatus(StatusCompleted);
-}
-
-// NS LIST #scc
-// :NickServ!service@service.onet NOTICE Merovingian :263 #scc :no users found
-void IrcKernel::raw_263n()
-{
-    FindNick::instance()->setStatus(StatusCompleted);
 }
 
 // LUSERS
@@ -3089,18 +2088,6 @@ void IrcKernel::raw_396()
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
-// :ChanServ!service@service.onet NOTICE ~scc_test :400 :you are not registred
-void IrcKernel::raw_400n()
-{
-    if (strDataList.size() < 3) return;
-
-    QString strNick = strDataList.at(2);
-
-    QString strMessage = QString(tr("* %1 :Nick is not registered")).arg(strNick);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
 // :cf1f4.onet 401 ~Merovingian ~Merovingian1 :No such nick
 // :cf1f3.onet 401 Merovingian #asdasdasd :No such channel
 // :cf1f3.onet 401 scc_test scc :No such nick/channel
@@ -3135,19 +2122,6 @@ void IrcKernel::raw_401()
     }
 }
 
-// :ChanServ!service@service.onet NOTICE scc_test :401 aa :no such nick
-// :NickServ!service@service.onet NOTICE Merovingian :401 a :no such nick
-void IrcKernel::raw_401n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Nick does not exist")).arg(strNick);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
 // :cf1f4.onet 402 Merovingian a :No such server
 void IrcKernel::raw_402()
 {
@@ -3156,18 +2130,6 @@ void IrcKernel::raw_402()
     QString strServer = strDataList.at(3);
 
     QString strMessage = QString(tr("* %1 :No such server")).arg(strServer);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :402 !*@*aa :invalid mask
-void IrcKernel::raw_402n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strMask = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Invalid mask")).arg(strMask);
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
@@ -3196,36 +2158,6 @@ void IrcKernel::raw_403()
     }
 }
 
-// CS BANIP #scc ADD wilk
-// :ChanServ!service@service.onet NOTICE Merovingian :403 wilk :user is not on-line
-// NS OFFLINE MSG a a
-// :NickServ!service@service.onet NOTICE Merovingian :403 msg :user is not on-line
-void IrcKernel::raw_403n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-        QString strMessage = QString(tr("* %1 :User is not on-line")).arg(strNick);
-        Message::instance()->showMessageActive(strMessage, MessageInfo);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-        QString strMessage = QString(tr("* %1 :User is not on-line")).arg(strNick);
-        Message::instance()->showMessageActive(strMessage, MessageInfo);
-    }
-}
-
 // :cf1f1.onet 404 scc_test #Quiz :Cannot send to channel (+m)
 // :cf1f4.onet 404 ~scc_test #lunar :Cannot send to channel (no external messages)
 void IrcKernel::raw_404()
@@ -3242,18 +2174,6 @@ void IrcKernel::raw_404()
         strReason = tr("(No moderator on the channel)");
 
     QString strMessage = QString(tr("* Unable to send a message to %1 %2")).arg(strChannel, strReason);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :404 ~zwariowany_zdzich0 :user is not registred
-void IrcKernel::raw_404n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :User is not registred")).arg(strNick);
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
@@ -3281,120 +2201,10 @@ void IrcKernel::raw_406()
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
-// :ChanServ!service@service.onet NOTICE ~test :406 VHOST :unknown command
-void IrcKernel::raw_406n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strCmd = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Unknown command")).arg(strCmd);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :407 VOICE :not enough parameters
-// :NickServ!service@service.onet NOTICE Merovingian :407 OFFLINE GET :not enough parameters
-void IrcKernel::raw_407n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strCmd = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Not enough parameters")).arg(strCmd);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :408 dsfdsf :no such channel
-// :RankServ!service@service.onet NOTICE Merovingian :408 #aa :no such channel
-void IrcKernel::raw_408n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :No such channel")).arg(strChannel);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE Merovingian :409 WWW :invalid argument
-void IrcKernel::raw_409n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strCommand = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Invalid argument")).arg(strCommand);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE Merovingian :411 ABC :no such setting
-void IrcKernel::raw_411n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strCommand = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :No such setting")).arg(strCommand);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
 // :cf1f3.onet 412 scc_test :No text to send
 void IrcKernel::raw_412()
 {
     QString strMessage = QString(tr("* No text to send"));
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE ~Merovingian :412 admi :user's data is not ready
-void IrcKernel::raw_412n()
-{
-    if (strDataList.size() < 5) return;
-
-//    QString strNick = strDataList.at(4);
-//    QString strMe = Settings::instance()->get("nick");
-
-//    if (strNick == strMe)
-//        Core::instance()->network->send(QString("RS INFO %1").arg(strNick));
-//    else
-//        Core::instance()->network->send(QString("NS INFO %1 s").arg(strNick));
-}
-
-// RS INFO istota_bezduszna
-// :RankServ!service@service.onet NOTICE istota_bezduszna :413 istota_bezduszna :user has no stats
-void IrcKernel::raw_413n()
-{
-}
-
-// RS INFO #testa
-// :RankServ!service@service.onet NOTICE Merovingian :414 #testa :channel has no stats
-void IrcKernel::raw_414n()
-{
-}
-
-// RS INFO succubi
-// :RankServ!service@service.onet NOTICE Merovingian :415 Succubi :permission denied
-void IrcKernel::raw_415n()
-{
-}
-
-// RS INFO #a
-// :RankServ!service@service.onet NOTICE Merovingian :416 #a :permission denied
-void IrcKernel::raw_416n()
-{
-}
-
-// :NickServ!service@service.onet NOTICE scc_test :420 aleksa7 :is already on your friend list
-void IrcKernel::raw_420n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strMessage = QString(tr("* Nick %1 is already on your friend list")).arg(strNick);
-
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
@@ -3416,42 +2226,6 @@ void IrcKernel::raw_421()
         strReason = tr("This command has been disabled.");
 
     QString strMessage = QString("* %1 :%2").arg(strCmd, strReason);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE scc_test :421 aaa :is not on your friend list
-void IrcKernel::raw_421n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strMessage = QString(tr("* Nick %1 is not on your friend list")).arg(strNick);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE scc_test :430 wilk :is already on your ignore list
-void IrcKernel::raw_430n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 is already on your ignore list")).arg(strNick);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE scc_test :431 a :is not on your ignore list
-void IrcKernel::raw_431n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 is not on your ignore list")).arg(strNick);
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
@@ -3511,18 +2285,6 @@ void IrcKernel::raw_433()
     }
 }
 
-// :NickServ!service@service.onet NOTICE scc_test :440 #scc :is already on your favourite list
-void IrcKernel::raw_440n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* Channel %1 is already on your favourite list")).arg(strChannel);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
 // KICK #kusicielki ~prawdziwa
 // :cf1f2.onet 441 Merovingian ~prawdziwa #kusicielki :They are not on that channel
 void IrcKernel::raw_441()
@@ -3533,18 +2295,6 @@ void IrcKernel::raw_441()
     QString strChannel = strDataList.at(4);
 
     QString strMessage = QString(tr("* %1 is not on %2 channel")).arg(strNick, strChannel);
-
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :NickServ!service@service.onet NOTICE scc_test :441 #scc :is not on your favourite list
-void IrcKernel::raw_441n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* Channel %1 is not on your favourite list")).arg(strChannel);
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
@@ -3614,151 +2364,6 @@ void IrcKernel::raw_451()
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
-// :ChanServ!service@service.onet NOTICE scc_test :452 #aaa :channel name already in use
-void IrcKernel::raw_452n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Channel name already in use")).arg(strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :453 #aaaaaaaa :is not valid channel name
-void IrcKernel::raw_453n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :is not valid channel name")).arg(strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :454 #aaaaaaaaaaaaaaaaaaaaaa :not enough unique channel name
-// NS OFFLINE GET
-// :NickServ!service@service.onet NOTICE Merovingian :454 a :no messages
-void IrcKernel::raw_454n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strChannel = strDataList.at(4);
-
-        QString strMessage = QString(tr("* %1 :Not enough unique channel name")).arg(strChannel);
-        Message::instance()->showMessageActive(strMessage, MessageInfo);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-
-        QString strDisplay = QString(tr("* No offline messages from %1")).arg(strNick);
-        Message::instance()->showMessageActive(strDisplay, MessageInfo);
-    }
-}
-
-// :NickServ!service@service.onet NOTICE Merovingian :455 scc_test5 :ignores offline messages from you
-void IrcKernel::raw_455n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strNick = strDataList.at(4);
-
-    QString strDisplay = QString(tr("* Offline message cannot be sent. %1 ignores offline messages from you")).arg(strNick);
-    Message::instance()->showMessageActive(strDisplay, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :456 #test2 Merovingian :is already channel owner
-// NS OFFLINE MSG exist_nick test
-// :NickServ!service@service.onet NOTICE Merovingian :456 Merovingian :is online
-void IrcKernel::raw_456n()
-{
-    if (strDataList.size() < 1) return;
-
-    QString strNick = strDataList.at(0);
-    if (strNick.at(0) == ':') strNick.remove(0,1);
-    strNick = strNick.left(strNick.indexOf('!'));
-
-    if (strNick.toLower() == "chanserv")
-    {
-        if (strDataList.size() < 6) return;
-
-        QString strNick = strDataList.at(5);
-
-        QString strMessage = QString(tr("* %1 is already channel owner")).arg(strNick);
-
-        // display
-        Message::instance()->showMessageActive(strMessage, MessageInfo);
-    }
-    else if (strNick.toLower() == "nickserv")
-    {
-        if (strDataList.size() < 5) return;
-
-        QString strNick = strDataList.at(4);
-
-        QString strDisplay = QString(tr("* Offline message cannot be sent. %1 is online")).arg(strNick);
-        Message::instance()->showMessageActive(strDisplay, MessageInfo);
-    }
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :458 #scc v scc :unable to remove non-existent privilege
-void IrcKernel::raw_458n()
-{
-    if (strDataList.size() < 7) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strWho = strDataList.at(6);
-
-    QString strMessage = QString(tr("* %1 :Unable to remove non-existent privilege")).arg(strWho);
-
-    // display
-    Message::instance()->showMessage(strChannel, strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :459 #scc b test :channel privilege already given
-void IrcKernel::raw_459n()
-{
-    if (strDataList.size() < 7) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strWho = strDataList.at(6);
-
-    QString strMessage = QString(tr("* %1 :Channel privilege already given")).arg(strWho);
-
-    // display
-    Message::instance()->showMessage(strChannel, strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :460 #scc b abc193!*@* :channel list is full
-void IrcKernel::raw_460n()
-{
-    if (strDataList.size() < 7) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strFlag = strDataList.at(5);
-    QString strNick = strDataList.at(6);
-
-    if (strFlag == "b")
-        strFlag = tr("ban");
-    else if (strFlag == "I")
-        strFlag = tr("invite");
-
-    QString strMessage = QString(tr("* Cannot %1 %2. Channel list is full")).arg(strFlag, strNick);
-
-    // display
-    Message::instance()->showMessage(strChannel, strMessage, MessageInfo);
-}
-
 // :cf1f2.onet 461 ~test OPER :Not enough parameters.
 void IrcKernel::raw_461()
 {
@@ -3771,103 +2376,11 @@ void IrcKernel::raw_461()
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
-// :ChanServ!service@service.onet NOTICE scc_test :461 #scc scc :channel operators cannot be banned
-void IrcKernel::raw_461n()
-{
-    if (strDataList.size() < 6) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strWho = strDataList.at(5);
-
-    QString strMessage = QString(tr("* %1 :Channel operators cannot be banned")).arg(strWho);
-
-    // display
-    Message::instance()->showMessage(strChannel, strMessage, MessageInfo);
-}
-
 // PASS
 // :cf1f2.onet 462 Merovingian :You may not reregister
 void IrcKernel::raw_462()
 {
     QString strMessage = QString(tr("* You may not reregister"));
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :463 #lunar AUDITORIUM :permission denied, insufficient privileges
-void IrcKernel::raw_463n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-    QString strCommand = strDataList.at(5);
-
-    QString strMessage = QString(tr("* %1 :Permission denied, insufficient privileges in %2 channel")).arg(strCommand, strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :464 TOPIC :invalid argument
-void IrcKernel::raw_464n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strCommand = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Invalid argument")).arg(strCommand);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :465 TEST :no such setting
-void IrcKernel::raw_465n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strCommand = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :No such setting")).arg(strCommand);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :466 #Sex_Randki :channel is blocked
-void IrcKernel::raw_466n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :channel is blocked")).arg(strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :467 #scc :permission denied, you are not a channel owner
-void IrcKernel::raw_467n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* %1 :Permission denied, you are not a channel owner")).arg(strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :468 #scc :permission denied, insufficient privileges
-void IrcKernel::raw_468n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* Permission denied, insufficient privileges in %1 channel")).arg(strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE Merovingian :469 #Czat :channel is private
-void IrcKernel::raw_469n()
-{
-    if (strDataList.size() < 5) return;
-
-    QString strChannel = strDataList.at(4);
-
-    QString strMessage = QString(tr("* Channel %1 is private")).arg(strChannel);
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
@@ -3894,13 +2407,6 @@ void IrcKernel::raw_471()
     QString strChannel = strDataList.at(3);
 
     QString strMessage = QString(tr("* Cannot join channel %1 - channel is full")).arg(strChannel);
-    Message::instance()->showMessageActive(strMessage, MessageInfo);
-}
-
-// :ChanServ!service@service.onet NOTICE scc_test :472 #aaaaaaaaaaaaaaaaaaaaaaaaaaaaa :wait 60 seconds before next REGISTER
-void IrcKernel::raw_472n()
-{
-    QString strMessage = QString(tr("* Wait 60 seconds before creating next channel"));
     Message::instance()->showMessageActive(strMessage, MessageInfo);
 }
 
