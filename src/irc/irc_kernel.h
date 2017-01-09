@@ -162,6 +162,7 @@ private slots:
     void raw_323();
     void raw_324();
     void raw_329();
+    void raw_330();
     void raw_332();
     void raw_333();
     void raw_335();
@@ -259,6 +260,7 @@ private slots:
     void raw_605();
     void raw_607();
     void raw_666();
+    void raw_671();
     void raw_702();
     void raw_703();
     void raw_704();

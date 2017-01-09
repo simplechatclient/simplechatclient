@@ -3145,16 +3145,16 @@
         <translation>* %1 był zalogowany od %2</translation>
     </message>
     <message>
-        <source>* %1 is a GlobalOp on OnetCzat</source>
-        <translation>* %1 jest administratorem czata</translation>
+        <source>* %1 is an IRC Operator</source>
+        <translation>* %1 jest IRC Operatorem</translation>
     </message>
     <message>
-        <source>* %1 is a NetAdmin on OnetCzat</source>
-        <translation>* %1 jest głównym administratorem czata</translation>
+        <source>* %1 is using a Secure Connection</source>
+        <translation>* %1 używa szyfrowanego połączenia</translation>
     </message>
     <message>
-        <source>* %1 is a Service on OnetCzat</source>
-        <translation>* %1 jest usługą czata</translation>
+        <source>* %1 is logged in as %2</source>
+        <translation>* %1 jest zalogowany jako %2</translation>
     </message>
     <message>
         <source>Too many results</source>

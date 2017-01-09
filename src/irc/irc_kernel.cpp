@@ -2543,14 +2543,10 @@ void IrcKernel::raw_313()
     if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
 
     QString strDisplay;
-    if (strMessage == "is a GlobalOp on OnetCzat")
-        strDisplay = QString(tr("* %1 is a GlobalOp on OnetCzat")).arg(strNick);
-    else if (strMessage == "is a NetAdmin on OnetCzat")
-        strDisplay = QString(tr("* %1 is a NetAdmin on OnetCzat")).arg(strNick);
-    else if (strMessage == "is a Service on OnetCzat")
-        strDisplay = QString(tr("* %1 is a Service on OnetCzat")).arg(strNick);
+    if (strMessage == "is an IRC Operator")
+        strDisplay = QString(tr("* %1 is an IRC Operator")).arg(strNick);
     else
-        strDisplay = strMessage;
+        strDisplay = QString("* %1 %2").arg(strNick, strMessage);
 
     Message::instance()->showMessageActive(strDisplay, MessageInfo);
 }
@@ -2768,6 +2764,27 @@ void IrcKernel::raw_329()
     QString strCreatedTime = QDateTime::fromTime_t(iCreatedTime).toString("dd MMM yyyy hh:mm:ss");
 
     QString strDisplay = QString(tr("* Channel %1 created at: %2")).arg(strChannel, strCreatedTime);
+    Message::instance()->showMessageActive(strDisplay, MessageInfo);
+}
+
+// :legowisko.pirc.pl 330 nick_tymczasowy293 pid pidpawel :is logged in as
+void IrcKernel::raw_330()
+{
+    if (strDataList.size() < 4) return;
+
+    QString strNick = strDataList.at(3);
+    QString strAccount = strDataList.at(4);
+
+    QString strMessage;
+    for (int i = 5; i < strDataList.size(); ++i) { if (i != 5) strMessage += " "; strMessage += strDataList.at(i); }
+    if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
+
+    QString strDisplay;
+    if (strMessage == "is logged in as")
+        strDisplay = QString(tr("* %1 is logged in as %2")).arg(strNick, strAccount);
+    else
+        strDisplay = strMessage;
+
     Message::instance()->showMessageActive(strDisplay, MessageInfo);
 }
 
@@ -4119,6 +4136,26 @@ void IrcKernel::raw_666()
     QString strMessage = QString(tr("* You cannot identify as a server, you are a USER. IRC Operators informed."));
 
     Message::instance()->showMessageActive(strMessage, MessageInfo);
+}
+
+// :legowisko.pirc.pl 671 nick_tymczasowy293 pid :is using a Secure Connection
+void IrcKernel::raw_671()
+{
+    if (strDataList.size() < 4) return;
+
+    QString strNick = strDataList.at(3);
+
+    QString strMessage;
+    for (int i = 4; i < strDataList.size(); ++i) { if (i != 4) strMessage += " "; strMessage += strDataList.at(i); }
+    if ((!strMessage.isEmpty()) && (strMessage.at(0) == ':')) strMessage.remove(0,1);
+
+    QString strDisplay;
+    if (strMessage == "is using a Secure Connection")
+        strDisplay = QString(tr("* %1 is using a Secure Connection")).arg(strNick);
+    else
+        strDisplay = QString("* %1 %2").arg(strNick, strMessage);
+
+    Message::instance()->showMessageActive(strDisplay, MessageInfo);
 }
 
 // COMMANDS
