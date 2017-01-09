@@ -370,8 +370,6 @@ void MainWindow::createSignals()
 void MainWindow::disableActions()
 {
 #ifdef IRC
-    channelHomesAction->setVisible(false);
-    channelFavouritesAction->setVisible(false);
     friendsAction->setVisible(false);
     ignoreAction->setVisible(false);
     findNickAction->setVisible(false);
@@ -577,13 +575,19 @@ void MainWindow::openChannelList()
 void MainWindow::openChannelHomes()
 {
     if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
-        ChannelHomesGui(this).exec();
+    {
+        Core::instance()->network->send(QString("PRIVMSG NickServ :ALIST"));
+        // ChannelHomesGui(this).exec();
+    }
 }
 
 void MainWindow::openChannelFavourites()
 {
     if (Core::instance()->network->isConnected() && Settings::instance()->getBool("logged"))
-        ChannelFavouritesGui(this).exec();
+    {
+        Core::instance()->network->send(QString("PRIVMSG NickServ :AJOIN LIST"));
+        // ChannelFavouritesGui(this).exec();
+    }
 }
 
 void MainWindow::openFriends()

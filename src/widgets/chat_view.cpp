@@ -198,22 +198,22 @@ void ChatView::joinChannel()
 
 void ChatView::addChannelToFavourites()
 {
-    Core::instance()->network->send(QString("NS FAVOURITES ADD %1").arg(strChannel));
+    Core::instance()->network->send(QString("PRIVMSG NickServ AJOIN ADD %1").arg(strChannel));
 }
 
 void ChatView::removeChannelFromFavourites()
 {
-    Core::instance()->network->send(QString("NS FAVOURITES DEL %1").arg(strChannel));
+    Core::instance()->network->send(QString("PRIVMSG NickServ AJOIN DEL %1").arg(strChannel));
 }
 
 void ChatView::addCurrentChannelToFavourites()
 {
-    Core::instance()->network->send(QString("NS FAVOURITES ADD %1").arg(strChatViewChannel));
+    Core::instance()->network->send(QString("PRIVMSG NickServ AJOIN ADD %1").arg(strChatViewChannel));
 }
 
 void ChatView::removeCurrentChannelFromFavourites()
 {
-    Core::instance()->network->send(QString("NS FAVOURITES DEL %1").arg(strChatViewChannel));
+    Core::instance()->network->send(QString("PRIVMSG NickServ AJOIN DEL %1").arg(strChatViewChannel));
 }
 
 void ChatView::openCurrentChannelModeration()
@@ -438,9 +438,9 @@ void ChatView::menuChannel(QContextMenuEvent *event)
     menu.addSeparator();
     menu.addAction(QIcon(":/images/breeze/legalmoves.svg"), tr("Join channel"), this, SLOT(joinChannel()));
 //    if (ChannelFavourites::instance()->contains(strChannel))
-//        menu.addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Remove channel from favourites"), this, SLOT(removeChannelFromFavourites()));
 //    else
-//        menu.addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Add channel to favourites"), this, SLOT(addChannelToFavourites()));
+        menu.addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Add channel to favourites"), this, SLOT(addChannelToFavourites()));
+        menu.addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Remove channel from favourites"), this, SLOT(removeChannelFromFavourites()));
 
     menu.exec(event->globalPos());
 }
@@ -641,21 +641,21 @@ void ChatView::menuStandard(QContextMenuEvent *event)
     connect(clear, SIGNAL(triggered()), this, SLOT(clear()));
     menu.addAction(clear);
 
-//    if (strChatViewChannel.at(0) == '#')
-//    {
-//        QMenu *channel = new QMenu(strChatViewChannel, &menu);
-//        channel->setIcon(QIcon(":/images/breeze/irc-operator.svg"));
+    if (strChatViewChannel.at(0) == '#')
+    {
+        QMenu *channel = new QMenu(strChatViewChannel, &menu);
+        channel->setIcon(QIcon(":/images/breeze/irc-operator.svg"));
 //        if (ChannelFavourites::instance()->contains(strChatViewChannel))
-//            channel->addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Remove channel from favourites"), this, SLOT(removeCurrentChannelFromFavourites()));
 //        else
-//            channel->addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Add channel to favourites"), this, SLOT(addCurrentChannelToFavourites()));
+            channel->addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Add channel to favourites"), this, SLOT(addCurrentChannelToFavourites()));
+            channel->addAction(QIcon(":/images/breeze/emblem-favorite.svg"), tr("Remove channel from favourites"), this, SLOT(removeCurrentChannelFromFavourites()));
 //        if (strSelfModes.contains(FLAG_MOD))
 //            channel->addAction(QIcon(":/images/moderation.svg"), tr("Moderation"), this, SLOT(openCurrentChannelModeration()));
 //        channel->addAction(QIcon(":/images/settings.svg"), tr("Channel settings"), this, SLOT(openCurrentChannelSettings()));
 
-//        menu.addSeparator();
-//        menu.addMenu(channel);
-//    }
+        menu.addSeparator();
+        menu.addMenu(channel);
+    }
 
     menu.exec(event->globalPos());
 }

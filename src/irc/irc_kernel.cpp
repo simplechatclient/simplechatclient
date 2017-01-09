@@ -612,7 +612,7 @@ void IrcKernel::raw_mode()
             if ((strNick == Settings::instance()->get("nick")) && (strFlag == "+r"))
             {
                 // channel homes
-                // Core::instance()->network->send("PRIVMSG NickServ alist");
+                // Core::instance()->network->send("PRIVMSG NickServ :ALIST");
 
                 // get my stats
                 // Core::instance()->network->send(QString("RS INFO %1").arg(Settings::instance()->get("nick")));
@@ -1026,7 +1026,7 @@ void IrcKernel::raw_001()
         strPassword = pSimpleCrypt->decrypt(strMe, strPassword);
         delete pSimpleCrypt;
 
-        Core::instance()->network->send(QString("PRIVMSG NickServ IDENTIFY %1").arg(strPassword));
+        Core::instance()->network->send(QString("PRIVMSG NickServ :IDENTIFY %1").arg(strPassword));
     }
 
     // busy
@@ -1954,7 +1954,7 @@ void IrcKernel::raw_250n()
         Message::instance()->showMessageActive(strDisplay, MessageInfo);
 
         // homes
-        // Core::instance()->network->send(QString("PRIVMSG NickServ alist"));
+        // Core::instance()->network->send(QString("PRIVMSG NickServ :ALIST"));
 
         // join
         Core::instance()->network->send(QString("JOIN %1").arg(strChannel));
@@ -2317,7 +2317,7 @@ void IrcKernel::raw_261n()
         Message::instance()->showMessageActive(strDisplay, MessageInfo);
 
         // homes
-        // Core::instance()->network->send(QString("PRIVMSG NickServ alist"));
+        // Core::instance()->network->send(QString("PRIVMSG NickServ :ALIST"));
 
         // part
         if (Channel::instance()->contains(strChannel))
