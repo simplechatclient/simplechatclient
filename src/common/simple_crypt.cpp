@@ -60,40 +60,40 @@ QString SimpleCrypt::encrypt(QString strKey, const QString &strData)
         qWarning() << tr("Error: crypt: Cannot encrypt - empty argument");
         return QString::null;
     }
-#ifndef Q_OS_MAC
-    QCA::Initializer init;
 
-    if ((!QCA::isSupported("aes256-cbc-pkcs7")) && (!QCA::isSupported("blowfish-cbc")))
-    {
-        qWarning() << tr("Warning: AES and Blowfish is not supported!");
-        return strData;
-    }
+//    QCA::Initializer init;
 
-    QCA::SecureArray arg = QByteArray(strData.toLatin1());
+//    if ((!QCA::isSupported("aes256-cbc-pkcs7")) && (!QCA::isSupported("blowfish-cbc")))
+//    {
+//        qWarning() << tr("Warning: AES and Blowfish is not supported!");
+//        return strData;
+//    }
 
-    if (strKey.length() < 16) { while(strKey.length() < 16) { strKey += " "; } }
-    QCA::SymmetricKey key = QByteArray(strKey.toLatin1());
+//    QCA::SecureArray arg = QByteArray(strData.toLatin1());
 
-    QCA::InitializationVector iv = QByteArray(strIv.toLatin1());
+//    if (strKey.length() < 16) { while(strKey.length() < 16) { strKey += " "; } }
+//    QCA::SymmetricKey key = QByteArray(strKey.toLatin1());
 
-    if (QCA::isSupported("aes256-cbc-pkcs7"))
-    {
-        QCA::Cipher cipher(QString("aes256"),QCA::Cipher::CBC,
-                           QCA::Cipher::DefaultPadding,
-                           QCA::Encode,
-                           key, iv);
-        return QCA::arrayToHex(QCA::SecureArray(cipher.process(arg)).toByteArray());
-    }
-    else if (QCA::isSupported("blowfish-cbc"))
-    {
-        QCA::Cipher cipher(QString("blowfish"), QCA::Cipher::CBC,
-                           QCA::Cipher::DefaultPadding,
-                           QCA::Encode,
-                           key, iv);
-        return QCA::arrayToHex(QCA::SecureArray(cipher.process(arg)).toByteArray());
-    }
-    else
-#endif
+//    QCA::InitializationVector iv = QByteArray(strIv.toLatin1());
+
+//    if (QCA::isSupported("aes256-cbc-pkcs7"))
+//    {
+//        QCA::Cipher cipher(QString("aes256"),QCA::Cipher::CBC,
+//                           QCA::Cipher::DefaultPadding,
+//                           QCA::Encode,
+//                           key, iv);
+//        return QCA::arrayToHex(QCA::SecureArray(cipher.process(arg)).toByteArray());
+//    }
+//    else if (QCA::isSupported("blowfish-cbc"))
+//    {
+//        QCA::Cipher cipher(QString("blowfish"), QCA::Cipher::CBC,
+//                           QCA::Cipher::DefaultPadding,
+//                           QCA::Encode,
+//                           key, iv);
+//        return QCA::arrayToHex(QCA::SecureArray(cipher.process(arg)).toByteArray());
+//    }
+//    else
+
         return strData;
 }
 
@@ -104,39 +104,39 @@ QString SimpleCrypt::decrypt(QString strKey, const QString &strData)
         qWarning() << tr("Error: crypt: Cannot decrypt - empty argument");
         return QString::null;
     }
-#ifndef Q_OS_MAC
-    QCA::Initializer init;
 
-    if ((!QCA::isSupported("aes256-cbc-pkcs7")) && (!QCA::isSupported("blowfish-cbc")))
-    {
-        qWarning() << tr("Warning: AES and Blowfish is not supported!");
-        return strData;
-    }
+//    QCA::Initializer init;
 
-    QCA::SecureArray arg = QCA::hexToArray(strData);
+//    if ((!QCA::isSupported("aes256-cbc-pkcs7")) && (!QCA::isSupported("blowfish-cbc")))
+//    {
+//        qWarning() << tr("Warning: AES and Blowfish is not supported!");
+//        return strData;
+//    }
 
-    if (strKey.length() < 16) { while(strKey.length() < 16) { strKey += " "; } }
-    QCA::SymmetricKey key = QByteArray(strKey.toLatin1());
+//    QCA::SecureArray arg = QCA::hexToArray(strData);
 
-    QCA::InitializationVector iv = QByteArray(strIv.toLatin1());
+//    if (strKey.length() < 16) { while(strKey.length() < 16) { strKey += " "; } }
+//    QCA::SymmetricKey key = QByteArray(strKey.toLatin1());
 
-    if (QCA::isSupported("aes256-cbc-pkcs7"))
-    {
-        QCA::Cipher cipher(QString("aes256"),QCA::Cipher::CBC,
-                           QCA::Cipher::DefaultPadding,
-                           QCA::Decode,
-                           key, iv);
-        return QCA::SecureArray(cipher.process(arg)).data();
-    }
-    else if (QCA::isSupported("blowfish-cbc"))
-    {
-        QCA::Cipher cipher(QString("blowfish"),QCA::Cipher::CBC,
-                           QCA::Cipher::DefaultPadding,
-                           QCA::Decode,
-                           key, iv);
-        return QCA::SecureArray(cipher.process(arg)).data();
-    }
-    else
-#endif
+//    QCA::InitializationVector iv = QByteArray(strIv.toLatin1());
+
+//    if (QCA::isSupported("aes256-cbc-pkcs7"))
+//    {
+//        QCA::Cipher cipher(QString("aes256"),QCA::Cipher::CBC,
+//                           QCA::Cipher::DefaultPadding,
+//                           QCA::Decode,
+//                           key, iv);
+//        return QCA::SecureArray(cipher.process(arg)).data();
+//    }
+//    else if (QCA::isSupported("blowfish-cbc"))
+//    {
+//        QCA::Cipher cipher(QString("blowfish"),QCA::Cipher::CBC,
+//                           QCA::Cipher::DefaultPadding,
+//                           QCA::Decode,
+//                           key, iv);
+//        return QCA::SecureArray(cipher.process(arg)).data();
+//    }
+//    else
+
         return strData;
 }
