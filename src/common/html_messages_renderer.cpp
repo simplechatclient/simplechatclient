@@ -74,7 +74,7 @@ void HtmlMessagesRenderer::fixContextMenu(QString &strData, MessageCategory eMes
         }
 
         // web
-        if ((strWord.startsWith("http:")) || (strWord.startsWith("https:")) || (strWord.startsWith("www.")))
+        if (((strWord.startsWith("http:")) || (strWord.startsWith("https:")) || (strWord.startsWith("www."))) && (!strWord.startsWith("#")))
         {
             Convert::removeStyles(strWord);
 
@@ -106,7 +106,7 @@ void HtmlMessagesRenderer::fixContextMenu(QString &strData, MessageCategory eMes
                 strDataList[i] = QString("<a onclick=\"return false\" name=\"website\" href=\"%1\">%2</a>").arg(strWord, strWord);
             }
         }
-        else if (((strWord.contains("http:")) && (!strWord.startsWith("http:"))) || ((strWord.contains("https:")) && (!strWord.startsWith("https:"))) || ((strWord.contains("www.")) && (!strWord.startsWith("www."))))
+        else if ((((strWord.contains("http:")) && (!strWord.startsWith("http:"))) || ((strWord.contains("https:")) && (!strWord.startsWith("https:"))) || ((strWord.contains("www.")) && (!strWord.startsWith("www.")))) && (!strWord.startsWith("#")))
         {
             if ((strWord.contains("http:")) || (strWord.contains("https:")))
             {

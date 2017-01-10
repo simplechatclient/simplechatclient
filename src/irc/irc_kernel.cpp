@@ -1662,7 +1662,7 @@ void IrcKernel::raw_318()
 }
 
 // WHOIS
-// :cf1f4.onet 319 scc_test Merovingian :#testy %#Komputery `#scc `#Quiz `#Scrabble `#hack
+// :chommik.pirc.pl 319 nick_tymczasowy293 ovo_ :@#ezoteryka #bog @#onet ~#religie #towarzyski #main @#scc ~#medycyna_naturalna @#dla_rysownikow #www.elektroda.pl #mydevil #help ~#cisza #listekklonu #4programmers
 void IrcKernel::raw_319()
 {
     if (strDataList.size() < 4) return;
@@ -1676,11 +1676,11 @@ void IrcKernel::raw_319()
         QString strChannel = strDataList.at(i);
         if (strChannel.at(0) == ':') strChannel.remove(0,1);
 
-        if ((strChannel.at(0) != '#') && (strChannel.at(0) != '^'))
+        if (strChannel.at(0) != '#')
         {
             // move prefix `#scc => #`scc
-            QChar prefix = strChannel.at(0);
-            strChannel.remove(0, 1);
+            QString prefix = strChannel.left(strChannel.indexOf('#'));
+            strChannel.remove(0, strChannel.indexOf("#"));
             strChannel.insert(1, prefix);
         }
         strChannels += strChannel;
@@ -1898,14 +1898,7 @@ void IrcKernel::raw_353()
             if (i == 5) strNick.remove(0,1); // remove :
             strNick = strNick.left(strNick.indexOf("|"));
 
-            QString strSuffix = strDataList.at(i);
-            if (strSuffix.contains("|"))
-            {
-                strSuffix = strSuffix.right(strSuffix.length() - strSuffix.indexOf("|") -1);
-                strSuffix = strSuffix.left(strSuffix.length()-2);
-            }
-            else
-                strSuffix = QString::null;
+            QString strSuffix = QString::null;
 
             QString strCleanNick = strNick;
 

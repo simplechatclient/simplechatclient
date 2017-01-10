@@ -2370,7 +2370,7 @@ void convertUtf8ToEmoji(QString &strData)
 */
 void Convert::fixHtmlChars(QString &strData)
 {
-    strData.replace("&", "&amp;");
+    //strData.replace("&", "&amp;");
     strData.replace("<", "&lt;");
     strData.replace(">", "&gt;");
     strData.replace("\"", "&quot;");
@@ -2505,16 +2505,14 @@ int Convert::getColor(const QString &strData)
     return -1;
 }
 
-QHash<char, QString> createPrefixHash()
+QHash<QChar, QString> createPrefixHash()
 {
-    QHash<char, QString> m;
-    m['&'] = "protect";
-    m['!'] = "mod";
-    m['='] = "screener";
-    m['+'] = "voice";
-    m['%'] = "halfop";
+    QHash<QChar, QString> m;
+    m['~'] = "owner";
+    m['&'] = "admin";
     m['@'] = "op";
-    m['`'] = "owner";
+    m['%'] = "halfop";
+    m['+'] = "voice";
     return m;
 }
 
@@ -2522,14 +2520,26 @@ void Convert::convertPrefix(QString &strData)
 {
     if (strData.isEmpty()) return;
 
-    static const QHash<char, QString> m = createPrefixHash();
+    static const QHash<QChar, QString> m = createPrefixHash();
 
-    char prefix = strData.at(1).toLatin1();
-    QString title = m[prefix];
-    if (!title.isNull()) {
-        strData.remove(1, 1);
-        strData.prepend(QString("<img src=\"qrc:/images/%1.png\" alt=\"%1\" />").arg(title));
+    QString html = "";
+
+    if (strData.at(0) == '#')
+    {
+        for (int i = 0; i < strData.size(); ++i)
+        {
+            QChar prefix = strData.at(1).toLatin1();
+            QString icon = m[prefix];
+            if (icon.isNull()) {
+                break;
+            }
+
+            strData.remove(1, 1);
+            html.append(QString("<img src=\"qrc:/images/%1.png\" alt=\"%1\" />").arg(icon));
+        }
     }
+
+    strData = html+strData;
 }
 
 void Convert::fixTopicUrl(QString &strData)
