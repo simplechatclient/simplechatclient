@@ -1020,6 +1020,10 @@ void IrcKernel::raw_001()
         Core::instance()->network->send(QString("PRIVMSG NickServ :IDENTIFY %1").arg(strPassword));
     }
 
+    // flag to get all flags per nick, not only max
+    Core::instance()->network->send("CAP REQ :multi-prefix");
+    Core::instance()->network->send("CAP END");
+
     // busy
     Settings::instance()->setBool("busy", false);
 
