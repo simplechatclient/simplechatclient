@@ -260,22 +260,22 @@ void ChatView::kamerzysta()
 
 void ChatView::friendsAdd()
 {
-    Core::instance()->network->send(QString("NS FRIENDS ADD %1").arg(strNick));
+    Core::instance()->network->send(QString("WATCH +%1").arg(strNick));
 }
 
 void ChatView::friendsDel()
 {
-    Core::instance()->network->send(QString("NS FRIENDS DEL %1").arg(strNick));
+    Core::instance()->network->send(QString("WATCH -%1").arg(strNick));
 }
 
 void ChatView::ignoreAdd()
 {
-    Core::instance()->network->send(QString("NS IGNORE ADD %1").arg(strNick));
+    Core::instance()->network->send(QString("SILENCE +%1!*@*").arg(strNick));
 }
 
 void ChatView::ignoreDel()
 {
-    Core::instance()->network->send(QString("NS IGNORE DEL %1").arg(strNick));
+    Core::instance()->network->send(QString("SILENCE -%1!*@*").arg(strNick));
 }
 
 void ChatView::kick()
@@ -585,8 +585,8 @@ void ChatView::menuNick(QContextMenuEvent *event)
     menu.addMenu(mInvite);
 //    if (strSelfModes.contains(FLAG_REGISTERED))
 //    {
-//        menu.addMenu(friends);
-//        menu.addMenu(ignore);
+        menu.addMenu(friends);
+        menu.addMenu(ignore);
 //    }
 //    if (iSelfMaxModes >= FLAG_HALFOP_INT)
 //    {

@@ -370,8 +370,6 @@ void MainWindow::createSignals()
 void MainWindow::disableActions()
 {
 #ifdef IRC
-    friendsAction->setVisible(false);
-    ignoreAction->setVisible(false);
     findNickAction->setVisible(false);
 
     myStatsAction->setVisible(false);

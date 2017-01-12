@@ -156,28 +156,28 @@ void NickListWidget::friendsAdd()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    Core::instance()->network->send(QString("NS FRIENDS ADD %1").arg(strSelectedNick));
+    Core::instance()->network->send(QString("WATCH +%1").arg(strSelectedNick));
 }
 
 void NickListWidget::friendsDel()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    Core::instance()->network->send(QString("NS FRIENDS DEL %1").arg(strSelectedNick));
+    Core::instance()->network->send(QString("WATCH -%1").arg(strSelectedNick));
 }
 
 void NickListWidget::ignoreAdd()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    Core::instance()->network->send(QString("NS IGNORE ADD %1").arg(strSelectedNick));
+    Core::instance()->network->send(QString("SILENCE +%1!*@*").arg(strSelectedNick));
 }
 
 void NickListWidget::ignoreDel()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    Core::instance()->network->send(QString("NS IGNORE DEL %1").arg(strSelectedNick));
+    Core::instance()->network->send(QString("SILENCE -%1!*@*").arg(strSelectedNick));
 }
 
 void NickListWidget::kick()
@@ -468,8 +468,8 @@ void NickListWidget::contextMenuEvent(QContextMenuEvent *e)
     menu->addMenu(mInvite);
 //    if (strSelfModes.contains(FLAG_REGISTERED))
 //    {
-//        menu->addMenu(friends);
-//        menu->addMenu(ignore);
+        menu->addMenu(friends);
+        menu->addMenu(ignore);
 //    }
 //    if (iSelfMaxModes >= FLAG_HALFOP_INT)
 //    {

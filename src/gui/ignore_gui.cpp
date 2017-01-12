@@ -80,7 +80,7 @@ void IgnoreGui::buttonAdd()
 
     if ((ok) && (!strText.isEmpty()))
     {
-        Core::instance()->network->send(QString("NS IGNORE ADD %1").arg(strText));
+        Core::instance()->network->send(QString("SILENCE +%1!*@*").arg(strText));
         QTimer::singleShot(1000*4, this, SLOT(refresh())); // 4 sec
     }
 }
@@ -97,7 +97,7 @@ void IgnoreGui::buttonRemove()
 
     if ((ok) && (!strText.isEmpty()))
     {
-        Core::instance()->network->send(QString("NS IGNORE DEL %1").arg(strText));
+        Core::instance()->network->send(QString("SILENCE -%1!*@*").arg(strText));
         QTimer::singleShot(1000*4, this, SLOT(refresh())); // 4 sec
     }
 }

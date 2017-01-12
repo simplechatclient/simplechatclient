@@ -137,7 +137,7 @@ void FriendsGui::buttonAdd()
 
     if ((ok) && (!strText.isEmpty()))
     {
-        Core::instance()->network->send(QString("NS FRIENDS ADD %1").arg(strText));
+        Core::instance()->network->send(QString("WATCH +%1").arg(strText));
         QTimer::singleShot(1000*4, this, SLOT(refresh())); // 4 sec
     }
 }
@@ -162,7 +162,7 @@ void FriendsGui::buttonRemove()
 
     if ((ok) && (!strText.isEmpty()))
     {
-        Core::instance()->network->send(QString("NS FRIENDS DEL %1").arg(strText));
+        Core::instance()->network->send(QString("WATCH -%1").arg(strText));
         QTimer::singleShot(1000*4, this, SLOT(refresh())); // 4 sec
     }
 }

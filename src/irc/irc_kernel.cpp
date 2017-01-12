@@ -1024,6 +1024,12 @@ void IrcKernel::raw_001()
     Core::instance()->network->send("CAP REQ :multi-prefix");
     Core::instance()->network->send("CAP END");
 
+    // friends
+    Core::instance()->network->send("WATCH");
+
+    // ignore
+    Core::instance()->network->send("SILENCE");
+
     // busy
     Settings::instance()->setBool("busy", false);
 
@@ -2589,8 +2595,8 @@ void IrcKernel::raw_601()
     Friends::instance()->set(strNick, false);
 }
 
-// NS FRIENDS DEL nick
-// :cf1f3.onet 602 scc_test aaa * * 0 :stopped watching
+// WATCH -nick
+//:bzyk.pirc.pl 602 nick_tymczasowy293 ovo_ ~username vhost:ovo.ovo.ovo 1484236642 :stopped watching
 void IrcKernel::raw_602()
 {
     if (strDataList.size() < 4) return;
@@ -2600,7 +2606,8 @@ void IrcKernel::raw_602()
     Friends::instance()->remove(strNick);
 }
 
-//:cf1f1.onet 604 scc_test scc_test 51976824 3DE379.B7103A.6CF799.6902F4 1267054441 :is online
+// WATCH +nick
+//:bzyk.pirc.pl 604 nick_tymczasowy293 ovo_ ~username vhost:ovo.ovo.ovo 1484236642 :is online
 void IrcKernel::raw_604()
 {
     if (strDataList.size() < 4) return;
