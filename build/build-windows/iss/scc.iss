@@ -52,6 +52,11 @@ Name: "{commondesktop}\Simple Chat Client"; Filename: "{app}\scc.exe"
 Filename: "{tmp}\vcredist_x86.exe"; Parameters: "/q /norestart"; StatusMsg: Installing Visual C++ Redistributable Package...
 Filename: "{app}\scc.exe"; Description: "{cm:LaunchProgram,Simple Chat Client}"; Flags: nowait postinstall skipifsilent
 
+[UninstallDelete]
+Type: filesandordirs; Name: "{userdocs}\scc"
+Type: dirifempty; Name: "{userdocs}\scc"
+
+; variables to code
 #define MyAppName "scc"
 #define MyAppExeName "scc.exe"
 
