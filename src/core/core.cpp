@@ -77,13 +77,9 @@ void Core::init()
     kamerzystaSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 0);
 
     // network
-#ifdef IRC
     QString strServer = "irc.pirc.pl";
     int iPort = 7002;
-#else
-    QString strServer = "czat-app.onet.pl";
-    int iPort = 5015;
-#endif
+
     network = new Network(strServer, iPort);
     network->start(QThread::InheritPriority);
 }
