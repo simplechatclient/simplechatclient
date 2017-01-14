@@ -89,10 +89,6 @@ bool Network::isConnected()
 
 void Network::clearAll()
 {
-    // close cam socket
-    if (Core::instance()->kamerzystaSocket->state() == QAbstractSocket::ConnectedState)
-        Core::instance()->kamerzystaSocket->disconnectFromHost();
-
     // set lag
     Lag::instance()->reset();
 

@@ -26,10 +26,6 @@
 #include "network.h"
 class MainWindow;
 
-QT_BEGIN_NAMESPACE
-class QTcpSocket;
-QT_END_NAMESPACE
-
 /**
  * Core
  */
@@ -48,8 +44,6 @@ public:
     MainWindow *mainWindow();
     void refreshLanguage();
 
-    // kamerzysta socket
-    QTcpSocket *kamerzystaSocket;
     // network
     Network *network;
 

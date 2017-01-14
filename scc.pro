@@ -16,8 +16,6 @@ SOURCES += src/common/commands.cpp \
     src/common/log.cpp \
     src/common/replace.cpp \
     src/common/simple_crypt.cpp \
-    src/common/webcam_engine.cpp \
-    src/common/webcam_network.cpp \
     src/common/winamp.cpp \
     src/common/mpris_player.cpp \
     src/common/xml.cpp \
@@ -59,9 +57,6 @@ SOURCES += src/common/commands.cpp \
     src/gui/user_avatar_gui.cpp \
     src/gui/user_profile_gui.cpp \
     src/gui/webbrowser_gui.cpp \
-    src/gui/webcam_gui.cpp \
-    src/gui/webcam_mini_gui.cpp \
-    src/gui/webcam_standard_gui.cpp \
     src/irc/irc_auth.cpp \
     src/irc/irc_kernel.cpp \
     src/models/autoaway.cpp \
@@ -118,7 +113,6 @@ SOURCES += src/common/commands.cpp \
     src/widgets/simple_stats_widget.cpp \
     src/widgets/tool_widget.cpp \
     src/widgets/topic_widget.cpp \
-    src/widgets/webcam_delegate.cpp
 HEADERS += src/common/commands.h \
     src/common/config.h \
     src/common/convert.h \
@@ -127,8 +121,6 @@ HEADERS += src/common/commands.h \
     src/common/log.h \
     src/common/replace.h \
     src/common/simple_crypt.h \
-    src/common/webcam_engine.h \
-    src/common/webcam_network.h \
     src/common/winamp.h \
     src/common/mpris_player.h \
     src/common/xml.h \
@@ -171,9 +163,6 @@ HEADERS += src/common/commands.h \
     src/gui/user_avatar_gui.h \
     src/gui/user_profile_gui.h \
     src/gui/webbrowser_gui.h \
-    src/gui/webcam_gui.h \
-    src/gui/webcam_mini_gui.h \
-    src/gui/webcam_standard_gui.h \
     src/irc/irc_auth.h \
     src/irc/irc_kernel.h \
     src/models/autoaway.h \
@@ -229,8 +218,7 @@ HEADERS += src/common/commands.h \
     src/widgets/simple_rank_widget.h \
     src/widgets/simple_stats_widget.h \
     src/widgets/tool_widget.h \
-    src/widgets/topic_widget.h \
-    src/widgets/webcam_delegate.h
+    src/widgets/topic_widget.h
 FORMS += ui/about.ui \
     ui/avatar_edit.ui \
     ui/avatar_list_widget.ui \
@@ -263,6 +251,4 @@ FORMS += ui/about.ui \
     ui/themes.ui \
     ui/update.ui \
     ui/user_avatar.ui \
-    ui/webbrowser.ui \
-    ui/webcam_mini.ui \
-    ui/webcam_standard.ui
+    ui/webbrowser.ui

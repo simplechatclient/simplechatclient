@@ -259,38 +259,6 @@ set (scc_HDRS
 	models/my_avatar.h
 )
 
-# kamerzysta
-if (WIN32)
-	LIST (APPEND scc_SRCS
-		common/kamerzysta.cpp
-	)
-	LIST (APPEND scc_MOC_HDRS
-		common/kamerzysta.h
-	)
-endif (WIN32)
-
-# internal camera
-LIST (APPEND scc_UIS
-	../ui/webcam_standard.ui
-	../ui/webcam_mini.ui
-)
-LIST (APPEND scc_SRCS
-	common/webcam_engine.cpp
-	common/webcam_network.cpp
-	gui/webcam_gui.cpp
-	gui/webcam_standard_gui.cpp
-	gui/webcam_mini_gui.cpp
-	widgets/webcam_delegate.cpp
-)
-LIST (APPEND scc_MOC_HDRS
-	common/webcam_engine.h
-	common/webcam_network.h
-	gui/webcam_gui.h
-	gui/webcam_standard_gui.h
-	gui/webcam_mini_gui.h
-	widgets/webcam_delegate.h
-)
-
 # winamp
 if (WIN32)
 	LIST (APPEND scc_SRCS

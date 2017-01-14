@@ -31,14 +31,7 @@
 #include "models/punish_reason.h"
 #include "models/settings.h"
 #include "gui/user_profile_gui.h"
-#include "gui/webcam_gui.h"
 #include "nicklist_widget.h"
-
-#ifdef Q_OS_WIN
-    #include <QDir>
-    #include <QSettings>
-    #include "common/kamerzysta.h"
-#endif
 
 NickListWidget::NickListWidget(const QString &_strChannel) : strChannel(_strChannel), strSelectedNick(QString::null)
 {
@@ -140,16 +133,14 @@ void NickListWidget::cam()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    new WebcamGui(strSelectedNick, true);
+    // TODO cams
 }
 
 void NickListWidget::kamerzysta()
 {
     if (strSelectedNick.isEmpty()) return;
 
-#ifdef Q_OS_WIN
-    (new Kamerzysta(Core::instance()->kamerzystaSocket))->show(strSelectedNick);
-#endif
+    // TODO cams
 }
 
 void NickListWidget::friendsAdd()
@@ -336,13 +327,6 @@ void NickListWidget::contextMenuEvent(QContextMenuEvent *e)
     QString strNickModes = Nick::instance()->getModes(strSelectedNick, strChannel);
     QList<QString> lPunishReasons = PunishReason::instance()->get();
 
-    #ifdef Q_OS_WIN
-        QSettings winSettings(QSettings::UserScope, "Onet.pl", "InstalledApps");
-        winSettings.beginGroup("Kamerzysta");
-        QDir dir;
-        bool bKamerzystaExists = dir.exists(winSettings.value("DataPath").toString());
-    #endif
-
     QMenu *mInvite = new QMenu(tr("Invite"));
     mInvite->setIcon(QIcon(":/images/breeze/legalmoves.svg"));
     QList<CaseIgnoreString> lChannelsCleared = Channel::instance()->getListClearedSorted();
@@ -446,24 +430,6 @@ void NickListWidget::contextMenuEvent(QContextMenuEvent *e)
 //    if (strSelectedNick.at(0) != '~')
 //    {
 //        menu->addAction(QIcon(":/images/breeze/view-pim-contacts.svg"), tr("Profile"), this, SLOT(profile()));
-//        if ((strNickModes.contains(FLAG_CAM_PUB)) || (strNickModes.contains(FLAG_CAM_PRIV)))
-//        {
-//            if (Settings::instance()->get("webcam") == "system")
-//            {
-//#ifdef Q_OS_WIN
-//                if (bKamerzystaExists)
-//                    menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam"), this, SLOT(kamerzysta()));
-//                else
-//                    menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
-//#else
-//                menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
-//#endif
-//            }
-//            else // internal
-//            {
-//                menu->addAction(QIcon(":/images/breeze/camera-web.svg"), tr("Webcam internal"), this, SLOT(cam()));
-//            }
-//        }
 //    }
     menu->addMenu(mInvite);
 //    if (strSelfModes.contains(FLAG_REGISTERED))

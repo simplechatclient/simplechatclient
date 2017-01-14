@@ -50,8 +50,6 @@ Core::~Core()
     delete window;
     window = 0;
 
-    kamerzystaSocket->deleteLater();
-
     // close network
     Settings::instance()->setBool("reconnect", false);
     network->disconnect();
@@ -70,11 +68,6 @@ void Core::init()
 
     // language
     refreshLanguage();
-
-    // kamerzysta
-    kamerzystaSocket = new QTcpSocket();
-    kamerzystaSocket->setSocketOption(QAbstractSocket::LowDelayOption, 1);
-    kamerzystaSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 0);
 
     // network
     QString strServer = "irc.pirc.pl";

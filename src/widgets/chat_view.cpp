@@ -43,14 +43,12 @@
 #include "models/settings.h"
 #include "gui/user_profile_gui.h"
 #include "gui/webbrowser_gui.h"
-#include "gui/webcam_gui.h"
 #include "chat_view.h"
 
 #ifdef Q_OS_WIN
     #include <QApplication>
     #include <QDir>
     #include <QSettings>
-    #include "common/kamerzysta.h"
 #endif
 
 ChatView::ChatView(const QString &_strChatViewChannel) : strChatViewChannel(_strChatViewChannel), bScrollToBottom(true)
@@ -248,14 +246,12 @@ void ChatView::profile()
 
 void ChatView::cam()
 {
-    new WebcamGui(strNick, true);
+    // TODO cams
 }
 
 void ChatView::kamerzysta()
 {
-#ifdef Q_OS_WIN
-    (new Kamerzysta(Core::instance()->kamerzystaSocket))->show(strNick);
-#endif
+    // TODO cams
 }
 
 void ChatView::friendsAdd()
