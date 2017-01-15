@@ -1,7 +1,7 @@
 /*
  * Simple Chat Client
  *
- *   Copyright (C) 2009-2016 Piotr Łuczko <piotr.luczko@gmail.com>
+ *   Copyright (C) 2009-2017 Piotr Łuczko <piotr.luczko@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ void AboutGui::setDefaultValues()
     strTitle += "<p>"+strVersion+"</p>";
 
     QString strAbout = "<p>"+tr("Simple chat client")+"</p>";
-    strAbout += "<p>&copy; 2016 by the Simple Chat Client Project</p>";
+    strAbout += "<p>&copy; 2017 by the Simple Chat Client Project</p>";
     strAbout += "<p><a style=\"text-decoration:none;\" href=\"http://simplechatclien.sf.net/\">"+tr("Home page")+"</a></p>";
     strAbout += "<p>"+tr("License")+" <a style=\"text-decoration:none;\" href=\"http://www.fsf.org/licensing/licenses/gpl.html\">GPL v3</a></p>";
 
