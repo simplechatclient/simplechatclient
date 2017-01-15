@@ -32,11 +32,13 @@ Example Environment variables for development:
 
 PATH
 
-	c:\Qt\5.5\mingw492_32\bin;c:\Qt\Tools\mingw492_32\bin;C:\Program Files (x86)\CMake\bin;
+	c:\Qt\Qt5.5.1\5.5\mingw492_32\bin
+	c:\Qt\Qt5.5.1\Tools\mingw492_32\bin
+	C:\Program Files\CMake\bin
 
 QT_DIR
 
-	c:\Qt\5.5\mingw492_32\bin\
+	c:\Qt\Qt5.5.1\5.5\mingw492_32\bin\
 
 ### Linux Debian/Ubuntu packages
 
@@ -44,7 +46,7 @@ QT_DIR
 
 Install qca plugin from https://projects.kde.org/projects/kdesupport/qca/repository
 
-We need qca build with Qt5 support. Current version from packages is with Qt4 support.
+We need qca build with Qt5 support
 
 	$ git clone git://anongit.kde.org/qca
 	$ cd qca
