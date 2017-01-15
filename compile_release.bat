@@ -19,7 +19,7 @@ set QTDIR=%QT_DIR%
 
 if not exist %CMAKE_DIR%\bin\cmake.exe (
 if not exist %CMAKE_32_DIR%\bin\cmake.exe (
-echo Download CMake from http://www.cmake.org/files/v3.2/cmake-3.2.3-win32-x86.exe
+echo Download CMake from https://cmake.org/files/v3.7/cmake-3.7.2-win64-x64.msi
 pause
 exit
 )

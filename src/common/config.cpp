@@ -242,8 +242,6 @@ QHash<QString,QString> Config::getDefaultValues()
 
         lDefaultValues.insert("tray_message", "true");
 
-        lDefaultValues.insert("webcam", "system"); // or "internal"
-
         lDefaultValues.insert("updates", "true");
 
         lDefaultValues.insert("auto_connect", "false");

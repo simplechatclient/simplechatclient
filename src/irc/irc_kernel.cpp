@@ -1025,10 +1025,10 @@ void IrcKernel::raw_001()
     Core::instance()->network->send("CAP END");
 
     // friends
-    Core::instance()->network->send("WATCH");
+    //Core::instance()->network->send("WATCH +");
 
     // ignore
-    Core::instance()->network->send("SILENCE");
+    //Core::instance()->network->send("SILENCE +");
 
     // busy
     Settings::instance()->setBool("busy", false);
