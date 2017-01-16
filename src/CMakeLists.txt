@@ -305,7 +305,7 @@ find_package(Qt5Network)
 find_package(Qt5WebKit)
 find_package(Qt5WebKitWidgets)
 find_package(Qt5Xml)
- 
+
 # include qt qtnetwork
 include_directories (
 	${CMAKE_BINARY_DIR}

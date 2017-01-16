@@ -53,12 +53,16 @@ set (SCC_BIN_DIR ${CMAKE_INSTALL_PREFIX}/bin)
 set (SCC_SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share)
 set (SCC_DATA_DIR ${CMAKE_INSTALL_PREFIX}/share/scc)
 
-# sub dir
+# configure
+configure_file (${CMAKE_SOURCE_DIR}/scc-config.h.cmake ${CMAKE_BINARY_DIR}/scc-config.h)
+
+# src and translations
 add_subdirectory (src)
 add_subdirectory (translations)
 
-# configure
-configure_file (${CMAKE_SOURCE_DIR}/scc-config.h.cmake ${CMAKE_BINARY_DIR}/scc-config.h)
+# tests
+include_directories (tests)
+enable_testing(true)
 
 if (UNIX)
 	message (STATUS " * install prefix: ${CMAKE_INSTALL_PREFIX}")
