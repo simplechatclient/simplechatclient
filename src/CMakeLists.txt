@@ -123,7 +123,6 @@ set (scc_SRCS
 	models/user_profile.cpp
 	models/utils.cpp
 
-	onet/onet_auth.cpp
 	onet/onet_avatar.cpp
 	onet/onet_kernel.cpp
 	onet/onet_utils.cpp
@@ -230,7 +229,6 @@ set (scc_MOC_HDRS
 	models/user_profile.h
 	models/utils.h
 
-	onet/onet_auth.h
 	onet/onet_avatar.h
 	onet/onet_kernel.h
 

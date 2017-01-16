@@ -53,13 +53,8 @@
 #include "models/offline.h"
 #include "gui/offline_list_gui.h"
 #include "gui/options_gui.h"
-#ifdef IRC
-    #include "irc/irc_auth.h"
-    #include "irc/irc_kernel.h"
-#else
-    #include "onet/onet_auth.h"
-    #include "onet/onet_kernel.h"
-#endif
+#include "irc/irc_auth.h"
+#include "irc/irc_kernel.h"
 #include "models/settings.h"
 #include "tab/tab_container.h"
 #include "tab/tab_manager.h"
@@ -85,13 +80,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     pTabM = new TabManager(this);
     pTabC = new TabContainer(pTabM);
 
-#ifdef IRC
     pIrcKernel = new IrcKernel(pTabC);
     pIrcAuth = new IrcAuth();
-#else
-    pOnetKernel = new OnetKernel(pTabC);
-    pOnetAuth = new OnetAuth();
-#endif
 
     // current tab index
     iPreviousTabIndex = 0;
@@ -112,13 +102,8 @@ MainWindow::~MainWindow()
 
     Autoaway::instance()->stop();
 
-#ifdef IRC
     delete pIrcAuth;
     delete pIrcKernel;
-#else
-    delete pOnetAuth;
-    delete pOnetKernel;
-#endif
 
     QObject::disconnect(pTabM, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
     delete pTabC;
@@ -343,28 +328,17 @@ void MainWindow::createSignals()
 
     // signals from network
     connect(Core::instance()->network, SIGNAL(socketStateChanged()), this, SLOT(updateButtons()));
-#ifdef IRC
     connect(Core::instance()->network, SIGNAL(kernel(const QString&)), pIrcKernel, SLOT(kernel(const QString&)));
     connect(Core::instance()->network, SIGNAL(authorize(QString,QString)), pIrcAuth, SLOT(authorize(QString,QString)));
-#else
-    connect(Core::instance()->network, SIGNAL(kernel(const QString&)), pOnetKernel, SLOT(kernel(const QString&)));
-    connect(Core::instance()->network, SIGNAL(authorize(QString,QString)), pOnetAuth, SLOT(authorize(QString,QString)));
-#endif
     connect(Core::instance()->network, SIGNAL(updateNick(const QString&)), this, SLOT(updateNick(const QString&)));
 
     // signals from auth
-#ifdef IRC
     connect(pIrcAuth, SIGNAL(updateNick(const QString&)), this, SLOT(updateNick(const QString&)));
     connect(pIrcAuth, SIGNAL(authStateChanged()), this, SLOT(updateButtons()));
-#else
-    connect(pOnetAuth, SIGNAL(updateNick(const QString&)), this, SLOT(updateNick(const QString&)));
-    connect(pOnetAuth, SIGNAL(authStateChanged()), this, SLOT(updateButtons()));
-#endif
 }
 
 void MainWindow::disableActions()
 {
-#ifdef IRC
     findNickAction->setVisible(false);
 
     myStatsAction->setVisible(false);
@@ -378,7 +352,6 @@ void MainWindow::disableActions()
     Offline::instance()->offmsgAllAction->setVisible(false);
     Offline::instance()->offmsgFriendAction->setVisible(false);
     Offline::instance()->offmsgNoneAction->setVisible(false);
-#endif
 }
 
 void MainWindow::init()
@@ -521,37 +494,35 @@ void MainWindow::updateButtons()
             connectAction->setIcon(QIcon(":/images/breeze/network-disconnect.svg"));
         }
     }
-#ifndef IRC
-    if (bUpdateMenu)
-    {
-        QString strNick = Settings::instance()->get("nick");
 
-        bool bRegistered = (strNick.at(0) == '~' ? false : true);
+    // if (bUpdateMenu)
+    // {
+    //     QString strNick = Settings::instance()->get("nick");
 
-        if (bRegistered)
-        {
-            channelHomesAction->setEnabled(true);
-            channelFavouritesAction->setEnabled(true);
-            friendsAction->setEnabled(true);
-            ignoreAction->setEnabled(true);
-            myStatsAction->setEnabled(true);
-            myProfileAction->setEnabled(true);
-            myAvatarAction->setEnabled(true);
-        }
-        else
-        {
-            channelHomesAction->setEnabled(false);
-            channelFavouritesAction->setEnabled(false);
-            friendsAction->setEnabled(false);
-            ignoreAction->setEnabled(false);
-            myStatsAction->setEnabled(false);
-            myProfileAction->setEnabled(false);
-            myAvatarAction->setEnabled(false);
-        }
-    }
-#else
+    //     bool bRegistered = (strNick.at(0) == '~' ? false : true);
+
+    //     if (bRegistered)
+    //     {
+    //         channelHomesAction->setEnabled(true);
+    //         channelFavouritesAction->setEnabled(true);
+    //         friendsAction->setEnabled(true);
+    //         ignoreAction->setEnabled(true);
+    //         myStatsAction->setEnabled(true);
+    //         myProfileAction->setEnabled(true);
+    //         myAvatarAction->setEnabled(true);
+    //     }
+    //     else
+    //     {
+    //         channelHomesAction->setEnabled(false);
+    //         channelFavouritesAction->setEnabled(false);
+    //         friendsAction->setEnabled(false);
+    //         ignoreAction->setEnabled(false);
+    //         myStatsAction->setEnabled(false);
+    //         myProfileAction->setEnabled(false);
+    //         myAvatarAction->setEnabled(false);
+    //     }
+    // }
     Q_UNUSED(bUpdateMenu);
-#endif
 }
 
 void MainWindow::openOptions()

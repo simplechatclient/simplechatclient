@@ -209,7 +209,7 @@ QString HtmlMessagesRenderer::renderer(QString strData, MessageCategory eMessage
     Convert::convertText(strData, true, true);
 
     // fix utf8
-    strData = Convert::fixUtf8Chars(strData);
+    //strData = Convert::fixUtf8Chars(strData);
 
     // font class
     QString strFontClass;

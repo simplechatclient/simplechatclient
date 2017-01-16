@@ -2648,17 +2648,6 @@
     </message>
 </context>
 <context>
-    <name>OnetAuth</name>
-    <message>
-        <source>Error: Authorization Failed.</source>
-        <translation>Błąd: Błąd autoryzacji.</translation>
-    </message>
-    <message>
-        <source>Error: Authentication error [%1]</source>
-        <translation>Błąd: Błąd autoryzacji [%1]</translation>
-    </message>
-</context>
-<context>
     <name>IrcKernel</name>
     <message>
         <source>* %1 [%2@%3] has joined %4</source>

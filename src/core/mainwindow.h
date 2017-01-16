@@ -24,13 +24,8 @@
 class QToolButton;
 class QMenuBar;
 class QToolBar;
-#ifdef IRC
-    class IrcAuth;
-    class IrcKernel;
-#else
-    class OnetAuth;
-    class OnetKernel;
-#endif
+class IrcAuth;
+class IrcKernel;
 class TabContainer;
 class TabManager;
 class ToolWidget;
@@ -108,13 +103,9 @@ private:
 
     TabManager *pTabM;
     TabContainer *pTabC;
-#ifdef IRC
+
     IrcKernel *pIrcKernel;
     IrcAuth *pIrcAuth;
-#else
-    OnetKernel *pOnetKernel;
-    OnetAuth *pOnetAuth;
-#endif
 
     int iPreviousTabIndex;
 
