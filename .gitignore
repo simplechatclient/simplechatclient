@@ -24,3 +24,4 @@ scc.vcxproj.filters
 #tests
 TESTS_*
 scc-tests*
+CTestTestfile.cmake
