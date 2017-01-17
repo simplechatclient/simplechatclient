@@ -1906,10 +1906,8 @@ void IrcKernel::raw_353()
         {
             QString strNick = strDataList.at(i);
             if (i == 5) strNick.remove(0,1); // remove :
-            strNick = strNick.left(strNick.indexOf("|"));
 
             QString strSuffix = QString::null;
-
             QString strCleanNick = strNick;
 
             QString strPrefix;
@@ -1925,22 +1923,22 @@ void IrcKernel::raw_353()
             Nick::instance()->add(strCleanNick, strChannel, strModes);
 
             // nick avatar
-            if (strCleanNick.at(0) != '~' && !strSuffix.contains(FLAG_BOT)
-                    && Themes::instance()->isCurrentWithAvatar()
-                    && Nick::instance()->getAvatar(strCleanNick).isEmpty())
-            {
-                QString strMe = Settings::instance()->get("nick");
-                if (strCleanNick == strMe)
-                {
-                    QString strAvatar = MyProfile::instance()->get("avatar");
-                    if (!strAvatar.isEmpty())
-                        Avatar::instance()->get(strCleanNick, "nick", strAvatar);
-                }
-                else
-                {
-                    // Core::instance()->network->send(QString("NS INFO %1 s").arg(strCleanNick));
-                }
-            }
+            // if (strCleanNick.at(0) != '~' && !strSuffix.contains(FLAG_BOT)
+            //         && Themes::instance()->isCurrentWithAvatar()
+            //         && Nick::instance()->getAvatar(strCleanNick).isEmpty())
+            // {
+            //     QString strMe = Settings::instance()->get("nick");
+            //     if (strCleanNick == strMe)
+            //     {
+            //         QString strAvatar = MyProfile::instance()->get("avatar");
+            //         if (!strAvatar.isEmpty())
+            //             Avatar::instance()->get(strCleanNick, "nick", strAvatar);
+            //     }
+            //     else
+            //     {
+            //         Core::instance()->network->send(QString("NS INFO %1 s").arg(strCleanNick));
+            //     }
+            // }
         }
     }
 }
