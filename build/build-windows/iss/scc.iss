@@ -64,7 +64,7 @@ Type: dirifempty; Name: "{userdocs}\scc"
 function InitializeSetup(): Boolean;
   var ErrorCode: Integer;
 begin
-  ShellExec('open','taskkill.exe','/f /im {#MyAppExeName}','',SW_HIDE,ewNoWait,ErrorCode);
+  ShellExec('open','taskkill.exe','/IM {#MyAppExeName} /T /F','',SW_HIDE,ewNoWait,ErrorCode);
   ShellExec('open','tskill.exe',' {#MyAppName}','',SW_HIDE,ewNoWait,ErrorCode);
   result := True;
 end;
@@ -72,7 +72,7 @@ end;
 function InitializeUninstall(): Boolean;
   var ErrorCode: Integer;
 begin
-  ShellExec('open','taskkill.exe','/f /im {#MyAppExeName}','',SW_HIDE,ewNoWait,ErrorCode);
+  ShellExec('open','taskkill.exe','/IM {#MyAppExeName} /T /F','',SW_HIDE,ewNoWait,ErrorCode);
   ShellExec('open','tskill.exe',' {#MyAppName}','',SW_HIDE,ewNoWait,ErrorCode);
   result := True;
 end;

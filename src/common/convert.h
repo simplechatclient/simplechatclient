@@ -22,7 +22,6 @@
 
 /**
  * Convert text
- * %Fbi%%C008100%%Ihehe%
  */
 
 #include <QString>
@@ -31,7 +30,6 @@ namespace Convert
 {
     void fixMeAction(QString &strData);
     void fixHtmlChars(QString &strData);
-    // QString fixUtf8Chars(const QString &string);
     void createText(QString &strData);
     void simpleReverseConvert(QString &strData);
     void simpleConvert(QString &strData);
