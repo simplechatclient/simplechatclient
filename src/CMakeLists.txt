@@ -124,8 +124,6 @@ set (scc_SRCS
 	models/utils.cpp
 
 	onet/onet_avatar.cpp
-	onet/onet_kernel.cpp
-	onet/onet_utils.cpp
 
 	irc/irc_auth.cpp
 	irc/irc_kernel.cpp
@@ -230,7 +228,6 @@ set (scc_MOC_HDRS
 	models/utils.h
 
 	onet/onet_avatar.h
-	onet/onet_kernel.h
 
 	tab/tab_container.h
 	tab/tab_manager.h

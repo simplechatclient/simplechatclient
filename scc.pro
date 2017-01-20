@@ -96,8 +96,6 @@ SOURCES += src/common/commands.cpp \
     src/models/user_profile.cpp \
     src/models/utils.cpp \
     src/onet/onet_avatar.cpp \
-    src/onet/onet_kernel.cpp \
-    src/onet/onet_utils.cpp \
     src/tab/tab_container.cpp \
     src/tab/tab_manager.cpp \
     src/tab/tab_widget.cpp \
@@ -201,8 +199,6 @@ HEADERS += src/common/commands.h \
     src/models/user_profile.h \
     src/models/utils.h \
     src/onet/onet_avatar.h \
-    src/onet/onet_kernel.h \
-    src/onet/onet_utils.h \
     src/tab/tab_container.h \
     src/tab/tab_manager.h \
     src/tab/tab_widget.h \
