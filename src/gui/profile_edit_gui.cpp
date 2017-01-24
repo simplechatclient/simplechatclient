@@ -58,8 +58,9 @@ void ProfileEditGui::setDefaultValues()
     // decrypt pass
     if (!strPassword.isEmpty())
     {
-        SimpleCrypt *pSimpleCrypt = new SimpleCrypt();
-        strPassword = pSimpleCrypt->decrypt(strNick, strPassword);
+        QString strKey = Settings::instance()->get("unique_id");
+        SimpleCrypt *pSimpleCrypt = new SimpleCrypt(strKey);
+        strPassword = pSimpleCrypt->decrypt(strPassword);
         delete pSimpleCrypt;
     }
 
@@ -85,8 +86,9 @@ void ProfileEditGui::buttonOk()
     }
 
     // encrypt pass
-    SimpleCrypt *pSimpleCrypt = new SimpleCrypt();
-    strPassword = pSimpleCrypt->encrypt(strNick, strPassword);
+    QString strKey = Settings::instance()->get("unique_id");
+    SimpleCrypt *pSimpleCrypt = new SimpleCrypt(strKey);
+    strPassword = pSimpleCrypt->encrypt(strPassword);
     delete pSimpleCrypt;
 
     Config *pConfig = new Config(ProfileConfig, strNick);

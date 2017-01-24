@@ -1013,8 +1013,9 @@ void IrcKernel::raw_001()
     // got password
     if (!strPassword.isEmpty()) {
         // decrypt pass
-        SimpleCrypt *pSimpleCrypt = new SimpleCrypt();
-        strPassword = pSimpleCrypt->decrypt(strMe, strPassword);
+        QString strKey = Settings::instance()->get("unique_id");
+        SimpleCrypt *pSimpleCrypt = new SimpleCrypt(strKey);
+        strPassword = pSimpleCrypt->decrypt(strPassword);
         delete pSimpleCrypt;
 
         Core::instance()->network->send(QString("PRIVMSG NickServ :IDENTIFY %1").arg(strPassword));

@@ -29,23 +29,22 @@ class SimpleCrypt : public QObject
 {
     Q_OBJECT
 public:
-    SimpleCrypt();
+    SimpleCrypt(const QString &iv);
     /**
      * Encrypt
-     * @param QString key
      * @param QString data
      * @return QString encrypted data
      */
-    QString encrypt(QString strKey, const QString &strData);
+    QString encrypt(const QString &strData);
     /**
      * Decrypt
-     * @param QString key
      * @param QString data
      * @return QString decrypted data
      */
-    QString decrypt(QString strKey, const QString &strData);
+    QString decrypt(const QString &strData);
 
 private:
+    QString strKey;
     QString strIv;
 };
 

@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include "core/core.h"
 #include "common/config.h"
+#include "models/settings.h"
 #include "common/simple_crypt.h"
 #include "register_nick_gui.h"
 #include "profile_manager_gui.h"
@@ -164,8 +165,9 @@ void ProfileAddGui::buttonOk()
     // encrypt pass
     if (!strPass.isEmpty())
     {
-        SimpleCrypt *pSimpleCrypt = new SimpleCrypt();
-        strPassword = pSimpleCrypt->encrypt(strNick, strPassword);
+        QString strKey = Settings::instance()->get("unique_id");
+        SimpleCrypt *pSimpleCrypt = new SimpleCrypt(strKey);
+        strPassword = pSimpleCrypt->encrypt(strPassword);
         delete pSimpleCrypt;
     }
 

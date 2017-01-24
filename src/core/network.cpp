@@ -54,8 +54,10 @@ Network::Network(const QString &_strServer, int _iPort) : strServer(_strServer),
     QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(recv()));
     QObject::connect(socket, SIGNAL(connected()), this, SLOT(connected()));
     QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
     QObject::connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(stateChanged(QAbstractSocket::SocketState)));
+
+    // QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+    QObject::connect(socket, static_cast<void(QAbstractSocket::*)(QAbstractSocket::SocketError)>(&QAbstractSocket::error), this, &Network::error);
 
     QObject::connect(timerPong, SIGNAL(timeout()), this, SLOT(timeoutPong()));
     QObject::connect(timerPing, SIGNAL(timeout()), this, SLOT(timeoutPing()));
@@ -145,8 +147,9 @@ void Network::authorize()
     // decrypt pass
     if (!strPass.isEmpty())
     {
-        SimpleCrypt *pSimpleCrypt = new SimpleCrypt();
-        strPass = pSimpleCrypt->decrypt(strNick, strPass);
+        QString strKey = Settings::instance()->get("unique_id");
+        SimpleCrypt *pSimpleCrypt = new SimpleCrypt(strKey);
+        strPass = pSimpleCrypt->decrypt(strPass);
         delete pSimpleCrypt;
     }
 

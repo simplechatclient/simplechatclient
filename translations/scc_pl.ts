@@ -3633,8 +3633,8 @@
         <translation>Błąd: crypt: Nie można odszyfrować danych - pusty parametr</translation>
     </message>
     <message>
-        <source>Warning: AES and Blowfish is not supported!</source>
-        <translation>Ostrzeżenie: AES oraz Blowfish nie są obsługiwane!</translation>
+        <source>Warning: AES is not supported!</source>
+        <translation>Ostrzeżenie: AES nie jest obsługiwane!</translation>
     </message>
 </context>
 <context>
