@@ -67,7 +67,7 @@ QString SimpleCrypt::encrypt(const QString &strData)
 
     if (!QCA::isSupported("aes128-cbc-pkcs7"))
     {
-        qWarning() << tr("Warning: AES and Blowfish is not supported!");
+        qWarning() << tr("Warning: AES is not supported!");
         return strData;
     }
 
@@ -86,7 +86,7 @@ QString SimpleCrypt::encrypt(const QString &strData)
     if (!cipher.ok())
     {
         qWarning() << "Encryption failed!";
-        return "";
+        return QString::null;
     }
 
     return QCA::arrayToHex(encryptedData.toByteArray());
@@ -121,7 +121,7 @@ QString SimpleCrypt::decrypt(const QString &strData)
     if (!cipher.ok())
     {
         qWarning() << "Decryption failed!";
-        return "";
+        return QString::null;
     }
 
     return decryptedData.data();
