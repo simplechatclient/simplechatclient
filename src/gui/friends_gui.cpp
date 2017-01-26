@@ -200,7 +200,7 @@ void FriendsGui::whois()
     }
 
     if (!strSelected.isEmpty())
-        Core::instance()->network->send(QString("WHOIS %1 :%1").arg(strSelected));
+        Core::instance()->network->send(QString("WHOIS %1").arg(strSelected));
 }
 
 void FriendsGui::invite()

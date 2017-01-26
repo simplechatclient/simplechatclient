@@ -183,5 +183,5 @@ void InviteListGui::whois()
     QListWidgetItem *item = ui.listWidget->selectedItems().at(0);
     QString strNick = item->data(InviteNickRole).toString();
 
-    Core::instance()->network->send(QString("WHOIS %1 %1").arg(strNick));
+    Core::instance()->network->send(QString("WHOIS %1").arg(strNick));
 }

@@ -236,7 +236,7 @@ void ChatView::priv()
 
 void ChatView::whois()
 {
-    Core::instance()->network->send(QString("WHOIS %1 :%1").arg(strNick));
+    Core::instance()->network->send(QString("WHOIS %1").arg(strNick));
 }
 
 void ChatView::profile()

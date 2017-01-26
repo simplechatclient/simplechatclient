@@ -97,5 +97,5 @@ void InviteGui::buttonIgnore()
 
 void InviteGui::whois()
 {
-    Core::instance()->network->send(QString("WHOIS %1 %1").arg(strNick));
+    Core::instance()->network->send(QString("WHOIS %1").arg(strNick));
 }

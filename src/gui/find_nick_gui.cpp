@@ -172,7 +172,7 @@ void FindNickGui::whois()
 
     QString strNick = ui.listWidget_nicks->selectedItems().at(0)->text();
 
-    Core::instance()->network->send(QString("WHOIS %1 :%1").arg(strNick));
+    Core::instance()->network->send(QString("WHOIS %1").arg(strNick));
 }
 
 void FindNickGui::invite()

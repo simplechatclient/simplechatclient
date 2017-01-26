@@ -119,7 +119,7 @@ void NickListWidget::whois()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    Core::instance()->network->send(QString("WHOIS %1 :%1").arg(strSelectedNick));
+    Core::instance()->network->send(QString("WHOIS %1").arg(strSelectedNick));
 }
 
 void NickListWidget::profile()

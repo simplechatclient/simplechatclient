@@ -701,5 +701,5 @@ QString Commands::cmdWhereis()
 
     QString strNick = strDataList.at(1);
 
-    return QString("WHOIS %1 :%1").arg(strNick);
+    return QString("WHOIS %1").arg(strNick);
 }
