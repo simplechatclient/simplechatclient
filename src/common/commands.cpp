@@ -44,6 +44,8 @@ Commands::Commands(const QString &_strChan, const QString &_strData) : strChan(_
 
 QString Commands::execute()
 {
+    return strData;
+/*
     if (strDataList.size() == 0)
         return QString::null;
 
@@ -111,6 +113,7 @@ QString Commands::execute()
     }
 
     return strData;
+*/
 }
 
 QList<QString> Commands::getList()
