@@ -82,9 +82,13 @@ void TabContainer::addTab(const QString &strChannel)
                 strDefaultAvatar = Avatar::instance()->getEmptyRegisteredUserAvatar();
         }
     }
-    else
+    else if (strChannel.startsWith('#'))
     {
         strDefaultAvatar = ":/images/channel_avatar.png";
+
+    } else {
+
+        strDefaultAvatar = Avatar::instance()->getEmptyUnregisteredUserAvatar();
     }
 
     // set default avatar
@@ -137,10 +141,15 @@ void TabContainer::partTab(int index)
 
     if (!strChannel.isEmpty())
     {
-        if (Core::instance()->network->isConnected())
-            Core::instance()->network->send(QString("PART %1").arg(strChannel));
-        else
+        if (Core::instance()->network->isConnected()) {
+            if (strChannel.startsWith("#")) {
+                Core::instance()->network->send(QString("PART %1").arg(strChannel));
+            } else {
+                removeTab(strChannel);
+            }
+        } else {
             removeTab(strChannel);
+        }
     }
 }
 

@@ -112,7 +112,7 @@ void NickListWidget::priv()
 {
     if (strSelectedNick.isEmpty()) return;
 
-    Core::instance()->network->send(QString("PRIV %1").arg(strSelectedNick));
+    Core::instance()->mainWindow()->tabAddRequested(strSelectedNick);
 }
 
 void NickListWidget::whois()
@@ -425,7 +425,7 @@ void NickListWidget::contextMenuEvent(QContextMenuEvent *e)
     QMenu *menu = new QMenu(strSelectedNick);
     menu->addAction(QIcon(":/images/breeze/user-identity.svg"), strSelectedNick, this, SLOT(nick()));
     menu->addSeparator();
-//    menu->addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
+    menu->addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
     menu->addAction(QIcon(":/images/breeze/user-properties.svg"), tr("Whois"), this, SLOT(whois()));
 //    if (strSelectedNick.at(0) != '~')
 //    {

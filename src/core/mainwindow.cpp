@@ -896,6 +896,12 @@ void MainWindow::toolButtonFix(QWidget *widget)
 #endif
 }
 
+// add tab
+void MainWindow::tabAddRequested(const QString &nick)
+{
+    pTabC->addTab(nick);
+}
+
 // part tab
 void MainWindow::tabCloseRequested(int index)
 {

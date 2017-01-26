@@ -20,6 +20,7 @@ scc.sdf
 scc.vcxproj.user
 scc.vcxproj
 scc.vcxproj.filters
+.idea/
 
 #tests
 TESTS_*

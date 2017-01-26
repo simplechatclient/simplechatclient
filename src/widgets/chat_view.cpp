@@ -231,7 +231,7 @@ void ChatView::nick()
 
 void ChatView::priv()
 {
-    Core::instance()->network->send(QString("PRIV %1").arg(strNick));
+    Core::instance()->mainWindow()->tabAddRequested(strNick);
 }
 
 void ChatView::whois()
@@ -547,7 +547,7 @@ void ChatView::menuNick(QContextMenuEvent *event)
     QMenu menu;
     menu.addAction(QIcon(":/images/breeze/user-identity.svg"), strNick, this, SLOT(nick()));
     menu.addSeparator();
-    //menu.addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
+    menu.addAction(QIcon(":/images/breeze/list-add-user.svg"), tr("Priv"), this, SLOT(priv()));
     menu.addAction(QIcon(":/images/breeze/user-properties.svg"), tr("Whois"), this, SLOT(whois()));
 //    if (strNick.at(0) != '~')
 //    {

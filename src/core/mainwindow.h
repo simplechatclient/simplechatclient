@@ -61,6 +61,7 @@ public:
     bool inputLineKeyEvent(QKeyEvent *k);
     void insertTextToInputLine(const QString &strText);
     void toolButtonFix(QWidget *widget);
+    void tabAddRequested(const QString &nick);
 
 public slots:
     void updateNick(const QString &strNick);

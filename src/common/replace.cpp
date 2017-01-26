@@ -26,7 +26,7 @@ void Replace::replaceEmots(QString &strData)
 {
     if (!Settings::instance()->getBool("replace_emoticons"))
         return;
-
+/*
     QHash<QString, QString> lEmoticons;
     lEmoticons[":*"] = "//cmok";
     lEmoticons[";)"] = "//oczko";
@@ -90,4 +90,5 @@ void Replace::replaceEmots(QString &strData)
 
         strData.replace(strEmoticon, lEmoticons[strEmoticon]);
     }
+*/
 }

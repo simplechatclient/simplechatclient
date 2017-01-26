@@ -640,6 +640,7 @@ void IrcKernel::raw_privmsg()
     Replace::replaceEmots(strMessage);
 
     QString strNickOrChannel = strDataList.at(2);
+    QString strMe = Settings::instance()->get("nick");
 
     //channel
     if (strNickOrChannel.contains('#'))
@@ -651,17 +652,15 @@ void IrcKernel::raw_privmsg()
         QString strChannel = strFullChannel.right(strFullChannel.length()-strFullChannel.indexOf('#'));
         Message::instance()->showMessage(strChannel, strMessage, MessageDefault, strNick);
     }
-    // priv
-    else if (strNickOrChannel.contains('^'))
-    {
-        QString strChannel = strNickOrChannel;
-        Message::instance()->showMessage(strChannel, strMessage, MessageDefault, strNick);
-    }
     // nick
-    else
+    else if (strNickOrChannel == strMe)
     {
-        QString strDisplay = QString("-%1- %2").arg(strNick, strMessage);
-        Message::instance()->showMessageActive(strDisplay, MessageNotice);
+        QString strChannel = strNick;
+
+        // add tab
+        pTabC->addTab(strChannel);
+
+        Message::instance()->showMessage(strChannel, strMessage, MessageDefault, strNick);
     }
 }
 
