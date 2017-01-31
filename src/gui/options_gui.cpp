@@ -354,7 +354,7 @@ void OptionsGui::setDefaultValues()
 
     bool bShowBackgroundImage = Settings::instance()->getBool("show_background_image");
 
-    bool bFontFormating = Settings::instance()->getBool("font_formating");
+    bool bFontFormating = Settings::instance()->getBool("font_formatting");
     bool bShowJoinPart = Settings::instance()->getBool("show_join_part");
     bool bShowJoinPartBigChannel = Settings::instance()->getBool("show_join_part_big_channel");
     bool bEmoticons = Settings::instance()->getBool("emoticons");
@@ -1110,10 +1110,10 @@ void OptionsGui::setShowBackgroundImage(bool bValue)
 
 void OptionsGui::setFontFormating(bool bValue)
 {
-    Settings::instance()->setBool("font_formating", bValue);
+    Settings::instance()->setBool("font_formatting", bValue);
 
     Config *pConfig = new Config();
-    pConfig->set("font_formating", bValue ? "true" : "false");
+    pConfig->set("font_formatting", bValue ? "true" : "false");
     delete pConfig;
 }
 

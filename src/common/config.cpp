@@ -227,7 +227,7 @@ QHash<QString,QString> Config::getDefaultValues()
         lDefaultValues.insert("background_image", strBackgroundImage);
         lDefaultValues.insert("show_background_image", "false");
 
-        lDefaultValues.insert("font_formating", "true");
+        lDefaultValues.insert("font_formatting", "true");
         lDefaultValues.insert("show_join_part", "true");
         lDefaultValues.insert("show_join_part_200", "false");
         lDefaultValues.insert("emoticons", "true");
