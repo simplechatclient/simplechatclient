@@ -474,8 +474,8 @@ void convertMircColorToHtml(QString &strData)
             while (iteratorBackground.hasNext()) {
                 iteratorBackground.next();
 
-                QString backgroundKey = iteratorForeground.key();
-                QColor backgroundColor = iteratorForeground.value();
+                QString backgroundKey = iteratorBackground.key();
+                QColor backgroundColor = iteratorBackground.value();
 
                 QRegExp rx(QString(QByteArray("\x03")) + foregroundKey + ","+ backgroundKey);
                 int pos = 0;
@@ -582,23 +582,38 @@ void convertMircFontToHtml(QString &strData)
     //  reverse foreground color and background color
     // lMircFonts[QString(QByteArray("\x16"))] = "";
 
-    QMapIterator<QString, QString> iterator (lMircFonts);
-    while (iterator.hasNext()) {
-        iterator.next();
-
-        QString key = iterator.key();
-        QString style = iterator.value();
-
-        QRegExp rx(key);
-        int pos = 0;
-        while ((pos = rx.indexIn(strData, pos)) != -1) {
-            int first = pos;
-            int second = first + rx.matchedLength();
-
-            strData.replace(first, second - first, QString("<span style=\"%1\">").arg(style));
-            strData += "</span>";
-        }
-    }
+    bool bold = false;
+    bool italic = false;
+    bool strike = false;
+    bool underline = false;
+//
+//    QStringList list = strData.split('');
+//    QStringListIterator iterator(list);
+//    while (iterator.hasNext())
+//    {
+//        QString s = iterator.next();
+//
+//        // trzeba pokolei bo gdy widzi drugiego bolda to go wylacza - dlatego w kodzie bylo togole
+//
+//    }
+//
+//    QMapIterator<QString, QString> iterator (lMircFonts);
+//    while (iterator.hasNext()) {
+//        iterator.next();
+//
+//        QString key = iterator.key();
+//        QString style = iterator.value();
+//
+//        QRegExp rx(key);
+//        int pos = 0;
+//        while ((pos = rx.indexIn(strData, pos)) != -1) {
+//            int first = pos;
+//            int second = first + rx.matchedLength();
+//
+//            strData.replace(first, second - first, QString("<span style=\"%1\">").arg(style));
+//            strData += "</span>";
+//        }
+//    }
 }
 
 void convertOnetEmoticons(QString &strData, bool bInsertWidthHeight, bool qWebViewContext)
