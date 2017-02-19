@@ -1735,6 +1735,12 @@ void IrcKernel::raw_322()
     QString strChannelName = strDataList.at(3);
     int iChannelPeople = QString(strDataList.at(4)).toInt();
 
+    // skip channel name asterix
+    // asterix channel is private hidden channel
+    if (strChannelName == "*") {
+        return;
+    }
+
     OnetChannelList oChannelList;
     oChannelList.name = strChannelName;
     oChannelList.people = iChannelPeople;
