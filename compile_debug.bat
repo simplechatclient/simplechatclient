@@ -2,11 +2,11 @@
 
 set SCC_DIR=%CD%
 set DESTINATION="C:\scc\release"
-set QT_DIR="C:\Qt\5.5\mingw492_32"
-set QT_TOOLS_DIR="C:\Qt\Tools"
-set QCA2_DIR="C:\Qt\Tools\qca"
+set QT_DIR="C:\Qt\Qt5.5.1\5.5\mingw492_32"
+set QT_TOOLS_DIR="C:\Qt\Qt5.5.1\Tools"
+set QCA2_DIR="C:\Qt\Qt5.5.1\Tools\qca"
 set OPENSSL_DIR="C:\OpenSSL-Win32"
-set MINGW_DIR="C:\Qt\Tools\mingw492_32"
+set MINGW_DIR="C:\Qt\Qt5.5.1\Tools\mingw492_32"
 set CMAKE_DIR="C:\Program Files\CMake"
 set CMAKE_32_DIR="C:\Program Files (x86)\CMake"
 set GIT_DIR="C:\Program Files\Git"
@@ -19,14 +19,14 @@ set QTDIR=%QT_DIR%
 
 if not exist %CMAKE_DIR%\bin\cmake.exe (
 if not exist %CMAKE_32_DIR%\bin\cmake.exe (
-echo Download CMake from http://www.cmake.org/files/v3.2/cmake-3.2.3-win32-x86.exe
+echo Download CMake from https://cmake.org/files/v3.7/cmake-3.7.2-win64-x64.msi
 pause
 exit
 )
 )
 
 if not exist %QT_DIR%\bin\qmake.exe (
-echo Download Qt 5.5.0 for MinGW from http://www.qt.io/download/
+echo Download Qt 5.5.1 for MinGW from http://download.qt.io/archive/qt/5.5/5.5.1/qt-opensource-windows-x86-mingw492-5.5.1.exe
 pause
 exit
 )
@@ -61,7 +61,7 @@ cd /D %SCC_DIR%
 :end_compile_qca
 
 if not exist %OPENSSL_DIR%\include\openssl\ssl.h (
-echo Download OpenSSL from http://slproweb.com/download/Win32OpenSSL-1_0_2d.exe
+echo Download OpenSSL from http://slproweb.com/download/Win32OpenSSL-1_0_2j.exe
 pause
 exit
 )
@@ -105,11 +105,6 @@ xcopy %QT_DIR%\bin\Qt5WebKitd.dll        %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\bin\Qt5WebKitWidgetsd.dll %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\bin\Qt5Widgetsd.dll       %DESTINATION%\ /C /H /R /Y /Q
 xcopy %QT_DIR%\bin\Qt5Xmld.dll           %DESTINATION%\ /C /H /R /Y /Q
-
-echo Copying Qt 5.4 dependency
-xcopy %QT_DIR%\bin\icuin53.dll           %DESTINATION%\ /C /H /R /Y /Q
-xcopy %QT_DIR%\bin\icuuc53.dll           %DESTINATION%\ /C /H /R /Y /Q
-xcopy %QT_DIR%\bin\icudt53.dll           %DESTINATION%\ /C /H /R /Y /Q
 
 echo Copying Qt 5.5 dependency
 xcopy %QT_DIR%\bin\icuin54.dll           %DESTINATION%\ /C /H /R /Y /Q
